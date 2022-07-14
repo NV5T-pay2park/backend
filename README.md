@@ -1,2 +1,1 @@
-# be-end0--user
-backend for end-user side
+# backend for end-user side
