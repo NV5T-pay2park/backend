@@ -36,6 +36,7 @@ else e-ticket status error
       DB --> service: return lisence_plate_id and already check-out message
   else e-ticket has lisence_plate_id != lisence_plate_id stored in database
       DB --> service: return lisence_plate_id and invalid lisence_plate_id message
+      deactivate DB
   end
   service --> merchant: send error message and lisence_plate_id of end-user
   deactivate merchant
