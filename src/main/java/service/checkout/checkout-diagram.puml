@@ -1,0 +1,49 @@
+@startuml
+
+!include https://raw.githubusercontent.com/bschwarz/puml-themes/master/themes/materia-outline/puml-theme-materia-outline.puml
+
+participant "End-user" as enduser
+participant "Merchant" as merchant
+participant "Service" as service
+database "Database" as DB
+
+autonumber
+activate enduser
+enduser -> service: open e-ticket
+
+
+activate service
+activate merchant
+merchant -> service: call check-out API including user_id and lisence_plate_id
+service -> service: validate user_id and lisence_plate_id
+
+
+activate DB
+service -> DB: check if e-ticket with status check-in created before
+
+alt e-ticket status is check-in
+    DB --> service: return lisence_plate_id and valid permission to update
+    group ref
+      service -> service: call API QR Pay of ZaloPay
+    end
+    service -> DB: update e-ticket status to check-out
+    DB --> service: updated success
+    service --> enduser: remove e-ticket from UI check-in list.
+    service --> merchant: send success message and lisence_plate_id of end-user
+else e-ticket status error
+
+  alt e-ticket is check-out
+      DB --> service: return lisence_plate_id and already check-out message
+  else e-ticket has lisence_plate_id != lisence_plate_id stored in database
+      DB --> service: return lisence_plate_id and invalid lisence_plate_id message
+  end
+  service --> merchant: send error message and lisence_plate_id of end-user
+  deactivate merchant
+  service --> enduser: send error message
+  deactivate enduser
+  deactivate service
+end
+
+
+
+@enduml
