@@ -9,11 +9,11 @@ database "Database" as DB
 
 autonumber
 activate enduser
+activate merchant
 enduser -> merchant: open e-ticket
 
 
 activate service
-activate merchant
 merchant -> service: call check-out API including user_id and lisence_plate_id
 service -> service: validate user_id and lisence_plate_id
 
