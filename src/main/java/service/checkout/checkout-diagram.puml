@@ -9,7 +9,7 @@ database "Database" as DB
 
 autonumber
 activate enduser
-enduser -> service: open e-ticket
+enduser -> merchant: open e-ticket
 
 
 activate service
