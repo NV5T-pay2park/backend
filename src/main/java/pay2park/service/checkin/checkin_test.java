@@ -1,4 +1,4 @@
-package service.checkin;
+package pay2park.service.checkin;
 
 public class checkin_test {
     public void main() {
