@@ -1,4 +1,4 @@
-package com.example.pay2parkbackend.model.payment;
+package pay2parkbackend.model.payment;
 
 public class ResponseQueryData {
     private int return_code;

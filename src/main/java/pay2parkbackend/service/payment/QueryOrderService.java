@@ -1,7 +1,5 @@
-package com.example.pay2parkbackend.service.payment;
-
-import com.example.pay2parkbackend.model.payment.ResponseQueryData;
-import org.json.JSONObject;
+package pay2parkbackend.service.payment;
+import pay2parkbackend.model.payment.ResponseQueryData;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

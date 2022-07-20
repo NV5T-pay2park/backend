@@ -1,12 +1,13 @@
-package com.example.pay2parkbackend.controller.payment;
+package pay2parkbackend.controller.payment;
 
-import com.example.pay2parkbackend.model.ResponseObject;
-import com.example.pay2parkbackend.service.payment.QueryOrderService;
-import org.json.JSONObject;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pay2parkbackend.model.ResponseObject;
+import pay2parkbackend.service.payment.QueryOrderService;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

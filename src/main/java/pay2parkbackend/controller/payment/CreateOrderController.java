@@ -1,14 +1,14 @@
-package com.example.pay2parkbackend.controller.payment;
+package pay2parkbackend.controller.payment;
 
 
-import com.example.pay2parkbackend.model.ResponseObject;
-import com.example.pay2parkbackend.model.payment.OrderData;
-import com.example.pay2parkbackend.model.payment.ResponseOrderData;
-import com.example.pay2parkbackend.service.payment.CreateOrderService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pay2parkbackend.model.ResponseObject;
+import pay2parkbackend.model.payment.OrderData;
+import pay2parkbackend.service.payment.CreateOrderService;
 
 
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class CreateOrderController {
 
         var data = createOrderService.createOrder(orderData);
         return  ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("OK", "create new order successfully", data)) ;
+                new ResponseObject("OK", "OK", data)) ;
     }
 }
 

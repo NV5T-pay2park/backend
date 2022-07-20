@@ -1,4 +1,4 @@
-package com.example.pay2parkbackend;
+package pay2parkbackend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package com.example.pay2parkbackend.model;
+package pay2parkbackend.model;
 
 import java.util.Objects;
 

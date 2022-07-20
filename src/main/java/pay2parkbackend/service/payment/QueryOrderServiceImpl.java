@@ -1,6 +1,6 @@
-package com.example.pay2parkbackend.service.payment;
+package pay2parkbackend.service.payment;
 
-import com.example.pay2parkbackend.model.payment.ResponseQueryData;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -11,6 +11,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import pay2parkbackend.model.payment.ResponseQueryData;
 import util.crypto.HMACUtil;
 
 import java.io.BufferedReader;
