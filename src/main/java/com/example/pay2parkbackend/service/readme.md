@@ -1,0 +1,1 @@
+cấu trúc theo các phần chính như payment, ticket, parking -> tương đương các phần trong thư mục controller
