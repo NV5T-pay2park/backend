@@ -1,6 +1,6 @@
 @startuml
 
-!include https://raw.githubusercontent.com/bschwarz/puml-themes/master/themes/materia-outline/puml-theme-materia-outline.puml
+'!include https://raw.githubusercontent.com/bschwarz/puml-themes/master/themes/materia-outline/puml-theme-materia-outline.puml
 
 participant "End-user" as enduser
 participant "Merchant" as merchant
