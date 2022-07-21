@@ -9,6 +9,9 @@ database "Database" as DB
 
 autonumber
 activate enduser
+activate merchant
+merchant -> enduser: open QR code
+
 activate service
 enduser -> service: call check-in API including parking_lot_id and user_id
 
