@@ -1,20 +1,23 @@
 @startuml
 
-!include https://raw.githubusercontent.com/bschwarz/puml-themes/master/themes/materia-outline/puml-theme-materia-outline.puml
 
-participant "End-user" as enduser
-participant "Merchant" as merchant
-participant "Service" as service
-database "Database" as DB
+participant "End-user (client)" as enduser
+participant "Merchant (client)" as merchant
+participant "Service (Pay2Park)" as service
+database "Database (Pay2Park)" as DB
 
 autonumber
 activate enduser
-activate merchant
-enduser -> merchant: open e-ticket
-
-
 activate service
-merchant -> service: call check-out API including user_id and lisence_plate_id
+enduser -> service: open e-ticket
+service -> service: wait response from merchant
+alt merchant does not response (time exeeded 5s)
+service --> enduser: null response
+
+else merchant sends request
+
+activate merchant
+merchant -> service: scan QR (e-ticket) to get information including user_id and lisence_plate_id
 service -> service: validate user_id and lisence_plate_id
 
 
@@ -28,8 +31,8 @@ alt e-ticket status is check-in
     end
     service -> DB: update e-ticket status to check-out
     DB --> service: updated success
-    service --> enduser: remove e-ticket from UI check-in list.
     service --> merchant: send success message and lisence_plate_id of end-user
+    service --> enduser: remove e-ticket from UI check-in list.
 else e-ticket status error
 
   alt e-ticket is check-out
@@ -44,7 +47,7 @@ else e-ticket status error
   deactivate enduser
   deactivate service
 end
-
+end
 
 
 @enduml
