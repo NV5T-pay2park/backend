@@ -1,4 +1,4 @@
-package com.example.pay2parkbackend.model.entityFromDB;
+package pay2parkbackend.model.entityFromDB;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +12,17 @@ public class VehicleType {
     @Column(name = "vehicle_type_id", nullable = false)
     private Integer id;
 
+    @Column(name = "vehicle_type_name", nullable = false, length = 50)
+    private String vehicleTypeName;
+
+    public String getVehicleTypeName() {
+        return vehicleTypeName;
+    }
+
+    public void setVehicleTypeName(String vehicleTypeName) {
+        this.vehicleTypeName = vehicleTypeName;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -19,6 +30,4 @@ public class VehicleType {
     public void setId(Integer id) {
         this.id = id;
     }
-
-    //TODO Reverse Engineering! Migrate other columns to the entity
 }

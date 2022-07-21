@@ -1,4 +1,4 @@
-package com.example.pay2parkbackend.model.entityFromDB;
+package pay2parkbackend.model.entityFromDB;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -8,7 +8,7 @@ import java.time.Instant;
 public class Transaction {
     @Id
     @Column(name = "transaction_id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "transaction_type", nullable = false, length = 50)
     private String transactionType;
@@ -56,11 +56,11 @@ public class Transaction {
         this.transactionType = transactionType;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }

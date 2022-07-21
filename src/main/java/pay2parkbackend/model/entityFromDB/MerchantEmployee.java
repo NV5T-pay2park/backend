@@ -1,4 +1,4 @@
-package com.example.pay2parkbackend.model.entityFromDB;
+package pay2parkbackend.model.entityFromDB;
 
 import javax.persistence.*;
 
@@ -8,7 +8,7 @@ public class MerchantEmployee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "user_name", nullable = false, length = 50)
     private String userName;
@@ -134,11 +134,11 @@ public class MerchantEmployee {
         this.userName = userName;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }

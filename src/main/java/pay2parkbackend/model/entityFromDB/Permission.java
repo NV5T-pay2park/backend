@@ -1,4 +1,4 @@
-package com.example.pay2parkbackend.model.entityFromDB;
+package pay2parkbackend.model.entityFromDB;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

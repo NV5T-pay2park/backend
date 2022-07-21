@@ -1,38 +1,37 @@
 package pay2parkbackend.model.payment;
 
 public class ResponseOrderData {
-    private int return_code;
-    private String app_trans_id;
-    private String order_url;
+    private int returnCode;
+    private String appTransId;
+    private String orderUrl;
 
-
-    public ResponseOrderData(int return_code, String app_trans_id, String order_url) {
-        this.return_code = return_code;
-        this.app_trans_id = app_trans_id;
-        this.order_url = order_url;
+    public ResponseOrderData(int returnCode, String appTransId, String orderUrl) {
+        this.returnCode = returnCode;
+        this.appTransId = appTransId;
+        this.orderUrl = orderUrl;
     }
 
-    public int getReturn_code() {
-        return return_code;
+    public int getReturnCode() {
+        return returnCode;
     }
 
-    public void setReturn_code(int return_code) {
-        this.return_code = return_code;
+    public void setReturnCode(int returnCode) {
+        this.returnCode = returnCode;
     }
 
-    public String getApp_trans_id() {
-        return app_trans_id;
+    public String getAppTransId() {
+        return appTransId;
     }
 
-    public void setApp_trans_id(String app_trans_id) {
-        this.app_trans_id = app_trans_id;
+    public void setAppTransId(String appTransId) {
+        this.appTransId = appTransId;
     }
 
-    public String getOrder_url() {
-        return order_url;
+    public String getOrderUrl() {
+        return orderUrl;
     }
 
-    public void setOrder_url(String order_url) {
-        this.order_url = order_url;
+    public void setOrderUrl(String orderUrl) {
+        this.orderUrl = orderUrl;
     }
 }

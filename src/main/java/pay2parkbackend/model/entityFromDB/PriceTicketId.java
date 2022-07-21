@@ -1,4 +1,4 @@
-package com.example.pay2parkbackend.model.entityFromDB;
+package pay2parkbackend.model.entityFromDB;
 
 import org.hibernate.Hibernate;
 
@@ -10,9 +10,9 @@ import java.util.Objects;
 
 @Embeddable
 public class PriceTicketId implements Serializable {
-    private static final long serialVersionUID = -461536793168910692L;
+    private static final long serialVersionUID = -9048580056216540742L;
     @Column(name = "parking_lot_id", nullable = false)
-    private Integer parkingLotId;
+    private Long parkingLotId;
     @Column(name = "vehicle_type_id", nullable = false)
     private Integer vehicleTypeId;
     @Column(name = "period_time", nullable = false)
@@ -34,11 +34,11 @@ public class PriceTicketId implements Serializable {
         this.vehicleTypeId = vehicleTypeId;
     }
 
-    public Integer getParkingLotId() {
+    public Long getParkingLotId() {
         return parkingLotId;
     }
 
-    public void setParkingLotId(Integer parkingLotId) {
+    public void setParkingLotId(Long parkingLotId) {
         this.parkingLotId = parkingLotId;
     }
 

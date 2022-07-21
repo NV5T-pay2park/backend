@@ -1,4 +1,4 @@
-package com.example.pay2parkbackend.model.entityFromDB;
+package pay2parkbackend.model.entityFromDB;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -9,7 +9,7 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ticket_id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "check_in_time", nullable = false)
     private Instant checkInTime;
@@ -31,17 +31,6 @@ public class Ticket {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "parking_lot_id", nullable = false)
     private ParkingLot parkingLot;
-
-    @Column(name = "ticketid", nullable = false)
-    private Long ticketid;
-
-    public Long getTicketid() {
-        return ticketid;
-    }
-
-    public void setTicketid(Long ticketid) {
-        this.ticketid = ticketid;
-    }
 
     public ParkingLot getParkingLot() {
         return parkingLot;
@@ -91,11 +80,11 @@ public class Ticket {
         this.checkInTime = checkInTime;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }

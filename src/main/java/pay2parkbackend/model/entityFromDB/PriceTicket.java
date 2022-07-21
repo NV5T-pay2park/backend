@@ -1,6 +1,15 @@
-package com.example.pay2parkbackend.model.entityFromDB;
+package pay2parkbackend.model.entityFromDB;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import pay2parkbackend.model.parking.ParkingDetailData;
+import pay2parkbackend.model.parking.PriceTicketData;
 
 import javax.persistence.*;
+import java.util.List;
+
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
+@JsonInclude(JsonInclude.Include.ALWAYS)
 
 @Entity
 @Table(name = "price_tickets")
@@ -62,5 +71,9 @@ public class PriceTicket {
 
     public void setId(PriceTicketId id) {
         this.id = id;
+    }
+
+    public PriceTicketData toPriceTicketData(PriceTicket priceTicket){
+        return new PriceTicketData(priceTicket.getId(), priceTicket.getVehicleType() ,priceTicket.getPrice(), priceTicket.getUnit());
     }
 }
