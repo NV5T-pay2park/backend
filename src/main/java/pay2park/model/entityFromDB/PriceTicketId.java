@@ -4,25 +4,28 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Entity;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
 public class PriceTicketId implements Serializable {
-    private static final long serialVersionUID = -9048580056216540742L;
+    private static final long serialVersionUID = -3697072087046027465L;
     @Column(name = "parking_lot_id", nullable = false)
-    private Long parkingLotId;
+    private Integer parkingLotId;
+
     @Column(name = "vehicle_type_id", nullable = false)
     private Integer vehicleTypeId;
+
     @Column(name = "period_time", nullable = false)
     private Integer periodTime;
 
-    public Integer getPeriodTime() {
-        return periodTime;
+    public Integer getParkingLotId() {
+        return parkingLotId;
     }
 
-    public void setPeriodTime(Integer periodTime) {
-        this.periodTime = periodTime;
+    public void setParkingLotId(Integer parkingLotId) {
+        this.parkingLotId = parkingLotId;
     }
 
     public Integer getVehicleTypeId() {
@@ -33,17 +36,12 @@ public class PriceTicketId implements Serializable {
         this.vehicleTypeId = vehicleTypeId;
     }
 
-    public Long getParkingLotId() {
-        return parkingLotId;
+    public Integer getPeriodTime() {
+        return periodTime;
     }
 
-    public void setParkingLotId(Long parkingLotId) {
-        this.parkingLotId = parkingLotId;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(vehicleTypeId, periodTime, parkingLotId);
+    public void setPeriodTime(Integer periodTime) {
+        this.periodTime = periodTime;
     }
 
     @Override
@@ -55,4 +53,10 @@ public class PriceTicketId implements Serializable {
                 Objects.equals(this.periodTime, entity.periodTime) &&
                 Objects.equals(this.parkingLotId, entity.parkingLotId);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(vehicleTypeId, periodTime, parkingLotId);
+    }
+
 }

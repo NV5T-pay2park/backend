@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package util.crypto;
+package pay2park.util.crypto;
 
 import java.util.Locale;
 

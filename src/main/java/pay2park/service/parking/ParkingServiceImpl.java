@@ -9,7 +9,8 @@ import pay2park.model.entityFromDB.PriceTicket;
 import pay2park.model.parking.ParkingDetailData;
 import pay2park.model.parking.ParkingListData;
 import pay2park.model.parking.PriceTicketData;
-import pay2park.repository.ParkingRepository;
+import pay2park.repository.ParkingLotRepository;
+
 import pay2park.repository.PriceTicketRepository;
 
 import org.springframework.data.domain.Page;
@@ -24,19 +25,19 @@ import java.util.List;
 public class ParkingServiceImpl implements  ParkingService{
 
     @Autowired
-    private ParkingRepository parkingRepository;
+    private ParkingLotRepository parkingLotRepository;
     @Autowired
     private PriceTicketRepository priceTicketRepository;
 
 
     @Override
     public List<ParkingListData> getAllParking (){
-        var rawData = parkingRepository.findAll();
+        var rawData = parkingLotRepository.findAll();
         List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
 
         for (ParkingLot parkingLot : rawData ){
 
-            parkingList.add(parkingLot.toParkingListData(parkingLot));
+            parkingList.add(new ParkingListData(parkingLot));
 
         }
         return parkingList;
@@ -45,20 +46,20 @@ public class ParkingServiceImpl implements  ParkingService{
 
 
     @Override
-    public ParkingDetailData getParkingById(Long parkingLotId){
-        var parking = parkingRepository.findById(parkingLotId).orElseThrow(() -> new ResourceNotFoundException("Parking lot not exist with id: "+parkingLotId));
+    public ParkingDetailData getParkingById(Integer parkingLotId){
+        var parking = parkingLotRepository.findById(parkingLotId).orElseThrow(() -> new ResourceNotFoundException("Parking lot not exist with id: "+parkingLotId));
         List<PriceTicket> priceTicketList = new ArrayList<PriceTicket>();
         priceTicketList = priceTicketRepository.findByParkingLotId(parking);
         List<PriceTicketData> priceTicketDataList = new ArrayList<PriceTicketData>();
         for (PriceTicket priceTicket: priceTicketList){
-            priceTicketDataList.add(priceTicket.toPriceTicketData(priceTicket));
+            priceTicketDataList.add(new PriceTicketData(priceTicket));
         }
-        return parking.toParkingDetailData(parking, priceTicketDataList);
+        return new ParkingDetailData(parking, priceTicketDataList);
     }
 
     @Override
     public List<ParkingListData> getParkingWithFilter(String coordinates,String stringSearch,String vehicleTypes){
-        var parkingList = parkingRepository.findAll();
+        var parkingList = parkingLotRepository.findAll();
         return null;
     }
 }

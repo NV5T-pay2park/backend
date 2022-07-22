@@ -7,7 +7,6 @@ import java.time.Instant;
 @Table(name = "tickets")
 public class Ticket {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ticket_id", nullable = false)
     private Long id;
 
@@ -32,44 +31,25 @@ public class Ticket {
     @JoinColumn(name = "parking_lot_id", nullable = false)
     private ParkingLot parkingLot;
 
-    public ParkingLot getParkingLot() {
-        return parkingLot;
+    public Ticket() {
     }
 
-    public void setParkingLot(ParkingLot parkingLot) {
+    public Ticket(Long id, Instant checkInTime, Instant checkOutTime, String licensePlates, VehicleType vehicleType, EndUser endUser, ParkingLot parkingLot) {
+        this.id = id;
+        this.checkInTime = checkInTime;
+        this.checkOutTime = checkOutTime;
+        this.licensePlates = licensePlates;
+        this.vehicleType = vehicleType;
+        this.endUser = endUser;
         this.parkingLot = parkingLot;
     }
 
-    public EndUser getEndUser() {
-        return endUser;
+    public Long getId() {
+        return id;
     }
 
-    public void setEndUser(EndUser endUser) {
-        this.endUser = endUser;
-    }
-
-    public VehicleType getVehicleType() {
-        return vehicleType;
-    }
-
-    public void setVehicleType(VehicleType vehicleType) {
-        this.vehicleType = vehicleType;
-    }
-
-    public String getLicensePlates() {
-        return licensePlates;
-    }
-
-    public void setLicensePlates(String licensePlates) {
-        this.licensePlates = licensePlates;
-    }
-
-    public Instant getCheckOutTime() {
-        return checkOutTime;
-    }
-
-    public void setCheckOutTime(Instant checkOutTime) {
-        this.checkOutTime = checkOutTime;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Instant getCheckInTime() {
@@ -80,11 +60,44 @@ public class Ticket {
         this.checkInTime = checkInTime;
     }
 
-    public Long getId() {
-        return id;
+    public Instant getCheckOutTime() {
+        return checkOutTime;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCheckOutTime(Instant checkOutTime) {
+        this.checkOutTime = checkOutTime;
     }
+
+    public String getLicensePlates() {
+        return licensePlates;
+    }
+
+    public void setLicensePlates(String licensePlates) {
+        this.licensePlates = licensePlates;
+    }
+
+    public VehicleType getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    public EndUser getEndUser() {
+        return endUser;
+    }
+
+    public void setEndUser(EndUser endUser) {
+        this.endUser = endUser;
+    }
+
+    public ParkingLot getParkingLot() {
+        return parkingLot;
+    }
+
+    public void setParkingLot(ParkingLot parkingLot) {
+        this.parkingLot = parkingLot;
+    }
+
 }

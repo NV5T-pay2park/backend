@@ -29,7 +29,7 @@ import java.io.IOException;
 
         @GetMapping("/getAllParking/{parkingLotId}")
         @ResponseBody
-        public ResponseObject getParkingById(@PathVariable(value="parkingLotId") Long parkingLotId)  {
+        public ResponseObject getParkingById(@PathVariable(value="parkingLotId") Integer parkingLotId)  {
 
             var data = parkingService.getParkingById(parkingLotId);
             return

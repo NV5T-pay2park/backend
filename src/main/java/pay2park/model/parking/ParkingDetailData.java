@@ -1,9 +1,11 @@
 package pay2park.model.parking;
 
+import pay2park.model.entityFromDB.ParkingLot;
+
 import java.util.List;
 
 public class ParkingDetailData {
-    private Long id;
+    private Integer id;
     private String parkingLotName;
     private String address;
     private Integer status;
@@ -13,7 +15,7 @@ public class ParkingDetailData {
     private Integer timeClose;
     private List<PriceTicketData> priceTicketList;
 
-    public ParkingDetailData(Long id, String parkingLotName, String address, Integer status, Double lat, Double ing, Integer timeOpen, Integer timeClose, List<PriceTicketData> priceTicketList) {
+    public ParkingDetailData(Integer id, String parkingLotName, String address, Integer status, Double lat, Double ing, Integer timeOpen, Integer timeClose, List<PriceTicketData> priceTicketList) {
         this.id = id;
         this.parkingLotName = parkingLotName;
         this.address = address;
@@ -25,11 +27,23 @@ public class ParkingDetailData {
         this.priceTicketList = priceTicketList;
     }
 
-    public Long getId() {
+    public ParkingDetailData(ParkingLot parkingLot, List<PriceTicketData> priceTicketDataList){
+        this.id = parkingLot.getId();
+        this.parkingLotName = parkingLot.getParkingLotName();
+        this.address = parkingLot.getAddress();
+        this.status = parkingLot.getStatus();
+        this.lat = parkingLot.getLat();
+        this.ing = parkingLot.getIng();
+        this.timeOpen = parkingLot.getTimeOpen();
+        this.timeClose = parkingLot.getTimeClose();
+        this.priceTicketList = priceTicketList;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

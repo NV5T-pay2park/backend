@@ -1,5 +1,6 @@
 package pay2park.model.parking;
 
+import pay2park.model.entityFromDB.PriceTicket;
 import pay2park.model.entityFromDB.PriceTicketId;
 import pay2park.model.entityFromDB.VehicleType;
 
@@ -19,6 +20,13 @@ public class PriceTicketData {
         this.vehicleType = vehicleType;
         this.price = price;
         this.unit = unit;
+    }
+
+    public PriceTicketData(PriceTicket priceTicket){
+        this.id = priceTicket.getId();
+        this.vehicleType = priceTicket.getVehicleType();
+        this.price = priceTicket.getPrice();
+        this.unit = priceTicket.getUnit();
     }
 
     public PriceTicketId getId() {

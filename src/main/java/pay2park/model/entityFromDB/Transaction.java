@@ -24,28 +24,12 @@ public class Transaction {
     @Column(name = "transaction_log", nullable = false)
     private String transactionLog;
 
-    public String getTransactionLog() {
-        return transactionLog;
+    public Long getId() {
+        return id;
     }
 
-    public void setTransactionLog(String transactionLog) {
-        this.transactionLog = transactionLog;
-    }
-
-    public Instant getTransactionDate() {
-        return transactionDate;
-    }
-
-    public void setTransactionDate(Instant transactionDate) {
-        this.transactionDate = transactionDate;
-    }
-
-    public Ticket getTicket() {
-        return ticket;
-    }
-
-    public void setTicket(Ticket ticket) {
-        this.ticket = ticket;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTransactionType() {
@@ -56,11 +40,28 @@ public class Transaction {
         this.transactionType = transactionType;
     }
 
-    public Long getId() {
-        return id;
+    public Ticket getTicket() {
+        return ticket;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
     }
+
+    public Instant getTransactionDate() {
+        return transactionDate;
+    }
+
+    public void setTransactionDate(Instant transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+
+    public String getTransactionLog() {
+        return transactionLog;
+    }
+
+    public void setTransactionLog(String transactionLog) {
+        this.transactionLog = transactionLog;
+    }
+
 }
