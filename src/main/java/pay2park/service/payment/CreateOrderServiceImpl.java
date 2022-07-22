@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import pay2park.model.payment.OrderData;
 import pay2park.model.payment.ResponseOrderData;
-import util.crypto.HMACUtil;
+import pay2park.util.crypto.HMACUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,13 +1,6 @@
 package pay2park.model.entityFromDB;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import pay2park.model.parking.PriceTicketData;
-
 import javax.persistence.*;
-
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
-@JsonInclude(JsonInclude.Include.ALWAYS)
 
 @Entity
 @Table(name = "price_tickets")
@@ -31,28 +24,12 @@ public class PriceTicket {
     @Column(name = "unit", nullable = false)
     private Integer unit;
 
-    public Integer getUnit() {
-        return unit;
+    public PriceTicketId getId() {
+        return id;
     }
 
-    public void setUnit(Integer unit) {
-        this.unit = unit;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public VehicleType getVehicleType() {
-        return vehicleType;
-    }
-
-    public void setVehicleType(VehicleType vehicleType) {
-        this.vehicleType = vehicleType;
+    public void setId(PriceTicketId id) {
+        this.id = id;
     }
 
     public ParkingLot getParkingLot() {
@@ -63,15 +40,28 @@ public class PriceTicket {
         this.parkingLot = parkingLot;
     }
 
-    public PriceTicketId getId() {
-        return id;
+    public VehicleType getVehicleType() {
+        return vehicleType;
     }
 
-    public void setId(PriceTicketId id) {
-        this.id = id;
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
     }
 
-    public PriceTicketData toPriceTicketData(PriceTicket priceTicket){
-        return new PriceTicketData(priceTicket.getId(), priceTicket.getVehicleType() ,priceTicket.getPrice(), priceTicket.getUnit());
+    public Integer getPrice() {
+        return price;
     }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public Integer getUnit() {
+        return unit;
+    }
+
+    public void setUnit(Integer unit) {
+        this.unit = unit;
+    }
+
 }

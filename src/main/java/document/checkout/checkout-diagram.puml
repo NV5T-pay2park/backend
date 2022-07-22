@@ -48,6 +48,9 @@ else e-ticket status error
   deactivate service
 end
 end
+<<<<<<< HEAD:src/main/resources/checkout-diagram.puml
 
+=======
+>>>>>>> 3d43c4f092068ce8600c0d3d88caa552bd63b807:src/main/java/document/checkout/checkout-diagram.puml
 
 @enduml
