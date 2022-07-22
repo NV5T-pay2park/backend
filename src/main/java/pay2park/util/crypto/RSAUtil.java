@@ -31,7 +31,11 @@ public class RSAUtil {
      *
      * @param pubkeyStr a public key in base64 encode
      *
+<<<<<<< HEAD
      * @return java.pay2park.backend.security.PublicKey
+=======
+     * @return java.security.PublicKey
+>>>>>>> 3d43c4f092068ce8600c0d3d88caa552bd63b807
      * */
     public static PublicKey stringToPublicKey(String pubkeyStr) throws InvalidKeySpecException {
         byte[] bytesKey = Base64.getDecoder().decode(pubkeyStr.getBytes());
@@ -45,7 +49,11 @@ public class RSAUtil {
      *
      * @param prikeyStr a private key in base64 encode
      *
+<<<<<<< HEAD
      * @return java.pay2park.backend.security.PrivateKey
+=======
+     * @return java.security.PrivateKey
+>>>>>>> 3d43c4f092068ce8600c0d3d88caa552bd63b807
      * */
     public static PrivateKey stringToPrivateKey(String prikeyStr) throws InvalidKeySpecException {
         byte[] bytesKey = Base64.getDecoder().decode(prikeyStr.getBytes());
