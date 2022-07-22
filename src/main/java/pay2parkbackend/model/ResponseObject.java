@@ -1,24 +1,25 @@
 package pay2parkbackend.model;
 
+import org.springframework.http.HttpStatus;
+
 import java.util.Objects;
 
 public class ResponseObject {
-    private String status;
+    private HttpStatus status;
     private String message;
     private Object data;
-    public ResponseObject() {}
 
-    public ResponseObject(String status, String message, Object data) {
+    public ResponseObject(HttpStatus status, String message, Object data) {
         this.status = status;
         this.message = message;
         this.data = data;
     }
 
-    public String getStatus() {
+    public HttpStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(HttpStatus status) {
         this.status = status;
     }
 
@@ -34,7 +35,7 @@ public class ResponseObject {
         return data;
     }
 
-    public void setData(Objects data) {
+    public void setData(Object data) {
         this.data = data;
     }
 }

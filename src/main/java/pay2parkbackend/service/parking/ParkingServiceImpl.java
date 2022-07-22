@@ -12,7 +12,6 @@ import pay2parkbackend.model.parking.PriceTicketData;
 import pay2parkbackend.repository.ParkingRepository;
 import pay2parkbackend.repository.PriceTicketRepository;
 
-import java.net.SocketOption;
 import java.util.ArrayList;
 import java.util.List;
 
