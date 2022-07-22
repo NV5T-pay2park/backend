@@ -25,6 +25,8 @@ import java.io.IOException;
                     new ResponseObject(HttpStatus.OK, "get all parking successfully", data) ;
         }
 
+
+
         @GetMapping("/getAllParking/{parkingLotId}")
         @ResponseBody
         public ResponseObject getParkingById(@PathVariable(value="parkingLotId") Long parkingLotId)  {
@@ -32,6 +34,17 @@ import java.io.IOException;
             var data = parkingService.getParkingById(parkingLotId);
             return
                     new ResponseObject(HttpStatus.OK, "get parking by id successfully ", data);
+        }
+
+
+        @GetMapping("/getParking")
+        @ResponseBody
+        public ResponseObject getParkingWithPagination(@RequestParam String coordinates,@RequestParam String stringSearch, @RequestParam String vehicleTypes) throws IOException {
+
+
+
+            return
+                    new ResponseObject(HttpStatus.OK, "get parking successfully", "search") ;
         }
 
 

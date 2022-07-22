@@ -12,6 +12,11 @@ import pay2park.model.parking.PriceTicketData;
 import pay2park.repository.ParkingRepository;
 import pay2park.repository.PriceTicketRepository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+
+import javax.websocket.OnClose;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +42,8 @@ public class ParkingServiceImpl implements  ParkingService{
         return parkingList;
     }
 
+
+
     @Override
     public ParkingDetailData getParkingById(Long parkingLotId){
         var parking = parkingRepository.findById(parkingLotId).orElseThrow(() -> new ResourceNotFoundException("Parking lot not exist with id: "+parkingLotId));
@@ -47,5 +54,11 @@ public class ParkingServiceImpl implements  ParkingService{
             priceTicketDataList.add(priceTicket.toPriceTicketData(priceTicket));
         }
         return parking.toParkingDetailData(parking, priceTicketDataList);
+    }
+
+    @Override
+    public List<ParkingListData> getParkingWithFilter(String coordinates,String stringSearch,String vehicleTypes){
+        var parkingList = parkingRepository.findAll();
+        return null;
     }
 }
