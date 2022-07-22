@@ -1,0 +1,46 @@
+@startuml
+
+
+participant "End-user (client)" as enduser
+participant "Merchant (client)" as merchant
+participant "Service (Pay2Park)" as service
+database "Database (Pay2Park)" as DB
+
+autonumber
+activate merchant
+activate service
+merchant -> service: scan enduser license_plate_id
+
+activate enduser
+
+enduser -> service: call check-in API including parking_lot_id and user_id
+
+service -> service: validate parking_lot_id and user_id
+
+service -> merchant: request information from merchant
+merchant --> service: send license_plate and vehicle_type
+service -> service: validate license_plate and vehicle_type
+
+activate DB
+service -> DB: check if e-ticket created before
+
+alt e-ticket is not created before
+    DB --> service: return true
+    service -> DB: insert new ticket including license_plate, user_id and parking_lot_id
+    DB --> service: insert success
+    service --> merchant: send message create e-ticket sucess
+    service --> enduser: send e-ticket infomation
+
+else the license plate with user ID and parking lot ID is exist
+    DB --> service: return false
+    deactivate DB
+    service --> merchant:send message e-ticket was created before
+    deactivate merchant
+    service --> enduser: send message check-in fail
+    deactivate enduser
+    deactivate service
+end
+
+
+
+@enduml

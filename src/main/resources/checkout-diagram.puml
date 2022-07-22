@@ -1,0 +1,53 @@
+@startuml
+
+
+participant "End-user (client)" as enduser
+participant "Merchant (client)" as merchant
+participant "Service (Pay2Park)" as service
+database "Database (Pay2Park)" as DB
+
+autonumber
+activate enduser
+activate service
+enduser -> service: open e-ticket
+service -> service: wait response from merchant
+alt merchant does not response (time exeeded 5s)
+service --> enduser: null response
+
+else merchant sends request
+
+activate merchant
+merchant -> service: scan QR (e-ticket) to get information including user_id and lisence_plate_id
+service -> service: validate user_id and lisence_plate_id
+
+
+activate DB
+service -> DB: check if e-ticket with status check-in created before
+
+alt e-ticket status is check-in
+    DB --> service: return lisence_plate_id and valid permission to update
+    group ref
+      service -> service: call API QR Pay of ZaloPay
+    end
+    service -> DB: update e-ticket status to check-out
+    DB --> service: updated success
+    service --> merchant: send success message and lisence_plate_id of end-user
+    service --> enduser: remove e-ticket from UI check-in list.
+else e-ticket status error
+
+  alt e-ticket is check-out
+      DB --> service: return lisence_plate_id and already check-out message
+  else e-ticket has lisence_plate_id != lisence_plate_id stored in database
+      DB --> service: return lisence_plate_id and invalid lisence_plate_id message
+      deactivate DB
+  end
+  service --> merchant: send error message and lisence_plate_id of end-user
+  deactivate merchant
+  service --> enduser: send error message
+  deactivate enduser
+  deactivate service
+end
+end
+
+
+@enduml

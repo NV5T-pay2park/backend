@@ -3,8 +3,8 @@ package pay2park.controller;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pay2park.model.QuickPayData;
-import pay2park.service.QuickPayService;
+import pay2park.model.entityRequest.QuickPayData;
+import pay2park.service.serviceInterface.QuickPayService;
 
 
 import javax.crypto.BadPaddingException;

@@ -3,9 +3,9 @@ package pay2park.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pay2park.model.OrderData;
-import pay2park.model.ResponseOrderData;
-import pay2park.service.CreateOrderService;
+import pay2park.model.entityRequest.OrderData;
+import pay2park.model.entityResponse.ResponseOrderData;
+import pay2park.service.serviceInterface.CreateOrderService;
 
 
 import java.io.IOException;

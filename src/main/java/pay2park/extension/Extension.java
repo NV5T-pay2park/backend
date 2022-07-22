@@ -19,6 +19,11 @@ public class Extension {
         fmt.setCalendar(cal);
         return Instant.parse(fmt.format(cal.getTimeInMillis()));
     }
+    public static Instant getCheckInTime() {
+        String time = Extension.getCurrentTimeString("yyyy-MM-dd") + 'T' +
+                Extension.getCurrentTimeString("HH:mm:ss") + 'Z';
+        return Instant.parse(time);
+    }
     public static String getLicensePlate() {
         return "77C1-12345";
     }

@@ -3,7 +3,7 @@ package pay2park.controller;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pay2park.service.QueryOrderService;
+import pay2park.service.serviceInterface.QueryOrderService;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

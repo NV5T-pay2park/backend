@@ -2,7 +2,9 @@ package pay2park.repositories;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import pay2park.model.EndUser;
+import org.springframework.stereotype.Repository;
+import pay2park.model.entityFromDB.EndUser;
 
-public interface EndUserRepository extends JpaRepository<EndUser, Long> {
+@Repository
+public interface EndUserRepository extends JpaRepository<EndUser, Integer> {
 }
