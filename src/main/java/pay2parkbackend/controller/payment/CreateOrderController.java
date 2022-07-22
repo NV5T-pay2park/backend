@@ -21,11 +21,11 @@ public class CreateOrderController {
 
     @PostMapping("/createOrder")
     @ResponseBody
-    public ResponseEntity<ResponseObject> createOrder(@RequestBody OrderData orderData) throws IOException {
+    public ResponseObject createOrder(@RequestBody OrderData orderData) throws IOException {
 
         var data = createOrderService.createOrder(orderData);
-        return  ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("OK", "OK", data)) ;
+        return
+                new ResponseObject(HttpStatus.OK, "create order successfully", data) ;
     }
 }
 

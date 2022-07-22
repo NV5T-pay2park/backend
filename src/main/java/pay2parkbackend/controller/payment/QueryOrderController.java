@@ -21,9 +21,9 @@ public class QueryOrderController {
 
     @PostMapping("/queryOrder")
     @ResponseBody
-    public ResponseEntity<ResponseObject> createOrder(@RequestBody Map<String,String> appTransId) throws IOException, URISyntaxException {
+    public ResponseObject createOrder(@RequestBody Map<String,String> appTransId) throws IOException, URISyntaxException {
         var data = queryOrderService.queryOrder(appTransId);
-        return  ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("OK", "query order status successfully", data)) ;
+        return
+                new ResponseObject(HttpStatus.OK, "query order status successfully", data) ;
     }
 }
