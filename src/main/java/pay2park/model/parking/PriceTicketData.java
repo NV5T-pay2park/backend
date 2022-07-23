@@ -9,15 +9,18 @@ public class PriceTicketData {
 
     private VehicleType vehicleType;
 
+    private Integer periodTime;
+
     private Integer price;
 
 
     private Integer unit;
 
 
-    public PriceTicketData(PriceTicketId id, VehicleType vehicleType, Integer price, Integer unit) {
+    public PriceTicketData(PriceTicketId id, VehicleType vehicleType, Integer periodTime, Integer price, Integer unit) {
         this.id = id;
         this.vehicleType = vehicleType;
+        this.periodTime = periodTime;
         this.price = price;
         this.unit = unit;
     }
@@ -25,6 +28,7 @@ public class PriceTicketData {
     public PriceTicketData(PriceTicket priceTicket){
         this.id = priceTicket.getId();
         this.vehicleType = priceTicket.getVehicleType();
+        this.periodTime = priceTicket.getPeriodTime();
         this.price = priceTicket.getPrice();
         this.unit = priceTicket.getUnit();
     }
@@ -59,5 +63,13 @@ public class PriceTicketData {
 
     public void setUnit(Integer unit) {
         this.unit = unit;
+    }
+
+    public Integer getPeriodTime() {
+        return periodTime;
+    }
+
+    public void setPeriodTime(Integer periodTime) {
+        this.periodTime = periodTime;
     }
 }

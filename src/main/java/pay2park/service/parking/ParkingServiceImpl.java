@@ -12,8 +12,11 @@ import pay2park.model.parking.PriceTicketData;
 import pay2park.repository.ParkingLotRepository;
 
 import pay2park.repository.PriceTicketRepository;
+import pay2park.util.functions.Distance;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -32,7 +35,7 @@ public class ParkingServiceImpl implements  ParkingService{
 
         for (ParkingLot parkingLot : rawData ){
 
-            parkingList.add(new ParkingListData(parkingLot));
+            parkingList.add(new ParkingListData(parkingLot,3.4,4));
 
         }
         return parkingList;
@@ -41,20 +44,63 @@ public class ParkingServiceImpl implements  ParkingService{
 
 
     @Override
-    public ParkingDetailData getParkingById(Integer parkingLotId){
+    public ParkingDetailData getParkingById(Integer parkingLotId, String coordinates){
         var parking = parkingLotRepository.findById(parkingLotId).orElseThrow(() -> new ResourceNotFoundException("Parking lot not exist with id: "+parkingLotId));
         List<PriceTicket> priceTicketList = new ArrayList<PriceTicket>();
         priceTicketList = priceTicketRepository.findByParkingLotId(parking);
+
         List<PriceTicketData> priceTicketDataList = new ArrayList<PriceTicketData>();
+
         for (PriceTicket priceTicket: priceTicketList){
             priceTicketDataList.add(new PriceTicketData(priceTicket));
+
         }
-        return new ParkingDetailData(parking, priceTicketDataList);
+        System.out.println(priceTicketDataList.get(8).getVehicleType().getVehicleTypeName());
+        if (coordinates == ""){
+            return new ParkingDetailData(parking, 0.0, 0, priceTicketDataList);
+        }
+        else {
+            String[] parts1 = coordinates.split(",");
+            Double userLong =Double.parseDouble(parts1[0]);
+            Double userLat = Double.parseDouble(parts1[1]);
+
+            Distance distance = new Distance();
+
+            String returnDistance = distance.getDistanceAndTimeGgApi(userLong, userLat, parking.getLat(), parking.getIng());
+            String[] parts2 = returnDistance.split(",");
+            return new ParkingDetailData(parking, Double.parseDouble(parts2[0]), Integer.parseInt(parts2[1]), priceTicketDataList);
+
+
+        }
     }
 
     @Override
-    public List<ParkingListData> getParkingWithFilter(String coordinates,String stringSearch,String vehicleTypes){
-        var parkingList = parkingLotRepository.findAll();
-        return null;
+    public List<ParkingListData> getParking(String coordinates,String stringSearch,String vehicleTypes){
+        var rawData = parkingLotRepository.findSearch(stringSearch);
+        List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
+
+
+
+
+
+        if (coordinates != "") {
+            String[] parts = coordinates.split(",");
+            Double userLong = Double.parseDouble(parts[0]);
+            Double userLat = Double.parseDouble(parts[1]);
+
+            Distance distance = new Distance();
+            for (ParkingLot parkingLot : rawData) {
+                Double dt = distance.getDistance(userLong, userLat, parkingLot.getLat(), parkingLot.getIng());
+                parkingList.add(new ParkingListData(parkingLot, dt, 4));
+
+            }
+            Collections.sort(parkingList, new Comparator<ParkingListData>() {
+                public int compare(ParkingListData s1, ParkingListData s2) {
+                    return s1.getDistance().compareTo(s2.getDistance());
+                }
+            });
+
+        }
+        return parkingList;
     }
 }

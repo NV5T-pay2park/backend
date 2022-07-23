@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ParkingService {
     List<ParkingListData> getAllParking();
-    List<ParkingListData> getParkingWithFilter(String coordinates,String stringSearch,String vehicleTypes);
-    ParkingDetailData getParkingById(Integer parkingLotId);
+    List<ParkingListData> getParking(String coordinates,String stringSearch,String vehicleTypes);
+    ParkingDetailData getParkingById(Integer parkingLotId, String coordinates);
 }

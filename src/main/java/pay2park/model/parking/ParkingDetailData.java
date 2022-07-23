@@ -14,9 +14,11 @@ public class ParkingDetailData {
     private Integer timeOpen;
     private Integer timeClose;
     private String phoneNumber;
+    private Double distance;
+    private Integer timeMoving;
     private List<PriceTicketData> priceTicketList;
 
-    public ParkingDetailData(Integer id, String parkingLotName, String address, Integer status, Double lat, Double ing, Integer timeOpen, Integer timeClose, String phoneNumber, List<PriceTicketData> priceTicketList) {
+    public ParkingDetailData(Integer id, String parkingLotName, String address, Integer status, Double lat, Double ing, Integer timeOpen, Integer timeClose, String phoneNumber, Double distance, Integer timeMoving, List<PriceTicketData> priceTicketList) {
         this.id = id;
         this.parkingLotName = parkingLotName;
         this.address = address;
@@ -26,10 +28,12 @@ public class ParkingDetailData {
         this.timeOpen = timeOpen;
         this.timeClose = timeClose;
         this.phoneNumber = phoneNumber;
+        this.distance = distance;
+        this.timeMoving = timeMoving;
         this.priceTicketList = priceTicketList;
     }
 
-    public ParkingDetailData(ParkingLot parkingLot, List<PriceTicketData> priceTicketDataList){
+    public ParkingDetailData(ParkingLot parkingLot, Double distance, Integer timeMoving, List<PriceTicketData> priceTicketDataList){
         this.id = parkingLot.getId();
         this.parkingLotName = parkingLot.getParkingLotName();
         this.address = parkingLot.getAddress();
@@ -39,7 +43,9 @@ public class ParkingDetailData {
         this.timeOpen = parkingLot.getTimeOpen();
         this.timeClose = parkingLot.getTimeClose();
         this.phoneNumber = parkingLot.getPhoneNumber();
-        this.priceTicketList = priceTicketList;
+        this.distance = distance;
+        this.timeMoving = timeMoving;
+        this.priceTicketList = priceTicketDataList;
     }
 
     public Integer getId() {
@@ -120,5 +126,21 @@ public class ParkingDetailData {
 
     public void setPriceTicketList(List<PriceTicketData> priceTicketList) {
         this.priceTicketList = priceTicketList;
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+
+    public Integer getTimeMoving() {
+        return timeMoving;
+    }
+
+    public void setTimeMoving(Integer timeMoving) {
+        this.timeMoving = timeMoving;
     }
 }

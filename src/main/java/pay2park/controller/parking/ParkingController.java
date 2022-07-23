@@ -29,9 +29,9 @@ import java.io.IOException;
 
         @GetMapping("/getAllParking/{parkingLotId}")
         @ResponseBody
-        public ResponseObject getParkingById(@PathVariable(value="parkingLotId") Integer parkingLotId)  {
+        public ResponseObject getParkingById(@PathVariable(value="parkingLotId") Integer parkingLotId, @RequestParam String coordinates)  {
 
-            var data = parkingService.getParkingById(parkingLotId);
+            var data = parkingService.getParkingById(parkingLotId, coordinates);
             return
                     new ResponseObject(HttpStatus.OK, "get parking by id successfully ", data);
         }
@@ -41,10 +41,9 @@ import java.io.IOException;
         @ResponseBody
         public ResponseObject getParkingWithPagination(@RequestParam String coordinates,@RequestParam String stringSearch, @RequestParam String vehicleTypes) throws IOException {
 
-
-
+            var data = parkingService.getParking(coordinates, stringSearch, vehicleTypes);
             return
-                    new ResponseObject(HttpStatus.OK, "get parking successfully", "search") ;
+                    new ResponseObject(HttpStatus.OK, "get parking by successfully ", data);
         }
 
 
