@@ -78,15 +78,18 @@ public class ParkingServiceImpl implements  ParkingService{
     public List<ParkingListData> getParking(String coordinates,String stringSearch,String vehicleTypes){
         var rawData = parkingLotRepository.findSearch(stringSearch);
         List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
+        String[] vehicleTypeParts = vehicleTypes.split(",");
+
+
 
 
 
 
 
         if (coordinates != "") {
-            String[] parts = coordinates.split(",");
-            Double userLong = Double.parseDouble(parts[0]);
-            Double userLat = Double.parseDouble(parts[1]);
+            String[] coordinateParts = coordinates.split(",");
+            Double userLong = Double.parseDouble(coordinateParts[0]);
+            Double userLat = Double.parseDouble(coordinateParts[1]);
 
             Distance distance = new Distance();
             for (ParkingLot parkingLot : rawData) {

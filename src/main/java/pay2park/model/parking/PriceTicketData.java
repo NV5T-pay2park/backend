@@ -5,7 +5,6 @@ import pay2park.model.entityFromDB.PriceTicketId;
 import pay2park.model.entityFromDB.VehicleType;
 
 public class PriceTicketData {
-    private PriceTicketId id;
 
     private VehicleType vehicleType;
 
@@ -17,8 +16,7 @@ public class PriceTicketData {
     private Integer unit;
 
 
-    public PriceTicketData(PriceTicketId id, VehicleType vehicleType, Integer periodTime, Integer price, Integer unit) {
-        this.id = id;
+    public PriceTicketData(VehicleType vehicleType, Integer periodTime, Integer price, Integer unit) {
         this.vehicleType = vehicleType;
         this.periodTime = periodTime;
         this.price = price;
@@ -26,19 +24,10 @@ public class PriceTicketData {
     }
 
     public PriceTicketData(PriceTicket priceTicket){
-        this.id = priceTicket.getId();
         this.vehicleType = priceTicket.getVehicleType();
         this.periodTime = priceTicket.getPeriodTime();
         this.price = priceTicket.getPrice();
         this.unit = priceTicket.getUnit();
-    }
-
-    public PriceTicketId getId() {
-        return id;
-    }
-
-    public void setId(PriceTicketId id) {
-        this.id = id;
     }
 
     public VehicleType getVehicleType() {

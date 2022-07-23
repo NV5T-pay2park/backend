@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ParkingLotRepository extends JpaRepository<ParkingLot, Integer> {
-    @Query(value = "SELECT parkingLot FROM ParkingLot parkingLot WHERE parkingLot.parkingLotName = ?1")
+    @Query(value = "SELECT parkingLot FROM ParkingLot parkingLot WHERE parkingLot.id > 0")
     List<ParkingLot> findSearch(String stringSearch);
 }
