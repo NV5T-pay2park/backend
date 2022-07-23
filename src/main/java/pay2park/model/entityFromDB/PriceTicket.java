@@ -24,28 +24,12 @@ public class PriceTicket {
     @Column(name = "unit", nullable = false)
     private Integer unit;
 
-    public PriceTicketId getId() {
-        return id;
+    public Integer getUnit() {
+        return unit;
     }
 
-    public void setId(PriceTicketId id) {
-        this.id = id;
-    }
-
-    public ParkingLot getParkingLot() {
-        return parkingLot;
-    }
-
-    public void setParkingLot(ParkingLot parkingLot) {
-        this.parkingLot = parkingLot;
-    }
-
-    public VehicleType getVehicleType() {
-        return vehicleType;
-    }
-
-    public void setVehicleType(VehicleType vehicleType) {
-        this.vehicleType = vehicleType;
+    public void setUnit(Integer unit) {
+        this.unit = unit;
     }
 
     public Integer getPrice() {
@@ -56,12 +40,27 @@ public class PriceTicket {
         this.price = price;
     }
 
-    public Integer getUnit() {
-        return unit;
+    public VehicleType getVehicleType() {
+        return vehicleType;
     }
 
-    public void setUnit(Integer unit) {
-        this.unit = unit;
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
     }
 
+    public ParkingLot getParkingLot() {
+        return parkingLot;
+    }
+
+    public void setParkingLot(ParkingLot parkingLot) {
+        this.parkingLot = parkingLot;
+    }
+
+    public PriceTicketId getId() {
+        return id;
+    }
+
+    public void setId(PriceTicketId id) {
+        this.id = id;
+    }
 }

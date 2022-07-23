@@ -13,9 +13,10 @@ public class ParkingDetailData {
     private Double ing;
     private Integer timeOpen;
     private Integer timeClose;
+    private String phoneNumber;
     private List<PriceTicketData> priceTicketList;
 
-    public ParkingDetailData(Integer id, String parkingLotName, String address, Integer status, Double lat, Double ing, Integer timeOpen, Integer timeClose, List<PriceTicketData> priceTicketList) {
+    public ParkingDetailData(Integer id, String parkingLotName, String address, Integer status, Double lat, Double ing, Integer timeOpen, Integer timeClose, String phoneNumber, List<PriceTicketData> priceTicketList) {
         this.id = id;
         this.parkingLotName = parkingLotName;
         this.address = address;
@@ -24,6 +25,7 @@ public class ParkingDetailData {
         this.ing = ing;
         this.timeOpen = timeOpen;
         this.timeClose = timeClose;
+        this.phoneNumber = phoneNumber;
         this.priceTicketList = priceTicketList;
     }
 
@@ -36,6 +38,7 @@ public class ParkingDetailData {
         this.ing = parkingLot.getIng();
         this.timeOpen = parkingLot.getTimeOpen();
         this.timeClose = parkingLot.getTimeClose();
+        this.phoneNumber = parkingLot.getPhoneNumber();
         this.priceTicketList = priceTicketList;
     }
 
@@ -101,6 +104,14 @@ public class ParkingDetailData {
 
     public void setTimeClose(Integer timeClose) {
         this.timeClose = timeClose;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public List<PriceTicketData> getPriceTicketList() {

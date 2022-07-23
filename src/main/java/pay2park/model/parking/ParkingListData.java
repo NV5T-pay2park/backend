@@ -11,8 +11,9 @@ public class ParkingListData {
     private Integer timeOpen;
     private Integer timeClose;
     private Integer status;
+    private String phoneNumber;
 
-    public ParkingListData(Integer id, String parkingLotName, Double lat, Double ing, Integer timeOpen, Integer timeClose, Integer status) {
+    public ParkingListData(Integer id, String parkingLotName, Double lat, Double ing, Integer timeOpen, Integer timeClose, Integer status, String phoneNumber) {
         this.id = id;
         this.parkingLotName = parkingLotName;
         this.lat = lat;
@@ -20,6 +21,7 @@ public class ParkingListData {
         this.timeOpen = timeOpen;
         this.timeClose = timeClose;
         this.status = status;
+        this.phoneNumber = phoneNumber;
     }
     public ParkingListData(ParkingLot parkingLot){
         this.id = parkingLot.getId();
@@ -29,6 +31,7 @@ public class ParkingListData {
         this.timeOpen = parkingLot.getTimeOpen();
         this.timeClose = parkingLot.getTimeClose();
         this.status = parkingLot.getStatus();
+        this.phoneNumber = parkingLot.getPhoneNumber();
     }
 
 
@@ -86,5 +89,13 @@ public class ParkingListData {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

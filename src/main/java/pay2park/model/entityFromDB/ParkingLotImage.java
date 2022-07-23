@@ -6,6 +6,7 @@ import javax.persistence.*;
 @Table(name = "parking_lot_images")
 public class ParkingLotImage {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id", nullable = false)
     private Integer id;
 
@@ -17,12 +18,12 @@ public class ParkingLotImage {
     @Column(name = "url", nullable = false)
     private String url;
 
-    public Integer getId() {
-        return id;
+    public String getUrl() {
+        return url;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public ParkingLot getParkingLot() {
@@ -33,12 +34,11 @@ public class ParkingLotImage {
         this.parkingLot = parkingLot;
     }
 
-    public String getUrl() {
-        return url;
+    public Integer getId() {
+        return id;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setId(Integer id) {
+        this.id = id;
     }
-
 }

@@ -13,11 +13,6 @@ import pay2park.repository.ParkingLotRepository;
 
 import pay2park.repository.PriceTicketRepository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-
-import javax.websocket.OnClose;
 import java.util.ArrayList;
 import java.util.List;
 

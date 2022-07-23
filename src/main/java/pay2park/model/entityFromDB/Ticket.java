@@ -7,6 +7,7 @@ import java.time.Instant;
 @Table(name = "tickets")
 public class Ticket {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ticket_id", nullable = false)
     private Long id;
 
@@ -31,9 +32,6 @@ public class Ticket {
     @JoinColumn(name = "parking_lot_id", nullable = false)
     private ParkingLot parkingLot;
 
-    public Ticket() {
-    }
-
     public Ticket(Long id, Instant checkInTime, Instant checkOutTime, String licensePlates, VehicleType vehicleType, EndUser endUser, ParkingLot parkingLot) {
         this.id = id;
         this.checkInTime = checkInTime;
@@ -44,44 +42,12 @@ public class Ticket {
         this.parkingLot = parkingLot;
     }
 
-    public Long getId() {
-        return id;
+    public ParkingLot getParkingLot() {
+        return parkingLot;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Instant getCheckInTime() {
-        return checkInTime;
-    }
-
-    public void setCheckInTime(Instant checkInTime) {
-        this.checkInTime = checkInTime;
-    }
-
-    public Instant getCheckOutTime() {
-        return checkOutTime;
-    }
-
-    public void setCheckOutTime(Instant checkOutTime) {
-        this.checkOutTime = checkOutTime;
-    }
-
-    public String getLicensePlates() {
-        return licensePlates;
-    }
-
-    public void setLicensePlates(String licensePlates) {
-        this.licensePlates = licensePlates;
-    }
-
-    public VehicleType getVehicleType() {
-        return vehicleType;
-    }
-
-    public void setVehicleType(VehicleType vehicleType) {
-        this.vehicleType = vehicleType;
+    public void setParkingLot(ParkingLot parkingLot) {
+        this.parkingLot = parkingLot;
     }
 
     public EndUser getEndUser() {
@@ -92,12 +58,43 @@ public class Ticket {
         this.endUser = endUser;
     }
 
-    public ParkingLot getParkingLot() {
-        return parkingLot;
+    public VehicleType getVehicleType() {
+        return vehicleType;
     }
 
-    public void setParkingLot(ParkingLot parkingLot) {
-        this.parkingLot = parkingLot;
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
     }
 
+    public String getLicensePlates() {
+        return licensePlates;
+    }
+
+    public void setLicensePlates(String licensePlates) {
+        this.licensePlates = licensePlates;
+    }
+
+    public Instant getCheckOutTime() {
+        return checkOutTime;
+    }
+
+    public void setCheckOutTime(Instant checkOutTime) {
+        this.checkOutTime = checkOutTime;
+    }
+
+    public Instant getCheckInTime() {
+        return checkInTime;
+    }
+
+    public void setCheckInTime(Instant checkInTime) {
+        this.checkInTime = checkInTime;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

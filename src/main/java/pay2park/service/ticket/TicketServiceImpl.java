@@ -19,7 +19,7 @@ import pay2park.repository.VehicleTypeRepository;
 import java.time.Instant;
 import java.util.*;
 
-import static org.apache.http.client.methods.RequestBuilder.put;
+
 import static pay2park.extension.Extension.getCheckInTime;
 
 @Service
