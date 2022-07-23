@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  pay2park-be:
+    image: truongnh28/pay2park:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - pay2park-network
+    depends_on:
+      - pay2park-mysqldb
+
+  pay2park-mysqldb:
+    image: mysql:latest
+    networks:
+      - pay2park-network
+    environment:
+      - MYSQL_ROOT_PASSWORD=123
+      - MYSQL_DATABASE=NV5T_parking_lot
+
+networks:
+  pay2park-network:
