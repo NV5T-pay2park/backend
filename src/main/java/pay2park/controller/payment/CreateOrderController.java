@@ -23,8 +23,11 @@ public class CreateOrderController {
     public ResponseObject createOrder(@RequestBody OrderData orderData) throws IOException {
 
         var data = createOrderService.createOrder(orderData);
-        return
-                new ResponseObject(HttpStatus.OK, "create order successfully", data) ;
+        return data.getReturnCode() == 1 ?
+
+                new ResponseObject(HttpStatus.OK, "create order successfully", data)
+                :
+                new ResponseObject(HttpStatus.OK, "create order failed", data);
     }
 }
 
