@@ -37,14 +37,23 @@ import java.io.IOException;
         }
 
 
-        @GetMapping("/getParking")
+        @GetMapping("/filterParking")
         @ResponseBody
-        public ResponseObject getParkingWithPagination(@RequestParam String coordinates,@RequestParam String stringSearch, @RequestParam String vehicleTypes) throws IOException {
+        public ResponseObject filterParking(@RequestParam String coordinates, @RequestParam String vehicleTypes) throws IOException {
 
-            var data = parkingService.getParking(coordinates, stringSearch, vehicleTypes);
+            var data = parkingService.filterParking(coordinates, vehicleTypes);
             return
-                    new ResponseObject(HttpStatus.OK, "get parking by successfully ", data);
+                    new ResponseObject(HttpStatus.OK, "filter parking successfully ", data);
         }
+
+        @GetMapping("/searchParking")
+        @ResponseBody
+        public ResponseObject searchParking(@RequestParam String stringSearch) throws IOException {
+            var data = parkingService.searchParking(stringSearch);
+            return
+                    new ResponseObject(HttpStatus.OK, "search parking successfully ", data);
+        }
+
 
 
     }

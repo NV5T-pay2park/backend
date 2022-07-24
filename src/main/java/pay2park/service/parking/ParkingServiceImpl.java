@@ -75,17 +75,23 @@ public class ParkingServiceImpl implements  ParkingService{
     }
 
     @Override
-    public List<ParkingListData> getParking(String coordinates,String stringSearch,String vehicleTypes){
-        var rawData = parkingLotRepository.findSearch(stringSearch);
+    public List<ParkingListData> filterParking(String coordinates,String vehicleTypes){
+
         List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
-        String[] vehicleTypeParts = vehicleTypes.split(",");
+        List<ParkingLot> rawData = new ArrayList<ParkingLot>();
 
+        if (vehicleTypes != ""){
+            String[] vehicleTypeParts = vehicleTypes.split(",");
+            List<Integer> typesInt = new ArrayList<Integer>();
+            for (String value: vehicleTypeParts){
+                typesInt.add(Integer.parseInt(value));
+            }
 
-
-
-
-
-
+            rawData = parkingLotRepository.filterWithVehicleType(typesInt);
+        }
+        else{
+            rawData = parkingLotRepository.findAll();
+        }
         if (coordinates != "") {
             String[] coordinateParts = coordinates.split(",");
             Double userLong = Double.parseDouble(coordinateParts[0]);
@@ -94,7 +100,7 @@ public class ParkingServiceImpl implements  ParkingService{
             Distance distance = new Distance();
             for (ParkingLot parkingLot : rawData) {
                 Double dt = distance.getDistance(userLong, userLat, parkingLot.getLat(), parkingLot.getIng());
-                parkingList.add(new ParkingListData(parkingLot, dt, 4));
+                parkingList.add(new ParkingListData(parkingLot, dt, 0));
 
             }
             Collections.sort(parkingList, new Comparator<ParkingListData>() {
@@ -102,8 +108,33 @@ public class ParkingServiceImpl implements  ParkingService{
                     return s1.getDistance().compareTo(s2.getDistance());
                 }
             });
+        }
+
+        else {
+            for (ParkingLot parkingLot : rawData) {
+                parkingList.add(new ParkingListData(parkingLot, 0.0, 0));
+            }
+        }
+
+        return parkingList;
+    }
+
+    @Override
+    public List<ParkingListData> searchParking(String stringSearch){
+        List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
+        List<ParkingLot> rawData = new ArrayList<ParkingLot>();
+        rawData = parkingLotRepository.searchWithStringSearch(stringSearch);
+
+        if (rawData.size() == 0){
+            rawData = parkingLotRepository.searchWithLikeStringSearch(stringSearch);
+        }
+        for (ParkingLot parkingLot : rawData) {
+
+            parkingList.add(new ParkingListData(parkingLot, 0.0, 0));
 
         }
-        return parkingList;
+
+
+        return parkingList.size()> 5? parkingList.subList(0, 5): parkingList;
     }
 }

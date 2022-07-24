@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface ParkingService {
     List<ParkingListData> getAllParking();
-    List<ParkingListData> getParking(String coordinates,String stringSearch,String vehicleTypes);
+    List<ParkingListData> filterParking(String coordinates,String vehicleTypes);
+    List<ParkingListData> searchParking(String stringSearch);
     ParkingDetailData getParkingById(Integer parkingLotId, String coordinates);
 }

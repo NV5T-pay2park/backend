@@ -31,6 +31,7 @@ public class Distance {
         url = url + "&key=AIzaSyCuIMJTEeifSs3ISPf2WOCsoiMjsuurP5w";
         RestTemplate restTemplate = new RestTemplate();
         String result = restTemplate.getForObject(url, String.class);
+        System.out.println(result);
         return "5.5,30";
     }
 

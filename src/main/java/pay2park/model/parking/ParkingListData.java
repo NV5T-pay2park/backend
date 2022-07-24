@@ -8,17 +8,19 @@ public class ParkingListData {
     private String parkingLotName;
     private Integer timeOpen;
     private Integer timeClose;
+    private String address;
     private Integer status;
     private String phoneNumber;
     private Double distance;
     private Integer timeMoving;
 
 
-    public ParkingListData(Integer id, String parkingLotName, Integer timeOpen, Integer timeClose, Integer status, String phoneNumber, Double distance , Integer timeMoving) {
+    public ParkingListData(Integer id, String parkingLotName, Integer timeOpen, Integer timeClose, String address, Integer status, String phoneNumber, Double distance , Integer timeMoving) {
         this.id = id;
         this.parkingLotName = parkingLotName;
         this.timeOpen = timeOpen;
         this.timeClose = timeClose;
+        this.address = address;
         this.status = status;
         this.phoneNumber = phoneNumber;
         this.distance = distance;
@@ -29,6 +31,7 @@ public class ParkingListData {
         this.parkingLotName = parkingLot.getParkingLotName();
         this.timeOpen = parkingLot.getTimeOpen();
         this.timeClose = parkingLot.getTimeClose();
+        this.address = parkingLot.getAddress();
         this.status = parkingLot.getStatus();
         this.phoneNumber = parkingLot.getPhoneNumber();
         this.distance = distance;
@@ -66,6 +69,14 @@ public class ParkingListData {
 
     public void setTimeClose(Integer timeClose) {
         this.timeClose = timeClose;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Integer getStatus() {
