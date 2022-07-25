@@ -1,7 +1,9 @@
 package pay2park.util.functions;
 
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
 
 
 import java.io.BufferedReader;
@@ -57,15 +59,33 @@ public class Distance {
             }
             in.close();
             JSONObject result = new JSONObject(content.toString());
-            if (result.get("status") == "OK") {
-                JSONObject row = (JSONObject) Array.get(result.get("rows"),0);
-                JSONObject elements = (JSONObject) Array.get(row.get("elements"), 0);
-                JSONObject data = (JSONObject) Array.get(elements, 0);
-                JSONObject distance = (JSONObject) data.get("distance");
-                JSONObject time = (JSONObject) data.get("duration");
-                return distance.get("value")+","+time.get("value");
+
+            System.out.println(result.get("status"));
+            if (result.get("status").equals("OK")) {
+
+                System.out.println('a');
+                System.out.println(result.get("rows").getClass());
+
+                JSONArray rows = result.getJSONArray("rows");
+
+                JSONObject r = rows.getJSONObject(0);
+                JSONArray elements = r.getJSONArray("elements");
+
+                JSONObject e = elements.getJSONObject(0);
+                System.out.println(e);
+                JSONObject distance = new JSONObject (e.get("distance").toString());
+                JSONObject duration = new JSONObject(e.get("duration").toString());
+                Integer dt = Integer.parseInt(distance.get("value").toString());
+                double dtDB = dt/1000;
+                dtDB = Math.round(dtDB * 10.0) / 10.0;
+                Integer dr = Integer.parseInt(duration.get("value").toString());
+
+
+
+                return Double. toString(dtDB) + ',' + dr;
              }
             else{
+
                 return "0.0,0";
             }
 
@@ -74,9 +94,4 @@ public class Distance {
         }
 
     }
-
-
-
-
-
 }

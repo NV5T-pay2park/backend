@@ -1,20 +1,12 @@
 @startuml
 
 
-participant "End-user (client)" as enduser
 participant "Merchant (client)" as merchant
 participant "Service (Pay2Park)" as service
 database "Database (Pay2Park)" as DB
 
 autonumber
-activate enduser
 activate service
-enduser -> service: open e-ticket
-service -> service: wait response from merchant
-alt merchant does not response (time exeeded 5s)
-service --> enduser: null response
-
-else merchant sends request
 
 activate merchant
 merchant -> service: scan QR (e-ticket) to get information including user_id and lisence_plate_id
@@ -26,13 +18,25 @@ service -> DB: check if e-ticket with status check-in created before
 
 alt e-ticket status is check-in
     DB --> service: return lisence_plate_id and valid permission to update
+    service --> merchant: lisence_plate_id
+    merchant -> service: payment require
     group ref
       service -> service: call API QR Pay of ZaloPay
     end
-    service -> DB: update e-ticket status to check-out
-    DB --> service: updated success
-    service --> merchant: send success message and lisence_plate_id of end-user
-    service --> enduser: remove e-ticket from UI check-in list.
+    service -> DB: save payment URL to database
+
+    loop status fail (maximum 30s)
+      group ref
+        service -> service: ping API get order status
+      end
+      alt status success
+        service -> DB: update e-ticket status to check-out
+        DB --> service: updated success
+      end
+    end
+
+
+    service --> merchant: send success/fail message
 else e-ticket status error
 
   alt e-ticket is check-out
@@ -41,16 +45,9 @@ else e-ticket status error
       DB --> service: return lisence_plate_id and invalid lisence_plate_id message
       deactivate DB
   end
-  service --> merchant: send error message and lisence_plate_id of end-user
+  service --> merchant: send error message
   deactivate merchant
-  service --> enduser: send error message
-  deactivate enduser
   deactivate service
 end
-end
-<<<<<<< HEAD:src/main/resources/checkout-diagram.puml
-
-=======
->>>>>>> 3d43c4f092068ce8600c0d3d88caa552bd63b807:src/main/java/document/checkout/checkout-diagram.puml
 
 @enduml

@@ -32,6 +32,9 @@ public class Ticket {
     @JoinColumn(name = "parking_lot_id", nullable = false)
     private ParkingLot parkingLot;
 
+    public Ticket() {
+    }
+
     public Ticket(Long id, Instant checkInTime, Instant checkOutTime, String licensePlates, VehicleType vehicleType, EndUser endUser, ParkingLot parkingLot) {
         this.id = id;
         this.checkInTime = checkInTime;
