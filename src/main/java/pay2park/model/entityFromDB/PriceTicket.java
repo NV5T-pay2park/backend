@@ -18,11 +18,23 @@ public class PriceTicket {
     @JoinColumn(name = "vehicle_type_id", nullable = false)
     private VehicleType vehicleType;
 
+
+    @Column(name = "period_time", nullable = false, insertable=false, updatable=false)
+    private Integer periodTime;
+
     @Column(name = "price", nullable = false)
     private Integer price;
 
     @Column(name = "unit", nullable = false)
     private Integer unit;
+
+    public Integer getPeriodTime() {
+        return periodTime;
+    }
+
+    public void setPeriodTime(Integer periodTime) {
+        this.periodTime = periodTime;
+    }
 
     public Integer getUnit() {
         return unit;

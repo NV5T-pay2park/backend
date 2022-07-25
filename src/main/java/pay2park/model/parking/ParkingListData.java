@@ -6,32 +6,36 @@ public class ParkingListData {
 
     private Integer id;
     private String parkingLotName;
-    private Double lat;
-    private Double ing;
     private Integer timeOpen;
     private Integer timeClose;
+    private String address;
     private Integer status;
     private String phoneNumber;
+    private Double distance;
+    private Integer timeMoving;
 
-    public ParkingListData(Integer id, String parkingLotName, Double lat, Double ing, Integer timeOpen, Integer timeClose, Integer status, String phoneNumber) {
+
+    public ParkingListData(Integer id, String parkingLotName, Integer timeOpen, Integer timeClose, String address, Integer status, String phoneNumber, Double distance , Integer timeMoving) {
         this.id = id;
         this.parkingLotName = parkingLotName;
-        this.lat = lat;
-        this.ing = ing;
         this.timeOpen = timeOpen;
         this.timeClose = timeClose;
+        this.address = address;
         this.status = status;
         this.phoneNumber = phoneNumber;
+        this.distance = distance;
+        this.timeMoving = timeMoving;
     }
-    public ParkingListData(ParkingLot parkingLot){
+    public ParkingListData(ParkingLot parkingLot, Double distance, Integer timeMoving){
         this.id = parkingLot.getId();
         this.parkingLotName = parkingLot.getParkingLotName();
-        this.lat = parkingLot.getLat();
-        this.ing = parkingLot.getIng();
         this.timeOpen = parkingLot.getTimeOpen();
         this.timeClose = parkingLot.getTimeClose();
+        this.address = parkingLot.getAddress();
         this.status = parkingLot.getStatus();
         this.phoneNumber = parkingLot.getPhoneNumber();
+        this.distance = distance;
+        this.timeMoving = timeMoving;
     }
 
 
@@ -51,22 +55,6 @@ public class ParkingListData {
         this.parkingLotName = parkingLotName;
     }
 
-    public Double getLat() {
-        return lat;
-    }
-
-    public void setLat(Double lat) {
-        this.lat = lat;
-    }
-
-    public Double getIng() {
-        return ing;
-    }
-
-    public void setIng(Double ing) {
-        this.ing = ing;
-    }
-
     public Integer getTimeOpen() {
         return timeOpen;
     }
@@ -83,6 +71,14 @@ public class ParkingListData {
         this.timeClose = timeClose;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -97,5 +93,21 @@ public class ParkingListData {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+
+    public Integer getTimeMoving() {
+        return timeMoving;
+    }
+
+    public void setTimeMoving(Integer timeMoving) {
+        this.timeMoving = timeMoving;
     }
 }
