@@ -48,7 +48,7 @@ public class CreateOrderServiceImpl implements  CreateOrderService{
             put("app_id", config.get("app_id"));
             put("app_trans_id", getCurrentTimeString("yyMMdd") +"_"+ orderData.getUserId().toString() + orderData.getTicketId().toString()); // translation missing: en.docs.shared.sample_code.comments.app_trans_id
             put("app_time", System.currentTimeMillis()); // miliseconds
-            put("app_user", "FRESHER TEST");
+            put("app_user", "DicBRxUCu86qoxntyDR_VTIeTpdXF0hfRUI1q-QPVyg");
             put("amount", orderData.getAmount());
             put("description", "Pay2Park - Payment for the order #"+orderData.getUserId().toString() + orderData.getTicketId().toString());
             put("bank_code", "zalopayapp");
@@ -86,6 +86,7 @@ public class CreateOrderServiceImpl implements  CreateOrderService{
         for (String key : result.keySet()) {
             System.out.format("%s = %s\n", key, result.get(key));
         }
+        System.out.println(result.get("zp_trans_token"));
         return new ResponseOrderData( (int)result.get("return_code"),appTransId, result.get("order_url").toString());
     };
 }
