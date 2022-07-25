@@ -22,7 +22,9 @@ public class QueryOrderController {
     @ResponseBody
     public ResponseObject createOrder(@RequestBody Map<String,String> appTransId) throws IOException, URISyntaxException {
         var data = queryOrderService.queryOrder(appTransId);
-        return
-                new ResponseObject(HttpStatus.OK, "query order status successfully", data) ;
+
+
+        return new ResponseObject(HttpStatus.OK, "query order status successfully", data);
+
     }
 }

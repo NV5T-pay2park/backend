@@ -14,6 +14,7 @@ import pay2park.repository.ParkingLotRepository;
 import pay2park.repository.PriceTicketRepository;
 import pay2park.util.functions.Distance;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -44,7 +45,7 @@ public class ParkingServiceImpl implements  ParkingService{
 
 
     @Override
-    public ParkingDetailData getParkingById(Integer parkingLotId, String coordinates){
+    public ParkingDetailData getParkingById(Integer parkingLotId, String coordinates) throws IOException {
         var parking = parkingLotRepository.findById(parkingLotId).orElseThrow(() -> new ResourceNotFoundException("Parking lot not exist with id: "+parkingLotId));
         List<PriceTicket> priceTicketList = new ArrayList<PriceTicket>();
         priceTicketList = priceTicketRepository.findByParkingLotId(parking);
@@ -55,7 +56,7 @@ public class ParkingServiceImpl implements  ParkingService{
             priceTicketDataList.add(new PriceTicketData(priceTicket));
 
         }
-        System.out.println(priceTicketDataList.get(8).getVehicleType().getVehicleTypeName());
+
         if (coordinates == ""){
             return new ParkingDetailData(parking, 0.0, 0, priceTicketDataList);
         }
