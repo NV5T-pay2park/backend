@@ -1,6 +1,16 @@
 package pay2park.util.functions;
 
-import org.springframework.web.client.RestTemplate;
+
+import org.json.JSONObject;
+
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Array;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 
 public class Distance {
     public static double getDistance(double lat1, double lon1, double lat2, double lon2) {
@@ -24,15 +34,45 @@ public class Distance {
         return (rad * 180.0 / Math.PI);
     }
 
-    public static String getDistanceAndTimeGgApi(double lat1, double lon1, double lat2, double lon2){
+    public static String getDistanceAndTimeGgApi(double lat1, double lon1, double lat2, double lon2) throws IOException {
         String url = "https://maps.googleapis.com/maps/api/distancematrix/json?";
         url = url + "destinations=" + lat1 + "," + lon1;
-        url = url + "&origins=" + lon2 + "," + lat2;
+        url = url + "&origins=" + lat2 + "," + lon2;
         url = url + "&key=AIzaSyCuIMJTEeifSs3ISPf2WOCsoiMjsuurP5w";
-        RestTemplate restTemplate = new RestTemplate();
-        String result = restTemplate.getForObject(url, String.class);
-        System.out.println(result);
-        return "5.5,30";
+
+        URL uri = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) uri.openConnection();
+        con.setRequestMethod("GET");
+
+        con.setRequestProperty("Content-Type", "application/json");
+        int status = con.getResponseCode();
+
+        if (status == 200) {
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer content = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+            JSONObject result = new JSONObject(content.toString());
+            if (result.get("status") == "OK") {
+                JSONObject row = (JSONObject) Array.get(result.get("rows"),0);
+                JSONObject elements = (JSONObject) Array.get(row.get("elements"), 0);
+                JSONObject data = (JSONObject) Array.get(elements, 0);
+                JSONObject distance = (JSONObject) data.get("distance");
+                JSONObject time = (JSONObject) data.get("duration");
+                return distance.get("value")+","+time.get("value");
+             }
+            else{
+                return "0.0,0";
+            }
+
+        } else {
+            return "0.0,0";
+        }
+
     }
 
 

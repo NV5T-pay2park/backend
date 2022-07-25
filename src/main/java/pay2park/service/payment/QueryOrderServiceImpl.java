@@ -63,8 +63,10 @@ public class QueryOrderServiceImpl implements QueryOrderService{
             System.out.format("%s = %s\n", key, result.get(key));
         }
 
-
-        return new ResponseQueryData((int)result.get("return_code"));
+        if((int)result.get("return_code") != 3){
+            return new ResponseQueryData((int)result.get("return_code"), "");
+        }
+        return new ResponseQueryData((int)result.get("return_code"), "https://sbgateway.zalopay.vn/openinapp?order=eyJ6cHRyYW5zdG9rZW4iOiIyMjA3MjUwMDAwMDAwODYwOTJaNzBUIiwiYXBwaWQiOjk5OTg4OH0");
     }
 
 }

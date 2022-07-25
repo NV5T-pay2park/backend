@@ -29,7 +29,7 @@ import java.io.IOException;
 
         @GetMapping("/getAllParking/{parkingLotId}")
         @ResponseBody
-        public ResponseObject getParkingById(@PathVariable(value="parkingLotId") Integer parkingLotId, @RequestParam String coordinates)  {
+        public ResponseObject getParkingById(@PathVariable(value="parkingLotId") Integer parkingLotId, @RequestParam String coordinates) throws IOException {
 
             var data = parkingService.getParkingById(parkingLotId, coordinates);
             return
