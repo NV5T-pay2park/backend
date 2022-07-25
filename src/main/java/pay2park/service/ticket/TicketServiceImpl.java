@@ -18,6 +18,7 @@ import pay2park.repository.VehicleTypeRepository;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 import static pay2park.extension.Extension.getCheckInTime;
@@ -37,6 +38,7 @@ public class TicketServiceImpl implements TicketService {
         if(!checkTicketData(ticketData)) return null;
         Long id = createTicketID(ticketData);
         Instant checkInTime = getCheckInTime();
+        Integer amount = null;
         String licensePlate = ticketData.getLicensePlate();
         int vehicleTypeID = ticketData.getVehicleType();
         Optional<VehicleType> vehicleType = vehicleTypeRepository.findById(vehicleTypeID);
@@ -46,13 +48,12 @@ public class TicketServiceImpl implements TicketService {
         Optional<ParkingLot> parkingLot = parkingLotRepository.findById(parkingLotID);
         String parkingLotName = parkingLotRepository.findById(parkingLotID).get().getParkingLotName();
         String vehicleTypeName = vehicleTypeRepository.findById(ticketData.getVehicleType()).get().getVehicleTypeName();
-        String status = "Chưa thanh toán";
         Ticket ticket = new Ticket(id, checkInTime, null,
                 licensePlate, vehicleType.get(), endUser.get(), parkingLot.get());
         try {
             ticketsRepository.save(ticket);
-            return new ResponseTicketData(id, checkInTime, licensePlate, vehicleTypeName, endUserID,
-                    "enduserName", parkingLotID, parkingLotName, status);
+            return new ResponseTicketData(id, checkInTime, amount, licensePlate, vehicleTypeName, endUserID,
+                    "enduserName", parkingLotID, parkingLotName, false);
         } catch (Exception e) {
             return new ResponseTicketData();
         }
@@ -64,10 +65,20 @@ public class TicketServiceImpl implements TicketService {
                     new ArrayList<Ticket>());
         }
         Optional<EndUser> endUser = endUserRepository.findById(endUserID);
-        return new ResponseObject(HttpStatus.OK, "Success",
-                ticketsRepository.getAllTicketByEndUserID(endUser.get()));
+        List<Ticket> ticketByEndUserID = ticketsRepository.getAllTicketByEndUserID(endUser.get());
+        List<ResponseTicketData> dataResponse = ticketByEndUserID.stream().map(
+                i -> new ResponseTicketData(i.getId(), i.getCheckInTime(),
+                        (i.getCheckOutTime() == null) ? null : calculateAmount(i.getId()),i.getLicensePlates(),
+                        i.getVehicleType().getVehicleTypeName(),
+                        i.getEndUser().getId(),
+                        i.getEndUser().getFirstName() + ' ' + i.getEndUser().getLastName(),
+                        i.getParkingLot().getId(), i.getParkingLot().getParkingLotName(),
+                        !(i.getCheckOutTime() == null))).collect(Collectors.toList());
+        return new ResponseObject(HttpStatus.OK, "Success", dataResponse);
     }
-
+    private Integer calculateAmount(Long ticketID) {
+        return 5000;
+    }
     private Long createTicketID(TicketData ticketData) {
         String createTicketTime = Extension.getCurrentTimeString("yyMMddHHmmss");
         String parkingLotID = String.valueOf(ticketData.getParkingLotID());

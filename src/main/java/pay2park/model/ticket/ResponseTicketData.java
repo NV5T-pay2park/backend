@@ -6,22 +6,24 @@ import java.util.Date;
 public class ResponseTicketData {
     private Long ticketID;
     private Instant checkInTime;
+    Integer amount;
     private String licensePlate;
     private String vehicleType;
     private int endUserID;
     private String endUserName;
     private int parkingLotID;
     private String parkingLotName;
-    private String status;
+    private boolean status;
 
     public ResponseTicketData() {
 
     }
 
-    public ResponseTicketData(Long ticketID, Instant checkInTime, String licensePlate, String vehicleType, int endUserID,
-                              String endUserName, int parkingLotID, String parkingLotName, String status) {
+    public ResponseTicketData(Long ticketID, Instant checkInTime, Integer amount, String licensePlate, String vehicleType,
+                              int endUserID, String endUserName, int parkingLotID, String parkingLotName, boolean status) {
         this.ticketID = ticketID;
         this.checkInTime = checkInTime;
+        this.amount = amount;
         this.licensePlate = licensePlate;
         this.vehicleType = vehicleType;
         this.endUserID = endUserID;
@@ -29,6 +31,18 @@ public class ResponseTicketData {
         this.parkingLotID = parkingLotID;
         this.parkingLotName = parkingLotName;
         this.status = status;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public boolean isStatus() {
+        return status;
     }
 
     public Long getTicketID() {
@@ -95,11 +109,11 @@ public class ResponseTicketData {
         this.parkingLotName = parkingLotName;
     }
 
-    public String getStatus() {
+    public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 }
