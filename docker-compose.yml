@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  pay2park-db:
+    container_name: pay2park-db
+    image: mysql:latest
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root123
+      - MYSQL_DATABASE=NV5T_parking_lot
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=root123
+    volumes:
+      - /db:/var/lib/mysql
+    networks:
+      - pay2park-network
+  app:
+    depends_on:
+      - pay2park-db
+    image: truongnh28/pay2park:latest
+    container_name: pay2park-be
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://pay2park-db/NV5T_parking_lot?autoReconnect=true&failOverReadOnly=false&maxReconnects=10
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+    stdin_open: true
+    tty: true
+    networks:
+      - pay2park-network
+
+volumes:
+  database:
+networks:
+  pay2park-network:

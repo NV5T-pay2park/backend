@@ -31,7 +31,7 @@ public class ParkingServiceImpl implements  ParkingService{
 
     @Override
     public List<ParkingListData> getAllParking (){
-        var rawData = parkingLotRepository.findAll();
+        List<ParkingLot> rawData = parkingLotRepository.findAll();
         List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
 
         for (ParkingLot parkingLot : rawData ){
@@ -46,7 +46,7 @@ public class ParkingServiceImpl implements  ParkingService{
 
     @Override
     public ParkingDetailData getParkingById(Integer parkingLotId, String coordinates) throws IOException {
-        var parking = parkingLotRepository.findById(parkingLotId).orElseThrow(() -> new ResourceNotFoundException("Parking lot not exist with id: "+parkingLotId));
+            ParkingLot parking = parkingLotRepository.findById(parkingLotId).orElseThrow(() -> new ResourceNotFoundException("Parking lot not exist with id: "+parkingLotId));
         List<PriceTicket> priceTicketList = new ArrayList<PriceTicket>();
         priceTicketList = priceTicketRepository.findByParkingLotId(parking);
 
@@ -109,14 +109,11 @@ public class ParkingServiceImpl implements  ParkingService{
                     return s1.getDistance().compareTo(s2.getDistance());
                 }
             });
-        }
-
-        else {
+        } else {
             for (ParkingLot parkingLot : rawData) {
                 parkingList.add(new ParkingListData(parkingLot, 0.0, 0));
             }
         }
-
         return parkingList;
     }
 
@@ -134,8 +131,6 @@ public class ParkingServiceImpl implements  ParkingService{
             parkingList.add(new ParkingListData(parkingLot, 0.0, 0));
 
         }
-
-
         return parkingList.size()> 5? parkingList.subList(0, 5): parkingList;
     }
 }
