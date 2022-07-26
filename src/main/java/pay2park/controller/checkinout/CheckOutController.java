@@ -19,6 +19,7 @@ import java.io.IOException;
 public class CheckOutController {
     @Autowired
     CheckOutService checkOutService;
+
     @Autowired
     TicketService ticketService;
 
@@ -27,6 +28,7 @@ public class CheckOutController {
         ResponseObject responseObject = checkOutService.preCheckOut(preCheckOutData);
         return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
     }
+
 
     @PostMapping("/checkOut")
     public ResponseEntity<ResponseObject> checkOut(@RequestBody CheckOutData checkOutData) throws IOException {

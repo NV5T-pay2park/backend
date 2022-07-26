@@ -21,7 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Service
-public class ParkingServiceImpl implements  ParkingService{
+public class ParkingServiceImpl implements ParkingService {
 
     @Autowired
     private ParkingLotRepository parkingLotRepository;
@@ -30,40 +30,38 @@ public class ParkingServiceImpl implements  ParkingService{
 
 
     @Override
-    public List<ParkingListData> getAllParking (){
+    public List<ParkingListData> getAllParking() {
         List<ParkingLot> rawData = parkingLotRepository.findAll();
         List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
 
-        for (ParkingLot parkingLot : rawData ){
+        for (ParkingLot parkingLot : rawData) {
 
-            parkingList.add(new ParkingListData(parkingLot,3.4,4));
+            parkingList.add(new ParkingListData(parkingLot, 3.4, 4));
 
         }
         return parkingList;
     }
 
 
-
     @Override
     public ParkingDetailData getParkingById(Integer parkingLotId, String coordinates) throws IOException {
-            ParkingLot parking = parkingLotRepository.findById(parkingLotId).orElseThrow(() -> new ResourceNotFoundException("Parking lot not exist with id: "+parkingLotId));
+        ParkingLot parking = parkingLotRepository.findById(parkingLotId).orElseThrow(() -> new ResourceNotFoundException("Parking lot not exist with id: " + parkingLotId));
         List<PriceTicket> priceTicketList = new ArrayList<PriceTicket>();
         priceTicketList = priceTicketRepository.findByParkingLotId(parking);
 
         List<PriceTicketData> priceTicketDataList = new ArrayList<PriceTicketData>();
 
-        for (PriceTicket priceTicket: priceTicketList){
+        for (PriceTicket priceTicket : priceTicketList) {
             priceTicketDataList.add(new PriceTicketData(priceTicket));
 
         }
 
-        if (coordinates == ""){
+        if (coordinates == "") {
             return new ParkingDetailData(parking, 0.0, 0, priceTicketDataList);
-        }
-        else {
+        } else {
             String[] parts1 = coordinates.split(",");
-            Double userLong =Double.parseDouble(parts1[0]);
-            Double userLat = Double.parseDouble(parts1[1]);
+            double userLong = Double.parseDouble(parts1[0]);
+            double userLat = Double.parseDouble(parts1[1]);
 
             Distance distance = new Distance();
 
@@ -76,27 +74,26 @@ public class ParkingServiceImpl implements  ParkingService{
     }
 
     @Override
-    public List<ParkingListData> filterParking(String coordinates,String vehicleTypes){
+    public List<ParkingListData> filterParking(String coordinates, String vehicleTypes) {
 
         List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
         List<ParkingLot> rawData = new ArrayList<ParkingLot>();
 
-        if (vehicleTypes != ""){
+        if (!vehicleTypes.equals("")) {
             String[] vehicleTypeParts = vehicleTypes.split(",");
             List<Integer> typesInt = new ArrayList<Integer>();
-            for (String value: vehicleTypeParts){
+            for (String value : vehicleTypeParts) {
                 typesInt.add(Integer.parseInt(value));
             }
 
             rawData = parkingLotRepository.filterWithVehicleType(typesInt);
-        }
-        else{
+        } else {
             rawData = parkingLotRepository.findAll();
         }
-        if (coordinates != "") {
+        if (!coordinates.equals("")) {
             String[] coordinateParts = coordinates.split(",");
-            Double userLong = Double.parseDouble(coordinateParts[0]);
-            Double userLat = Double.parseDouble(coordinateParts[1]);
+            double userLong = Double.parseDouble(coordinateParts[0]);
+            double userLat = Double.parseDouble(coordinateParts[1]);
 
             Distance distance = new Distance();
             for (ParkingLot parkingLot : rawData) {
@@ -118,12 +115,12 @@ public class ParkingServiceImpl implements  ParkingService{
     }
 
     @Override
-    public List<ParkingListData> searchParking(String stringSearch){
+    public List<ParkingListData> searchParking(String stringSearch) {
         List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
         List<ParkingLot> rawData = new ArrayList<ParkingLot>();
         rawData = parkingLotRepository.searchWithStringSearch(stringSearch);
 
-        if (rawData.size() == 0){
+        if (rawData.size() == 0) {
             rawData = parkingLotRepository.searchWithLikeStringSearch(stringSearch);
         }
         for (ParkingLot parkingLot : rawData) {
@@ -131,6 +128,6 @@ public class ParkingServiceImpl implements  ParkingService{
             parkingList.add(new ParkingListData(parkingLot, 0.0, 0));
 
         }
-        return parkingList.size()> 5? parkingList.subList(0, 5): parkingList;
+        return parkingList.size() > 5 ? parkingList.subList(0, 5) : parkingList;
     }
 }

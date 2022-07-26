@@ -15,8 +15,10 @@ import pay2park.exception.ResourceNotFoundException;
 import pay2park.extension.Extension;
 import pay2park.model.ResponseObject;
 import pay2park.model.checkinout.CheckOutData;
+
 import pay2park.model.checkinout.PreCheckOutData;
 import pay2park.model.entityFromDB.Ticket;
+
 import pay2park.repository.EndUserRepository;
 import pay2park.repository.ParkingLotRepository;
 import pay2park.repository.TicketsRepository;
