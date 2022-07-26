@@ -14,8 +14,6 @@ import pay2park.service.ticket.TicketService;
 public class CheckInController {
     @Autowired
     CheckInService checkInService;
-    @Autowired
-    TicketService ticketService;
     @PostMapping("/checkIn")
     public ResponseEntity<ResponseObject> checkIn(@RequestBody CheckInData checkInData) {
         ResponseObject responseObject = checkInService.checkIn(checkInData);
