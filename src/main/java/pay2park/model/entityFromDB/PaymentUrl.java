@@ -15,6 +15,17 @@ public class PaymentUrl {
     @Column(name = "order_url")
     private String orderUrl;
 
+    @Column(name = "zp_trans_token")
+    private String zpTransToken;
+
+    public String getZpTransToken() {
+        return zpTransToken;
+    }
+
+    public void setZpTransToken(String zpTransToken) {
+        this.zpTransToken = zpTransToken;
+    }
+
     public String getOrderUrl() {
         return orderUrl;
     }

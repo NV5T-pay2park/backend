@@ -7,9 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pay2park.model.ResponseObject;
-import pay2park.model.checkinout.CheckInData;
 import pay2park.model.checkinout.CheckOutData;
-import pay2park.service.checkinout.CheckInService;
+import pay2park.model.checkinout.PreCheckOutData;
 import pay2park.service.checkinout.CheckOutService;
 import pay2park.service.ticket.TicketService;
 
@@ -20,9 +19,21 @@ import java.io.IOException;
 public class CheckOutController {
     @Autowired
     CheckOutService checkOutService;
+
+    @Autowired
+    TicketService ticketService;
+
+    @PostMapping("/preCheckOut")
+    public ResponseEntity<ResponseObject> preCheckOut(@RequestBody PreCheckOutData preCheckOutData) throws IOException {
+        ResponseObject responseObject = checkOutService.preCheckOut(preCheckOutData);
+        return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
+    }
+
+
     @PostMapping("/checkOut")
-    public ResponseEntity<ResponseObject> checkIn(@RequestBody CheckOutData checkOutData) throws IOException {
+    public ResponseEntity<ResponseObject> checkOut(@RequestBody CheckOutData checkOutData) throws IOException {
         ResponseObject responseObject = checkOutService.checkOut(checkOutData);
         return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
     }
+
 }
