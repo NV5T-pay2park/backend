@@ -5,10 +5,11 @@ import javax.persistence.*;
 @Entity
 @Table(name = "parking_lot_images")
 public class ParkingLotImage {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id", nullable = false)
-    private Integer id;
+    private String id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "parking_lot_id", nullable = false)
@@ -34,11 +35,11 @@ public class ParkingLotImage {
         this.parkingLot = parkingLot;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 }
