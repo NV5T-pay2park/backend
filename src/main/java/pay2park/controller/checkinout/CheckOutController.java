@@ -31,7 +31,7 @@ public class CheckOutController {
 
 
     @PostMapping("/checkOut")
-    public ResponseEntity<ResponseObject> checkOut(@RequestBody CheckOutData checkOutData) throws IOException {
+    public ResponseEntity<ResponseObject> checkOut(@RequestBody CheckOutData checkOutData) throws IOException, InterruptedException {
         ResponseObject responseObject = checkOutService.checkOut(checkOutData);
         return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
     }

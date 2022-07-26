@@ -11,6 +11,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import pay2park.model.payment.QueryData;
 import pay2park.model.payment.ResponseQueryData;
 import pay2park.util.crypto.HMACUtil;
 
@@ -32,8 +33,8 @@ public class QueryOrderServiceImpl implements QueryOrderService{
         put("endpoint", "https://sb-openapi.zalopay.vn/v2/query");
     }};
 
-    public ResponseQueryData queryOrder(Map<String,String> appTransId) throws URISyntaxException, IOException {
-        String app_trans_id = appTransId.get("app_trans_id");  // Input your app_trans_id
+    public ResponseQueryData queryOrder(QueryData queryData) throws URISyntaxException, IOException {
+        String app_trans_id = queryData.getAppTransId();  // Input your app_trans_id
         String data = config.get("app_id") +"|"+ app_trans_id  +"|"+ config.get("key1"); // appid|app_trans_id|key1
         String mac = HMACUtil.HMacHexStringEncode(HMACUtil.HMACSHA256, config.get("key1"), data);
 
@@ -62,11 +63,7 @@ public class QueryOrderServiceImpl implements QueryOrderService{
         for (String key : result.keySet()) {
             System.out.format("%s = %s\n", key, result.get(key));
         }
-
-        if((int)result.get("return_code") != 3){
-            return new ResponseQueryData((int)result.get("return_code"), "");
-        }
-        return new ResponseQueryData((int)result.get("return_code"), "https://sbgateway.zalopay.vn/openinapp?order=eyJ6cHRyYW5zdG9rZW4iOiIyMjA3MjUwMDAwMDAwODYwOTJaNzBUIiwiYXBwaWQiOjk5OTg4OH0");
+        return new ResponseQueryData((int)result.get("return_code"));
     }
 
 }
