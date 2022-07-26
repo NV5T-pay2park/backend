@@ -20,8 +20,6 @@ import java.io.IOException;
 public class CheckOutController {
     @Autowired
     CheckOutService checkOutService;
-    @Autowired
-    TicketService ticketService;
     @PostMapping("/checkOut")
     public ResponseEntity<ResponseObject> checkIn(@RequestBody CheckOutData checkOutData) throws IOException {
         ResponseObject responseObject = checkOutService.checkOut(checkOutData);
