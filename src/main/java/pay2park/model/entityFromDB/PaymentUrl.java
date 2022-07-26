@@ -18,6 +18,15 @@ public class PaymentUrl {
     @Column(name = "zp_trans_token")
     private String zpTransToken;
 
+    public PaymentUrl() {
+    }
+
+    public PaymentUrl(String id, String orderUrl, String zpTransToken) {
+        this.id = id;
+        this.orderUrl = orderUrl;
+        this.zpTransToken = zpTransToken;
+    }
+
     public String getZpTransToken() {
         return zpTransToken;
     }

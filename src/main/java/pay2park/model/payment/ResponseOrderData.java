@@ -4,15 +4,13 @@ public class ResponseOrderData {
     private int returnCode;
     private String appTransId;
     private String orderUrl;
-    private String zp_trans_token;
+    private String zpTransToken;
 
-    public ResponseOrderData(int returnCode, String appTransId, String orderUrl, String zp_trans_token) {
+    public ResponseOrderData(int returnCode, String appTransId, String orderUrl, String zpTransToken) {
         this.returnCode = returnCode;
         this.appTransId = appTransId;
         this.orderUrl = orderUrl;
-        this.zp_trans_token = zp_trans_token;
-
-
+        this.zpTransToken = zpTransToken;
     }
 
     public int getReturnCode() {
@@ -39,11 +37,11 @@ public class ResponseOrderData {
         this.orderUrl = orderUrl;
     }
 
-    public String getZp_trans_token() {
-        return zp_trans_token;
+    public String getZpTransToken() {
+        return zpTransToken;
     }
 
-    public void setZp_trans_token(String zp_trans_token) {
-        this.zp_trans_token = zp_trans_token;
+    public void setZpTransToken(String zpTransToken) {
+        this.zpTransToken = zpTransToken;
     }
 }
