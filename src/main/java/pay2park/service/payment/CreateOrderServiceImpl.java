@@ -87,6 +87,6 @@ public class CreateOrderServiceImpl implements  CreateOrderService{
             System.out.format("%s = %s\n", key, result.get(key));
         }
         System.out.println(result.get("zp_trans_token"));
-        return new ResponseOrderData( (int)result.get("return_code"),appTransId, result.get("order_url").toString());
+        return new ResponseOrderData( (int)result.get("return_code"),appTransId, result.get("order_url").toString(), result.get("zp_trans_token").toString());
     };
 }
