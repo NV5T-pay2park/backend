@@ -2,6 +2,7 @@ package pay2park.controller.payment;
 
 
 
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +25,17 @@ public class CreateOrderController {
     @ResponseBody
     public ResponseObject createOrder(@RequestBody OrderData orderData) throws IOException {
 
+        ResponseOrderData data = createOrderService.createOrder(orderData);
+        return data.getReturnCode() == 1 ?
+
+                new ResponseObject(HttpStatus.OK, "create order successfully", data)
+                :
+                new ResponseObject(HttpStatus.OK, "create order failed", data);
+    }
+    @GetMapping(value = "/getCreateOrder")
+    @ResponseBody
+    public ResponseObject getCreateOrder(@RequestParam Long userId, @RequestParam Long ticketId, @RequestParam Long amount) throws IOException {
+        OrderData orderData = new OrderData(userId, ticketId, amount);
         ResponseOrderData data = createOrderService.createOrder(orderData);
         return data.getReturnCode() == 1 ?
 

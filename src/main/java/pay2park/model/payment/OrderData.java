@@ -5,6 +5,12 @@ public class OrderData {
     private Long userId;
     private Long amount;
 
+    public OrderData(Long ticketId, Long userId, Long amount) {
+        this.ticketId = ticketId;
+        this.userId = userId;
+        this.amount = amount;
+    }
+
     public Long getTicketId() {
         return ticketId;
     }
