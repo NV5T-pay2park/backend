@@ -6,7 +6,8 @@ import java.util.Date;
 public class ResponseTicketData {
     private Long ticketID;
     private Instant checkInTime;
-    Integer amount;
+    private Instant checkOutTime;
+    Integer total;
     private String licensePlate;
     private String vehicleType;
     private int endUserID;
@@ -19,11 +20,12 @@ public class ResponseTicketData {
 
     }
 
-    public ResponseTicketData(Long ticketID, Instant checkInTime, Integer amount, String licensePlate, String vehicleType,
-                              int endUserID, String endUserName, int parkingLotID, String parkingLotName, boolean status) {
+    public ResponseTicketData(Long ticketID, Instant checkInTime, Instant checkOutTime, Integer total,
+                              String licensePlate, String vehicleType, int endUserID, String endUserName, int parkingLotID, String parkingLotName, boolean status) {
         this.ticketID = ticketID;
         this.checkInTime = checkInTime;
-        this.amount = amount;
+        this.checkOutTime = checkOutTime;
+        this.total = total;
         this.licensePlate = licensePlate;
         this.vehicleType = vehicleType;
         this.endUserID = endUserID;
@@ -31,18 +33,6 @@ public class ResponseTicketData {
         this.parkingLotID = parkingLotID;
         this.parkingLotName = parkingLotName;
         this.status = status;
-    }
-
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
-    }
-
-    public boolean isStatus() {
-        return status;
     }
 
     public Long getTicketID() {
@@ -59,6 +49,22 @@ public class ResponseTicketData {
 
     public void setCheckInTime(Instant checkInTime) {
         this.checkInTime = checkInTime;
+    }
+
+    public Instant getCheckOutTime() {
+        return checkOutTime;
+    }
+
+    public void setCheckOutTime(Instant checkOutTime) {
+        this.checkOutTime = checkOutTime;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
     }
 
     public String getLicensePlate() {
@@ -109,7 +115,7 @@ public class ResponseTicketData {
         this.parkingLotName = parkingLotName;
     }
 
-    public boolean getStatus() {
+    public boolean isStatus() {
         return status;
     }
 
