@@ -17,6 +17,7 @@ import pay2park.model.ResponseObject;
 import pay2park.model.checkinout.CheckOutData;
 
 import pay2park.model.checkinout.PreCheckOutData;
+import pay2park.model.entityFromDB.ParkingLot;
 import pay2park.model.entityFromDB.PaymentUrl;
 import pay2park.model.entityFromDB.Ticket;
 
@@ -111,9 +112,13 @@ public class CheckOutServiceImpl implements CheckOutService {
         }
         if (flag.equals(true)){
             Instant time = Instant.now();
-            Ticket ticketUpdate = ticketsRepository.findById(ticketID).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));;
+            Ticket ticketUpdate = ticketsRepository.findById(ticketID).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
             ticketUpdate.setCheckOutTime(time);
             ticketsRepository.save(ticketUpdate);
+            ParkingLot parkingLotUpdate = parkingLotRepository.findById(ticketUpdate.getParkingLot().getId()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
+            int newSlotRemaining = parkingLotUpdate.getNumberSlotRemaining() + 1;
+            parkingLotUpdate.setNumberSlotRemaining(newSlotRemaining);
+            parkingLotRepository.save(parkingLotUpdate);
 
 
             return new ResponseObject(HttpStatus.OK, "checkout successfully", "");
