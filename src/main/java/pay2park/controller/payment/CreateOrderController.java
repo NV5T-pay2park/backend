@@ -17,6 +17,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/")
+@CrossOrigin
 public class CreateOrderController {
     @Autowired
     private CreateOrderService createOrderService;
