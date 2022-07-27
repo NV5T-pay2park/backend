@@ -8,11 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import pay2park.model.ResponseObject;
 import pay2park.service.image.ImageService;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/")
 @CrossOrigin
@@ -20,11 +15,13 @@ public class ImageController {
     @Autowired
     ImageService imageService;
     @PostMapping("uploadImage")
-    public ResponseEntity<ResponseObject> upload(@RequestParam MultipartFile multipartFile) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(HttpStatus.OK, "", ""));
+    public ResponseEntity<ResponseObject> upload(@RequestParam MultipartFile multipartFile, @RequestParam int parkingLotID) {
+        ResponseObject responseObject = imageService.insertImage(multipartFile, parkingLotID);
+        return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
     }
-    @DeleteMapping("/delete")
+    @DeleteMapping("deleteImage")
     public ResponseEntity<ResponseObject> deleteImage(@RequestParam("id") String id) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(HttpStatus.OK, "", ""));
+        ResponseObject responseObject = imageService.deleteImage(id);
+        return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
     }
 }
