@@ -75,7 +75,7 @@ public class CheckOutServiceImpl implements CheckOutService {
 
 
         // Tính tiền các thứ nhận lại amount
-        Long amount = 5000L;
+        Long amount = 60000L;
         Long ticketID = checkOutData.getTicketID();
         Integer endUserId = checkOutData.getEndUserID();
 
@@ -107,7 +107,7 @@ public class CheckOutServiceImpl implements CheckOutService {
                 break;
             }
             counter += 1;
-            if (counter == 20) break;
+            if (counter == 200) break;
         }
         if (flag.equals(true)){
             Instant time = Instant.now();
