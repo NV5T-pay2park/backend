@@ -120,7 +120,6 @@ public class CheckOutServiceImpl implements CheckOutService {
             parkingLotUpdate.setNumberSlotRemaining(newSlotRemaining);
             parkingLotRepository.save(parkingLotUpdate);
 
-
             return new ResponseObject(HttpStatus.OK, "checkout successfully", "");
         }
 
