@@ -38,11 +38,9 @@ public class CreateOrderServiceImpl implements  CreateOrderService{
     @Override
     public ResponseOrderData createOrder(OrderData orderData) throws IOException {
         Random rand = new Random();
-        int random_id = rand.nextInt(1000);
         final Map embed_data = new HashMap(){{
 
         }};
-
 
         Map<String, Object> order = new HashMap<String, Object>(){{
             put("app_id", config.get("app_id"));
@@ -83,10 +81,9 @@ public class CreateOrderServiceImpl implements  CreateOrderService{
         }
 
         JSONObject result = new JSONObject(resultJsonStr.toString());
-        for (String key : result.keySet()) {
-            System.out.format("%s = %s\n", key, result.get(key));
-        }
-        System.out.println(result.get("zp_trans_token"));
+//        for (String key : result.keySet()) {
+//            System.out.format("%s = %s\n", key, result.get(key));
+//        }
         return new ResponseOrderData( (int)result.get("return_code"),appTransId, result.get("order_url").toString(), result.get("zp_trans_token").toString());
     };
 }

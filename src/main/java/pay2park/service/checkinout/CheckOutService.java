@@ -8,5 +8,5 @@ import java.io.IOException;
 
 public interface CheckOutService {
     ResponseObject preCheckOut(PreCheckOutData preCheckOutData) throws IOException;
-    ResponseObject checkOut(CheckOutData checkOutData) throws IOException;
+    ResponseObject checkOut(CheckOutData checkOutData) throws IOException, InterruptedException;
 }
