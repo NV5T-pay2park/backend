@@ -53,7 +53,8 @@ public class TicketServiceImpl implements TicketService {
         try {
             ticketsRepository.save(ticket);
             return new ResponseTicketData(id, checkInTime, amount, licensePlate, vehicleTypeName, endUserID,
-                    "enduserName", parkingLotID, parkingLotName, false);
+                    endUser.get().getFirstName() + ' ' + endUser.get().getLastName(),
+                    parkingLotID, parkingLotName, false);
         } catch (Exception e) {
             return new ResponseTicketData();
         }
