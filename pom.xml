@@ -51,7 +51,10 @@
 			<version>4.5.13</version>
 		</dependency>
 
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
@@ -64,6 +67,11 @@
 			<groupId>com.cloudinary</groupId>
 			<artifactId>cloudinary-core</artifactId>
 			<version>1.32.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>5.3.21</version>
 		</dependency>
 
 	</dependencies>
