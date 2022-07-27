@@ -19,7 +19,4 @@ public interface TicketsRepository extends JpaRepository<Ticket, Long> {
     List<Ticket> getAllTicketByEndUserID(EndUser endUser);
     @Query(value = "SELECT ticket FROM Ticket ticket WHERE ticket.endUser = ?1 AND ticket.parkingLot = ?2 AND ticket.checkOutTime IS NULL")
     List<Ticket> getTicketByEndUserIDAndParkingLot(EndUser endUser, ParkingLot parkingLot);
-    @Modifying
-    @Query(value = "UPDATE tickets SET check_out_time = :time WHERE ticket_id = :ticketId", nativeQuery = true)
-    void updateTicketStatus(@Param("ticketId") Long ticketId,@Param("time") Instant time);
 }

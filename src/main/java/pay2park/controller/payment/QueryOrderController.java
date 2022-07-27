@@ -17,14 +17,15 @@ import java.util.Map;
 
 //@RestController
 //@RequestMapping("/api/")
+//@CrossOrigin
 //public class QueryOrderController {
 //    @Autowired
 //    private QueryOrderService queryOrderService;
 //
 //    @PostMapping("/queryOrder")
 //    @ResponseBody
-//    public ResponseQueryData createOrder(@RequestBody Map<String,String> appTransId) throws IOException, URISyntaxException {
-//        ResponseQueryData data = queryOrderService.queryOrder(appTransId);
+//    public ResponseQueryData createOrder(@RequestBody QueryData queryData) throws IOException, URISyntaxException {
+//        ResponseQueryData data = queryOrderService.queryOrder(queryData);
 //        return data;
 //    }
 //}
