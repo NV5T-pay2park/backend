@@ -103,7 +103,7 @@ public class CheckOutServiceImpl implements CheckOutService {
             QueryData queryData = new QueryData(appTransId);
             ResponseQueryData responseQueryData = queryOrderService.queryOrder(queryData);
 
-            if(responseQueryData.getReturnCode() == 3){
+            if(responseQueryData.getReturnCode() == 1){
                 flag = true;
                 break;
             }
