@@ -32,7 +32,7 @@ public class ParkingDetailData {
     public ParkingDetailData(ParkingLot parkingLot, Double distance, Integer timeMoving, List<PriceTicketData> priceTicketDataList){
         this.id = parkingLot.getId();
         this.parkingLotName = parkingLot.getParkingLotName();
-        this.address = parkingLot.getAddress();
+        this.address = parkingLot.getStreet() + parkingLot.getWard() + parkingLot.getDistrict() + parkingLot.getCity();
         this.status = parkingLot.getStatus();
         this.timeOpen = parkingLot.getTimeOpen();
         this.timeClose = parkingLot.getTimeClose();
