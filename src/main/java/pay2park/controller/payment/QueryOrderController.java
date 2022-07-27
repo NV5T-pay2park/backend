@@ -30,9 +30,11 @@ import java.util.Map;
 //}
 
 @RestController
+
 @RequestMapping(value = "/api/", method = RequestMethod.POST
         , produces = {"application/json", "application/xml"}
         ,  consumes = {"application/x-www-form-urlencoded"})
+@CrossOrigin
 public class QueryOrderController {
     @Autowired
     private QueryOrderService queryOrderService;

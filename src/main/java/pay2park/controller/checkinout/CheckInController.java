@@ -11,6 +11,7 @@ import pay2park.service.ticket.TicketService;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class CheckInController {
     @Autowired
     CheckInService checkInService;

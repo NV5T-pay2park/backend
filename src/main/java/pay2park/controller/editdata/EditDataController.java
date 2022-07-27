@@ -12,6 +12,7 @@ import pay2park.service.editdata.EditDataService;
 
 @RestController
 @RequestMapping("/api/")
+@CrossOrigin
 public class EditDataController {
     @Autowired
     EditDataService testService;

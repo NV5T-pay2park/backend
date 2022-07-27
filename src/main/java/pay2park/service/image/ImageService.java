@@ -1,16 +1,18 @@
 package pay2park.service.image;
 
+import org.springframework.web.multipart.MultipartFile;
+import pay2park.model.ResponseObject;
 import pay2park.model.entityFromDB.ParkingLotImage;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ImageService {
-    Optional<ParkingLotImage> getOneImage(String id);
+    ResponseObject getOneImage(String id);
 
-    List<ParkingLotImage> getAllImageByParkingLot(int id);
+    ResponseObject getAllImageByParkingLot(int id);
 
-    void insertImage(ParkingLotImage image);
+    void insertImage(MultipartFile multipartFile);
 
     void deleteImage(String id);
 
