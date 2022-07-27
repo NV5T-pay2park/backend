@@ -8,7 +8,6 @@ import pay2park.model.checkinout.CheckInData;
 import pay2park.model.entityFromDB.EndUser;
 import pay2park.model.entityFromDB.ParkingLot;
 import pay2park.model.entityFromDB.Ticket;
-import pay2park.model.entityFromDB.VehicleType;
 import pay2park.model.parking.VehicleData;
 import pay2park.model.ticket.TicketData;
 import pay2park.model.ticket.ResponseTicketData;
@@ -40,6 +39,9 @@ public class CheckInServiceImpl implements CheckInService {
         }
         if(!checkInformationCheckIn(vehicleData)) {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
+        }
+        if(!checkNumberSlotRemaining(checkInData)) {
+            return new ResponseObject(HttpStatus.FOUND, "Sold out", ticket);
         }
         List<Ticket> ticketsIsCreated = getTicketIsCreated(checkInData, vehicleData);
 //        return new ResponseObject(HttpStatus.OK, "", ticketsRepository.count());
@@ -92,5 +94,9 @@ public class CheckInServiceImpl implements CheckInService {
     }
     private VehicleData getInformationCheckInDataMock() {
         return new VehicleData(1, "77C1-6756799");
+    }
+    private boolean checkNumberSlotRemaining(CheckInData checkInData) {
+        Optional<ParkingLot> parkingLot = parkingLotRepository.findById(checkInData.getParkingLotID());
+        return parkingLot.get().getNumberSlotRemaining() > 0;
     }
 }
