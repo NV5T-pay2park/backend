@@ -4,13 +4,11 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.Singleton;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import pay2park.model.ResponseObject;
-import pay2park.model.cloudinary.CloudinaryResponse;
 import pay2park.model.entityFromDB.ParkingLot;
 import pay2park.model.entityFromDB.ParkingLotImage;
 import pay2park.repository.ParkingLotImageRepository;
@@ -18,8 +16,6 @@ import pay2park.repository.ParkingLotRepository;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -32,9 +28,9 @@ public class ImageServiceImpl implements ImageService {
     ParkingLotRepository parkingLotRepository;
     private final Cloudinary cloudinary = Singleton.getCloudinary();
     @Override
-    public ResponseObject getOneImage(String id) {
+    public ResponseObject getImageByID(String id) {
         Optional<ParkingLotImage> parkingLotImage = parkingLotImageRepository.findById(id);
-        return parkingLotImage.map(lotImage -> new ResponseObject(HttpStatus.OK, "Success", lotImage))
+        return parkingLotImage.map(image -> new ResponseObject(HttpStatus.OK, "Success", image.getUrl()))
                 .orElseGet(() -> new ResponseObject(HttpStatus.FOUND, "ID is not valid", ""));
     }
     @Override

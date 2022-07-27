@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pay2park.model.ResponseObject;
+import pay2park.model.entityFromDB.PaymentUrl;
 import pay2park.service.image.ImageService;
 
 @RestController
@@ -20,8 +21,18 @@ public class ImageController {
         return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
     }
     @DeleteMapping("deleteImage")
-    public ResponseEntity<ResponseObject> deleteImage(@RequestParam("id") String id) {
+    public ResponseEntity<ResponseObject> deleteImage(@RequestParam String id) {
         ResponseObject responseObject = imageService.deleteImage(id);
+        return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
+    }
+    @GetMapping("getAllImageByParkingLot")
+    public ResponseEntity<ResponseObject> getAllImageByParkingLot(@RequestParam int parkingLotID) {
+        ResponseObject responseObject = imageService.getAllImageByParkingLot(parkingLotID);
+        return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
+    }
+    @GetMapping("getImageByID")
+    public ResponseEntity<ResponseObject> getImageByID(@RequestParam String id) {
+        ResponseObject responseObject = imageService.getImageByID(id);
         return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
     }
 }
