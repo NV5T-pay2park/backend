@@ -13,7 +13,7 @@ public interface ImageService {
 
     ResponseObject getAllImageByParkingLot(int id);
 
-    ResponseObject insertImage(MultipartFile multipartFile, ParkingLot parkingLot);
+    ResponseObject insertImage(MultipartFile multipartFile, int parkingLotID);
 
     ResponseObject deleteImage(String id);
 }
