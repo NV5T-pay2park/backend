@@ -45,7 +45,7 @@ public class CheckInServiceImpl implements CheckInService {
 //        return new ResponseObject(HttpStatus.OK, "", ticketsRepository.count());
         if(ticketsIsCreated.size() > 0) {
             Ticket ticketIsCreated = ticketsIsCreated.get(0);
-            ticket = new ResponseTicketData(ticketIsCreated.getId(), ticketIsCreated.getCheckInTime(), null,
+            ticket = new ResponseTicketData(ticketIsCreated.getId(), ticketIsCreated.getCheckInTime(), null,null,
                     ticketIsCreated.getLicensePlates(), ticketIsCreated.getVehicleType().getVehicleTypeName(),
                     ticketIsCreated.getEndUser().getId(),
                     ticketIsCreated.getEndUser().getFirstName() + ' ' + ticketIsCreated.getEndUser().getLastName(),
