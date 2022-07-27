@@ -17,14 +17,14 @@ import java.util.Map;
 @RequestMapping("/api/")
 @CrossOrigin
 public class ImageController {
-//    @Autowired
-//    ImageService imageService;
+    @Autowired
+    ImageService imageService;
     @PostMapping("uploadImage")
     public ResponseEntity<ResponseObject> upload(@RequestParam MultipartFile multipartFile) {
-        return null;
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(HttpStatus.OK, "", ""));
     }
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseObject> deleteImage(@RequestParam("id") String id) {
-        return null;
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(HttpStatus.OK, "", ""));
     }
 }

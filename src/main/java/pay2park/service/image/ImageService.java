@@ -2,6 +2,7 @@ package pay2park.service.image;
 
 import org.springframework.web.multipart.MultipartFile;
 import pay2park.model.ResponseObject;
+import pay2park.model.entityFromDB.ParkingLot;
 import pay2park.model.entityFromDB.ParkingLotImage;
 
 import java.util.List;
@@ -12,9 +13,7 @@ public interface ImageService {
 
     ResponseObject getAllImageByParkingLot(int id);
 
-    void insertImage(MultipartFile multipartFile);
+    ResponseObject insertImage(MultipartFile multipartFile, ParkingLot parkingLot);
 
-    void deleteImage(String id);
-
-    boolean isExists(String id);
+    ResponseObject deleteImage(String id);
 }
