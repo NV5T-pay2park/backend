@@ -5,8 +5,9 @@ import pay2park.model.checkinout.CheckOutData;
 import pay2park.model.checkinout.PreCheckOutData;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public interface CheckOutService {
     ResponseObject preCheckOut(PreCheckOutData preCheckOutData) throws IOException;
-    ResponseObject checkOut(CheckOutData checkOutData) throws IOException, InterruptedException;
+    ResponseObject checkOut(CheckOutData checkOutData) throws IOException, InterruptedException, URISyntaxException;
 }

@@ -20,15 +20,22 @@ import pay2park.model.checkinout.PreCheckOutData;
 import pay2park.model.entityFromDB.PaymentUrl;
 import pay2park.model.entityFromDB.Ticket;
 
+import pay2park.model.payment.OrderData;
+import pay2park.model.payment.QueryData;
+import pay2park.model.payment.ResponseOrderData;
+import pay2park.model.payment.ResponseQueryData;
 import pay2park.repository.EndUserRepository;
 import pay2park.repository.ParkingLotRepository;
 import pay2park.repository.PaymentUrlRepository;
 import pay2park.repository.TicketsRepository;
+import pay2park.service.payment.CreateOrderService;
+import pay2park.service.payment.QueryOrderService;
 
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalTime;
@@ -44,6 +51,10 @@ public class CheckOutServiceImpl implements CheckOutService {
     ParkingLotRepository parkingLotRepository;
     @Autowired
     PaymentUrlRepository paymentUrlRepository;
+    @Autowired
+    CreateOrderService createOrderService;
+    @Autowired
+    QueryOrderService queryOrderService;
 
     @Override
     public ResponseObject preCheckOut(PreCheckOutData checkOutData) throws IOException {
@@ -60,86 +71,38 @@ public class CheckOutServiceImpl implements CheckOutService {
 
 
     @Override
-    public ResponseObject checkOut(CheckOutData checkOutData) throws IOException, InterruptedException {
+    public ResponseObject checkOut(CheckOutData checkOutData) throws IOException, InterruptedException, URISyntaxException {
+
 
         // Tính tiền các thứ nhận lại amount
         Long amount = 5000L;
         Long ticketID = checkOutData.getTicketID();
         Integer endUserId = checkOutData.getEndUserID();
 
-        // call api thanh toan
-        Map<String, String> config = new HashMap<String, String>(){{
-            put("endpoint", "http://localhost:8080/api/"+"createOrder");
-        }};
-        Map<String, Object> param = new HashMap<String, Object>(){{
-            put("userId", endUserId);
-            put("ticketId", ticketID);
-            put("amount", amount);
+        // Kiem tra checkout
+        String appTransId = getCurrentTimeString("yyMMdd") +"_"+ endUserId + ticketID.toString();
+        boolean appTransIdExist = paymentUrlRepository.existsById(appTransId);
 
-        }};
-        String appTransId = getCurrentTimeString("yyMMdd") +"_"+ endUserId.toString() + ticketID.toString();
+        if (!appTransIdExist){
 
-        CloseableHttpClient client = HttpClients.createDefault();
-        HttpPost post = new HttpPost(config.get("endpoint"));
-
-        List<NameValuePair> params = new ArrayList<>();
-        for (Map.Entry<String, Object> e : param.entrySet()) {
-            params.add(new BasicNameValuePair(e.getKey(), e.getValue().toString()));
+            // call api thanh toan
+            OrderData orderData = new OrderData(ticketID,(long) endUserId, amount);
+            ResponseOrderData responseOrderData = createOrderService.createOrder(orderData);
+            if (responseOrderData.getReturnCode() == 2){
+                return new ResponseObject(HttpStatus.FOUND, "payment failed", "");
+            }
+            paymentUrlRepository.save(new PaymentUrl(appTransId, responseOrderData.getOrderUrl(), responseOrderData.getZpTransToken()));
         }
-
-        // Content-Type: application/x-www-form-urlencoded
-        post.setEntity(new UrlEncodedFormEntity(params));
-
-        CloseableHttpResponse res = client.execute(post);
-        BufferedReader rd = new BufferedReader(new InputStreamReader(res.getEntity().getContent()));
-        StringBuilder resultJsonStr = new StringBuilder();
-        String line;
-
-        while ((line = rd.readLine()) != null) {
-            resultJsonStr.append(line);
-        }
-
-        JSONObject result = new JSONObject(resultJsonStr.toString());
-        for (String key : result.keySet()) {
-            System.out.format("%s = %s\n", key, result.get(key));
-        }
-        if (result.get("returnCode").equals(2)){
-            return new ResponseObject(HttpStatus.FOUND, "payment failed", "");
-        }
-
-        paymentUrlRepository.save(new PaymentUrl(appTransId, result.get("orderUrl").toString(), result.get("zpTransToken").toString()));
 
         // query order status
         Boolean flag = false;
         int counter = 0;
         while (true){
             Thread.sleep(3000);
+            QueryData queryData = new QueryData(appTransId);
+            ResponseQueryData responseQueryData = queryOrderService.queryOrder(queryData);
 
-            Map<String, Object> param1 = new HashMap<String, Object>(){{
-                put("appTransId", appTransId);
-            }};
-            CloseableHttpClient client1 = HttpClients.createDefault();
-            HttpPost post1 = new HttpPost("http://localhost:8080/api/"+"queryOrder");
-
-            List<NameValuePair> params1 = new ArrayList<>();
-            for (Map.Entry<String, Object> e : param1.entrySet()) {
-                params1.add(new BasicNameValuePair(e.getKey(), e.getValue().toString()));
-            }
-
-            // Content-Type: application/x-www-form-urlencoded
-            post1.setEntity(new UrlEncodedFormEntity(params1));
-
-            CloseableHttpResponse res1 = client1.execute(post1);
-            BufferedReader rd1 = new BufferedReader(new InputStreamReader(res1.getEntity().getContent()));
-            StringBuilder resultJsonStr1 = new StringBuilder();
-            String line1;
-
-            while ((line1 = rd1.readLine()) != null) {
-                resultJsonStr1.append(line1);
-            }
-
-            JSONObject result1 = new JSONObject(resultJsonStr1.toString());
-            if(result1.get("returnCode").equals(1)){
+            if(responseQueryData.getReturnCode() == 1){
                 flag = true;
                 break;
             }
@@ -148,7 +111,10 @@ public class CheckOutServiceImpl implements CheckOutService {
         }
         if (flag.equals(true)){
             Instant time = Instant.now();
-            ticketsRepository.updateTicketStatus(ticketID, time);
+            Ticket ticketUpdate = ticketsRepository.findById(ticketID).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));;
+            ticketUpdate.setCheckOutTime(time);
+            ticketsRepository.save(ticketUpdate);
+
 
             return new ResponseObject(HttpStatus.OK, "checkout successfully", "");
         }
