@@ -10,6 +10,7 @@ import pay2park.service.checkinout.CheckOutService;
 import pay2park.service.ticket.TicketService;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/api")
@@ -29,7 +30,7 @@ public class CheckOutController {
 
 
     @PostMapping("/checkOut")
-    public ResponseEntity<ResponseObject> checkOut(@RequestBody CheckOutData checkOutData) throws IOException, InterruptedException {
+    public ResponseEntity<ResponseObject> checkOut(@RequestBody CheckOutData checkOutData) throws IOException, InterruptedException, URISyntaxException {
         ResponseObject responseObject = checkOutService.checkOut(checkOutData);
         return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
     }
