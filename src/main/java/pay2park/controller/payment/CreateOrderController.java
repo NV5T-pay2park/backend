@@ -17,7 +17,9 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/")
+
 @CrossOrigin
+
 public class CreateOrderController {
     @Autowired
     private CreateOrderService createOrderService;
@@ -45,6 +47,61 @@ public class CreateOrderController {
                 new ResponseObject(HttpStatus.OK, "create order failed", data);
     }
 }
+
+
+
+// oke for checkout call http
+
+//@RestController
+//@RequestMapping("/api/")
+//public class CreateOrderController {
+//    @Autowired
+//    private CreateOrderService createOrderService;
+//
+//    @PostMapping(value = "/createOrder")
+//    @ResponseBody
+//    public ResponseObject createOrder(@RequestBody OrderData orderData) throws IOException {
+//
+//        ResponseOrderData data = createOrderService.createOrder(orderData);
+//        return data.getReturnCode() == 1 ?
+//
+//                new ResponseObject(HttpStatus.OK, "create order successfully", data)
+//                :
+//                new ResponseObject(HttpStatus.OK, "create order failed", data);
+//    }
+//    @GetMapping(value = "/getCreateOrder")
+//    @ResponseBody
+//    public ResponseObject getCreateOrder(@RequestParam Long userId, @RequestParam Long ticketId, @RequestParam Long amount) throws IOException {
+//        OrderData orderData = new OrderData(userId, ticketId, amount);
+//        ResponseOrderData data = createOrderService.createOrder(orderData);
+//        return data.getReturnCode() == 1 ?
+//
+//                new ResponseObject(HttpStatus.OK, "create order successfully", data)
+//                :
+//                new ResponseObject(HttpStatus.OK, "create order failed", data);
+//    }
+//}
+
+
+// oke for checkout call http
+
+//@RestController
+//@RequestMapping(value = "/api/", method = RequestMethod.POST
+//        , produces = {"application/json", "application/xml"}
+//        ,  consumes = {"application/x-www-form-urlencoded"})
+//public class CreateOrderController {
+//    @Autowired
+//    private CreateOrderService createOrderService;
+//
+//    @PostMapping(value = "/createOrder")
+//    @ResponseBody
+//    public ResponseOrderData createOrder(OrderData orderData) throws IOException {
+//
+//        var data = createOrderService.createOrder(orderData);
+//        return data;
+//    }
+//}
+
 
 
 // oke for checkout call http
