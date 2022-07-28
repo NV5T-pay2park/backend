@@ -2,6 +2,7 @@ package pay2park.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pay2park.model.entityFromDB.ParkingLot;
 import pay2park.model.entityFromDB.PriceTicket;
@@ -16,4 +17,11 @@ public interface PriceTicketRepository extends JpaRepository<PriceTicket, PriceT
 
     @Query(value = "SELECT price_ticket FROM PriceTicket price_ticket WHERE price_ticket.parkingLot = ?1")
     List<PriceTicket> getPriceTicketByParkingLotId(ParkingLot parkingLot);
+
+    @Query(value = "SELECT DISTINCT parkingLot FROM PriceTicket priceTicket WHERE priceTicket.vehicleType.id = :type")
+    List<ParkingLot> filterWithAVehicleType(@Param("type") Integer vehicleType);
+
+    @Query(value = "SELECT DISTINCT parking_lot_id FROM price_tickets WHERE vehicle_type_id = :type",nativeQuery = true)
+    List<Integer> filterIdWithAVehicleType(@Param("type") Integer vehicleType);
+
 }

@@ -86,14 +86,34 @@ public class ParkingServiceImpl implements ParkingService {
                 typesInt.add(Integer.parseInt(value));
             }
             if(!stringSearch.equals("")){
-                List<Integer> parkingLotIdList = parkingLotRepository.filterIdWithVehicleType(typesInt);
+                List<Integer> parkingLotIdList = new ArrayList<Integer>();
+                if(vehicleTypeParts.length == 1){
+                    parkingLotIdList = priceTicketRepository.filterIdWithAVehicleType(typesInt.get(0));
+                }
+                else{
+                    List<Integer> parkingLotIdList1 = priceTicketRepository.filterIdWithAVehicleType(typesInt.get(0));
+                    List<Integer> parkingLotIdList2 = priceTicketRepository.filterIdWithAVehicleType(typesInt.get(1));
+                    parkingLotIdList1.retainAll(parkingLotIdList2);
+                    parkingLotIdList = parkingLotIdList1;
+                }
+
                 rawData = parkingLotRepository.searchWithStringSearchAndIdList(stringSearch, parkingLotIdList);
                 if(rawData.size() == 0){
                     rawData = parkingLotRepository.searchWithLikeStringSearchAndIdList(stringSearch, parkingLotIdList);
                 }
             }
             else{
-                rawData = parkingLotRepository.filterWithVehicleType(typesInt);
+                if(vehicleTypeParts.length == 1){
+                    rawData = priceTicketRepository.filterWithAVehicleType(typesInt.get(0));
+                }
+                else{
+                    List<ParkingLot> rawData1 = priceTicketRepository.filterWithAVehicleType(typesInt.get(0));
+                    List<ParkingLot> rawData2 = priceTicketRepository.filterWithAVehicleType(typesInt.get(1));
+                    rawData1.retainAll(rawData2);
+                    rawData = rawData1;
+
+                }
+
             }
 
         }
