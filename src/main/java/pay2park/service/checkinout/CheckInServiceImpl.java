@@ -16,8 +16,10 @@ import pay2park.repository.ParkingLotRepository;
 import pay2park.repository.TicketsRepository;
 import pay2park.repository.VehicleTypeRepository;
 import pay2park.service.ticket.TicketService;
+import pay2park.service.websocket.Socket;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class CheckInServiceImpl implements CheckInService {
@@ -31,9 +33,12 @@ public class CheckInServiceImpl implements CheckInService {
     TicketsRepository ticketsRepository;
     @Autowired
     TicketService ticketService;
+    @Autowired
+    Socket socket;
     public ResponseObject checkIn(CheckInData checkInData) {
         ResponseTicketData ticket = new ResponseTicketData();
         VehicleData vehicleData = getInformationCheckInDataMock();
+
         if(!checkCheckInData(checkInData)) {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
         }
@@ -52,6 +57,7 @@ public class CheckInServiceImpl implements CheckInService {
                     ticketIsCreated.getEndUser().getId(),
                     ticketIsCreated.getEndUser().getFirstName() + ' ' + ticketIsCreated.getEndUser().getLastName(),
                     ticketIsCreated.getParkingLot().getId(), ticketIsCreated.getParkingLot().getParkingLotName(), false);
+            socket.SendCheckInFail(checkInData.getParkingLotID());
             return new ResponseObject(HttpStatus.BAD_REQUEST, "Ticket is created", ticket);
         } else {
             ticket = ticketService.createTicket(
@@ -59,6 +65,7 @@ public class CheckInServiceImpl implements CheckInService {
                             vehicleData.getVehicleTypeID(),
                             checkInData.getEndUserID(),
                             checkInData.getParkingLotID()));
+            socket.SendCheckInSuccessful(checkInData.getParkingLotID());
             return new ResponseObject(HttpStatus.OK, "Success", ticket);
         }
     }

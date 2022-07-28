@@ -10,6 +10,7 @@ import pay2park.model.checkinout.CheckOutData;
 import pay2park.model.checkinout.PreCheckOutData;
 import pay2park.model.entityFromDB.ParkingLot;
 import pay2park.model.entityFromDB.PaymentUrl;
+import pay2park.model.entityFromDB.PriceTicket;
 import pay2park.model.entityFromDB.Ticket;
 
 import pay2park.model.payment.OrderData;
@@ -69,15 +70,15 @@ public class CheckOutServiceImpl implements CheckOutService {
         Integer endUserId = checkOutData.getEndUserID();
 
         // Check checkout
-        String appTransId = getCurrentTimeString("yyMMdd") +"_"+ endUserId + ticketID.toString();
+        String appTransId = getCurrentTimeString("yyMMdd") + "_" + endUserId + ticketID.toString();
         boolean appTransIdExist = paymentUrlRepository.existsById(appTransId);
 
-        if (!appTransIdExist){
+        if (!appTransIdExist) {
 
             // call api payment
-            OrderData orderData = new OrderData(ticketID,(long) endUserId, amount);
+            OrderData orderData = new OrderData(ticketID, (long) endUserId, amount);
             ResponseOrderData responseOrderData = createOrderService.createOrder(orderData);
-            if (responseOrderData.getReturnCode() == 2){
+            if (responseOrderData.getReturnCode() == 2) {
                 return new ResponseObject(HttpStatus.FOUND, "payment failed", "");
             }
             paymentUrlRepository.save(new PaymentUrl(appTransId, responseOrderData.getOrderUrl(), responseOrderData.getZpTransToken()));
@@ -86,19 +87,19 @@ public class CheckOutServiceImpl implements CheckOutService {
         // query order status
         Boolean flag = false;
         int counter = 0;
-        while (true){
+        while (true) {
             Thread.sleep(3000);
             QueryData queryData = new QueryData(appTransId);
             ResponseQueryData responseQueryData = queryOrderService.queryOrder(queryData);
 
-            if(responseQueryData.getReturnCode() == 1){
+            if (responseQueryData.getReturnCode() == 1) {
                 flag = true;
                 break;
             }
             counter += 1;
             if (counter == 200) break;
         }
-        if (flag.equals(true)){
+        if (flag.equals(true)) {
             // update ticket checkout time and slot of parking
             Instant time = Instant.now();
             Ticket ticketUpdate = ticketsRepository.findById(ticketID).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
@@ -130,5 +131,21 @@ public class CheckOutServiceImpl implements CheckOutService {
         SimpleDateFormat fmt = new SimpleDateFormat(format);
         fmt.setCalendar(cal);
         return fmt.format(cal.getTimeInMillis());
+    }
+
+    private int calculateAmountOfTicket(double parkingHour, PriceTicket[] PriceTickets) {
+        int result = 0;
+        for (int i = 0; i < PriceTickets.length; i++) {
+            double time = 0;
+            if (i + 1 < PriceTickets.length && parkingHour > PriceTickets[i+1].getPeriodTime()) {
+                time = PriceTickets[i+1].getPeriodTime() - PriceTickets[i].getPeriodTime();
+            }
+            else {
+                time = parkingHour - PriceTickets[i].getPeriodTime();
+            }
+            int units = (int) Math.ceil(time / PriceTickets[i].getUnit());
+            result += units * PriceTickets[i].getPrice();
+        }
+        return result;
     }
 }
