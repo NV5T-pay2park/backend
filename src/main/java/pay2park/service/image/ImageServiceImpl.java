@@ -80,4 +80,5 @@ public class ImageServiceImpl implements ImageService {
     private boolean checkParkingLotID(int parkingLotID) {
         return parkingLotRepository.existsById(parkingLotID);
     }
+
 }

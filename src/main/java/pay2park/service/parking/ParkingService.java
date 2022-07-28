@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface ParkingService {
     List<ParkingListData> getAllParking();
-    List<ParkingListData> searchAndFilterParking(String stringSearch, String vehicleTypes, String coordinates);
+    List<ParkingListData> searchAndFilterParking(String stringSearch, String vehicleTypes, String district, String coordinates);
     ParkingDetailData getParkingById(Integer parkingLotId, String coordinates) throws IOException;
 }

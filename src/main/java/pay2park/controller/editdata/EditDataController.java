@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pay2park.model.ResponseObject;
 import pay2park.model.entityFromDB.Merchant;
-import pay2park.model.entityFromDB.ParkingLot;
 import pay2park.model.entityFromDB.VehicleType;
 import pay2park.service.editdata.EditDataService;
 

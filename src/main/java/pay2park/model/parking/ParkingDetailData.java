@@ -16,23 +16,11 @@ public class ParkingDetailData {
     private Integer timeMoving;
     private List<PriceTicketData> priceTicketList;
 
-    public ParkingDetailData(Integer id, String parkingLotName, String address, Integer status, Integer timeOpen, Integer timeClose, String phoneNumber, Double distance, Integer timeMoving, List<PriceTicketData> priceTicketList) {
-        this.id = id;
-        this.parkingLotName = parkingLotName;
-        this.address = address;
-        this.status = status;
-        this.timeOpen = timeOpen;
-        this.timeClose = timeClose;
-        this.phoneNumber = phoneNumber;
-        this.distance = distance;
-        this.timeMoving = timeMoving;
-        this.priceTicketList = priceTicketList;
-    }
 
     public ParkingDetailData(ParkingLot parkingLot, Double distance, Integer timeMoving, List<PriceTicketData> priceTicketDataList){
         this.id = parkingLot.getId();
         this.parkingLotName = parkingLot.getParkingLotName();
-        this.address = parkingLot.getStreet() + parkingLot.getWard() + parkingLot.getDistrict() + parkingLot.getCity();
+        this.address = parkingLot.getStreet() + ", " +  parkingLot.getWard() + ", " + parkingLot.getDistrict() + ", " + parkingLot.getCity();
         this.status = parkingLot.getStatus();
         this.timeOpen = parkingLot.getTimeOpen();
         this.timeClose = parkingLot.getTimeClose();

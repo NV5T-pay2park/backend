@@ -1,18 +1,9 @@
 package pay2park.service.checkinout;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import pay2park.exception.ResourceNotFoundException;
-import pay2park.extension.Extension;
 import pay2park.model.ResponseObject;
 import pay2park.model.checkinout.CheckOutData;
 
@@ -33,13 +24,10 @@ import pay2park.service.payment.CreateOrderService;
 import pay2park.service.payment.QueryOrderService;
 
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalTime;
 import java.util.*;
 
 @Service
@@ -58,7 +46,7 @@ public class CheckOutServiceImpl implements CheckOutService {
     QueryOrderService queryOrderService;
 
     @Override
-    public ResponseObject preCheckOut(PreCheckOutData checkOutData) throws IOException {
+    public ResponseObject preCheckOut(PreCheckOutData checkOutData){
         if (!checkDataIsValid(checkOutData)) {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", "");
         }
@@ -75,18 +63,18 @@ public class CheckOutServiceImpl implements CheckOutService {
     public ResponseObject checkOut(CheckOutData checkOutData) throws IOException, InterruptedException, URISyntaxException {
 
 
-        // Tính tiền các thứ nhận lại amount
+        // Calculate amount of ticket
         Long amount = 60000L;
         Long ticketID = checkOutData.getTicketID();
         Integer endUserId = checkOutData.getEndUserID();
 
-        // Kiem tra checkout
+        // Check checkout
         String appTransId = getCurrentTimeString("yyMMdd") +"_"+ endUserId + ticketID.toString();
         boolean appTransIdExist = paymentUrlRepository.existsById(appTransId);
 
         if (!appTransIdExist){
 
-            // call api thanh toan
+            // call api payment
             OrderData orderData = new OrderData(ticketID,(long) endUserId, amount);
             ResponseOrderData responseOrderData = createOrderService.createOrder(orderData);
             if (responseOrderData.getReturnCode() == 2){
@@ -111,6 +99,7 @@ public class CheckOutServiceImpl implements CheckOutService {
             if (counter == 200) break;
         }
         if (flag.equals(true)){
+            // update ticket checkout time and slot of parking
             Instant time = Instant.now();
             Ticket ticketUpdate = ticketsRepository.findById(ticketID).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
             ticketUpdate.setCheckOutTime(time);

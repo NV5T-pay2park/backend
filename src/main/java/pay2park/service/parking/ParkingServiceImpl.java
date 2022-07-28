@@ -1,6 +1,7 @@
 package pay2park.service.parking;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import pay2park.exception.ResourceNotFoundException;
@@ -74,7 +75,7 @@ public class ParkingServiceImpl implements ParkingService {
     }
 
     @Override
-    public List<ParkingListData> searchAndFilterParking(String stringSearch, String vehicleTypes, String coordinates) {
+    public List<ParkingListData> searchAndFilterParking(String stringSearch, String vehicleTypes,String district, String coordinates) {
         List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
         List<ParkingLot> rawData = new ArrayList<ParkingLot>();
 
@@ -108,6 +109,9 @@ public class ParkingServiceImpl implements ParkingService {
             }
         }
 
+
+            // distance
+
         if (!coordinates.equals("")) {
             String[] coordinateParts = coordinates.split(",");
             double userLong = Double.parseDouble(coordinateParts[0]);
@@ -116,7 +120,7 @@ public class ParkingServiceImpl implements ParkingService {
             Distance distance = new Distance();
             for (ParkingLot parkingLot : rawData) {
                 Double dt = distance.getDistance(userLong, userLat, parkingLot.getLat(), parkingLot.getIng());
-                int time = (int)(dt * 2/3);
+                int time = (int)(dt * 4);
                 parkingList.add(new ParkingListData(parkingLot, dt, time));
 
             }
@@ -130,7 +134,20 @@ public class ParkingServiceImpl implements ParkingService {
                 parkingList.add(new ParkingListData(parkingLot, 0.0, 0));
             }
         }
+        if (district == "Tất cả"){
+            if (!coordinates.equals("")){
+                // get district nearest
+                district = "Quận 1";
+                //CollectionUtils.filter(parkingList, o -> ((ParkingLot) o).getDistrict().equals(district));
+
+            }
+        }
+        else{
+            //CollectionUtils.filter(parkingList, o -> ((ParkingLot) o).getDistrict().equals(district));
+        }
+
         return parkingList;
     }
+
 
 }
