@@ -22,6 +22,5 @@ public interface TicketsRepository extends JpaRepository<Ticket, Long> {
     @Query(value = "SELECT ticket FROM Ticket ticket WHERE ticket.endUser = ?1 AND ticket.parkingLot = ?2 AND ticket.licensePlates = ?3 AND ticket.checkOutTime IS NULL")
     List<Ticket> getTicketByEndUserIDAndParkingLot(EndUser endUser, ParkingLot parkingLot, String licensePlates);
 
-    @Query(value = "SELECT price_ticket FROM PriceTicket price_ticket WHERE price_ticket.parkingLot = ?1")
-    List<PriceTicket> getPriceTicketByParkingLotId(ParkingLot parkingLot);
+
 }
