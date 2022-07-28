@@ -54,6 +54,27 @@ public class ParkingLot {
     @Column(name = "phone_number", length = 10)
     private String phoneNumber;
 
+    public ParkingLot() {
+    }
+
+    public ParkingLot(Integer id, String parkingLotName, Integer numberSlot, Integer numberSlotRemaining, String street, String ward, String district, String city, Integer status, Merchant merchant, Double lat, Double ing, Integer timeOpen, Integer timeClose, String phoneNumber) {
+        this.id = id;
+        this.parkingLotName = parkingLotName;
+        this.numberSlot = numberSlot;
+        this.numberSlotRemaining = numberSlotRemaining;
+        this.street = street;
+        this.ward = ward;
+        this.district = district;
+        this.city = city;
+        this.status = status;
+        this.merchant = merchant;
+        this.lat = lat;
+        this.ing = ing;
+        this.timeOpen = timeOpen;
+        this.timeClose = timeClose;
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }

@@ -2,12 +2,16 @@ package pay2park.model.parking;
 
 import pay2park.model.entityFromDB.ParkingLot;
 
+import javax.persistence.Column;
 import java.util.List;
 
 public class ParkingDetailData {
     private Integer id;
     private String parkingLotName;
-    private String address;
+    private String street;
+    private String ward;
+    private String district;
+    private String city;
     private Integer status;
     private Integer timeOpen;
     private Integer timeClose;
@@ -17,10 +21,14 @@ public class ParkingDetailData {
     private List<PriceTicketData> priceTicketList;
 
 
+
     public ParkingDetailData(ParkingLot parkingLot, Double distance, Integer timeMoving, List<PriceTicketData> priceTicketDataList){
         this.id = parkingLot.getId();
         this.parkingLotName = parkingLot.getParkingLotName();
-        this.address = parkingLot.getStreet() + ", " +  parkingLot.getWard() + ", " + parkingLot.getDistrict() + ", " + parkingLot.getCity();
+        this.street = parkingLot.getStreet();
+        this.ward = parkingLot.getWard();
+        this.district = parkingLot.getDistrict();
+        this.city = parkingLot.getCity();
         this.status = parkingLot.getStatus();
         this.timeOpen = parkingLot.getTimeOpen();
         this.timeClose = parkingLot.getTimeClose();
@@ -46,12 +54,36 @@ public class ParkingDetailData {
         this.parkingLotName = parkingLotName;
     }
 
-    public String getAddress() {
-        return address;
+    public String getStreet() {
+        return street;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getWard() {
+        return ward;
+    }
+
+    public void setWard(String ward) {
+        this.ward = ward;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public Integer getStatus() {
