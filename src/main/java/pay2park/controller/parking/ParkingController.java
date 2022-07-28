@@ -42,13 +42,12 @@ public class ParkingController {
 
     @GetMapping("/searchAndFilterParking")
     @ResponseBody
-    public ResponseObject searchAndFilterParking(@RequestParam String stringSearch, @RequestParam String vehicleTypes, @RequestParam String coordinates) throws IOException {
+    public ResponseObject searchAndFilterParking(@RequestParam String stringSearch, @RequestParam String vehicleTypes, @RequestParam String district, @RequestParam String coordinates) throws IOException {
 
-        var data = parkingService.searchAndFilterParking(stringSearch, vehicleTypes, coordinates);
+        var data = parkingService.searchAndFilterParking(stringSearch, vehicleTypes, district, coordinates);
         return
                 new ResponseObject(HttpStatus.OK, "search and filter parking successfully ", data);
     }
-
 
 }
 

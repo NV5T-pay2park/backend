@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface EditDataService {
     String insertMerchant(Merchant merchant, String name);
-    String insertParkingLot(ParkingLot parkingLot, String name, String address);
+    String insertParkingLot(int id, String name, String street, String ward, String district, String city);
     String insertVehicle(VehicleType vehicleType, String name);
     List<VehicleType> getAllVehicleType();
     List<ParkingLot> getAllParkingLot();

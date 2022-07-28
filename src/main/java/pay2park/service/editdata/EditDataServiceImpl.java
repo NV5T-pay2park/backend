@@ -10,6 +10,7 @@ import pay2park.repository.ParkingLotRepository;
 import pay2park.repository.VehicleTypeRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EditDataServiceImpl implements EditDataService {
@@ -26,9 +27,14 @@ public class EditDataServiceImpl implements EditDataService {
         return "YES";
     }
     @Override
-    public String insertParkingLot(ParkingLot parkingLot, String name, String address) {
+    public String insertParkingLot(int id, String name, String street, String ward, String district, String city){ //String name, String street, String ward, String district, String city) {
+        Optional<ParkingLot> parkingLot1 = parkingLotRepository.findById(id);
+        ParkingLot parkingLot = parkingLot1.get();
         parkingLot.setParkingLotName(name);
-        parkingLot.setAddress(address);
+        parkingLot.setStreet(street);
+        parkingLot.setWard(ward);
+        parkingLot.setDistrict(district);
+        parkingLot.setCity(city);
         parkingLotRepository.save(parkingLot);
         return "YES";
     }

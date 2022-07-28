@@ -1,18 +1,5 @@
 package pay2park.service.image;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import pay2park.model.ResponseObject;
-import pay2park.model.entityFromDB.ParkingLot;
-import pay2park.model.entityFromDB.ParkingLotImage;
-import pay2park.repository.ParkingLotImageRepository;
-import pay2park.repository.ParkingLotRepository;
-
-import java.util.List;
-import java.util.Optional;
-
 //@Service
 public class ImageServiceImpl {//implements ImageService {
 //    @Autowired

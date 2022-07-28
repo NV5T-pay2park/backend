@@ -31,7 +31,7 @@ public class ParkingListData {
         this.parkingLotName = parkingLot.getParkingLotName();
         this.timeOpen = parkingLot.getTimeOpen();
         this.timeClose = parkingLot.getTimeClose();
-        this.address = parkingLot.getAddress();
+        this.address = parkingLot.getStreet() + ", " +  parkingLot.getWard() + ", " + parkingLot.getDistrict() + ", " + parkingLot.getCity();
         this.status = parkingLot.getStatus();
         this.phoneNumber = parkingLot.getPhoneNumber();
         this.distance = distance;

@@ -6,7 +6,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pay2park.model.entityFromDB.ParkingLot;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Repository
