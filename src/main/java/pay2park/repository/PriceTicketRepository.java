@@ -13,4 +13,7 @@ import java.util.List;
 public interface PriceTicketRepository extends JpaRepository<PriceTicket, PriceTicketId> {
     @Query(value = "SELECT price_ticket FROM PriceTicket price_ticket WHERE price_ticket.parkingLot = ?1")
     List<PriceTicket> findByParkingLotId(ParkingLot parkingLotId);
+
+    @Query(value = "SELECT price_ticket FROM PriceTicket price_ticket WHERE price_ticket.parkingLot = ?1")
+    List<PriceTicket> getPriceTicketByParkingLotId(ParkingLot parkingLot);
 }
