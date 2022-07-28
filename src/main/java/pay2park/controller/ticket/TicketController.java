@@ -13,8 +13,6 @@ import pay2park.service.ticket.TicketService;
 public class TicketController {
     @Autowired
     private TicketService ticketService;
-    @Autowired
-    private VehicleTypeRepository vehicleTypeRepository;
     @GetMapping("/getTicketByEndUserId")
     public ResponseEntity<ResponseObject> getTicketByEndUserId(@RequestParam(value = "endUserID") int endUserID) {
         ResponseObject responseObject = ticketService.getTicketByEndUserId(endUserID);

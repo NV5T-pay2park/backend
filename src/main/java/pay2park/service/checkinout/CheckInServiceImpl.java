@@ -33,17 +33,21 @@ public class CheckInServiceImpl implements CheckInService {
     TicketService ticketService;
     public ResponseObject checkIn(CheckInData checkInData) {
         ResponseTicketData ticket = new ResponseTicketData();
-        VehicleData informationData = getInformationCheckInDataMock();
+        VehicleData vehicleData = getInformationCheckInDataMock();
         if(!checkCheckInData(checkInData)) {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
         }
-        if(!checkInformationCheckIn(informationData)) {
+        if(!checkInformationCheckIn(vehicleData)) {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
         }
-        List<Ticket> ticketsIsCreated = getTicketIsCreated(checkInData);
+        if(!checkNumberSlotRemaining(checkInData)) {
+            return new ResponseObject(HttpStatus.FOUND, "Sold out", ticket);
+        }
+        List<Ticket> ticketsIsCreated = getTicketIsCreated(checkInData, vehicleData);
+//        return new ResponseObject(HttpStatus.OK, "", ticketsRepository.count());
         if(ticketsIsCreated.size() > 0) {
             Ticket ticketIsCreated = ticketsIsCreated.get(0);
-            ticket = new ResponseTicketData(ticketIsCreated.getId(), ticketIsCreated.getCheckInTime(), null,
+            ticket = new ResponseTicketData(ticketIsCreated.getId(), ticketIsCreated.getCheckInTime(), null,null,
                     ticketIsCreated.getLicensePlates(), ticketIsCreated.getVehicleType().getVehicleTypeName(),
                     ticketIsCreated.getEndUser().getId(),
                     ticketIsCreated.getEndUser().getFirstName() + ' ' + ticketIsCreated.getEndUser().getLastName(),
@@ -51,8 +55,8 @@ public class CheckInServiceImpl implements CheckInService {
             return new ResponseObject(HttpStatus.BAD_REQUEST, "Ticket is created", ticket);
         } else {
             ticket = ticketService.createTicket(
-                    new TicketData(informationData.getLicensePlate(),
-                            informationData.getVehicleTypeID(),
+                    new TicketData(vehicleData.getLicensePlate(),
+                            vehicleData.getVehicleTypeID(),
                             checkInData.getEndUserID(),
                             checkInData.getParkingLotID()));
             return new ResponseObject(HttpStatus.OK, "Success", ticket);
@@ -65,16 +69,16 @@ public class CheckInServiceImpl implements CheckInService {
                 existsById(checkInData.getParkingLotID());
         return checkEndUserID && checkParkingLotID;
     }
-    private boolean checkInformationCheckIn(VehicleData informationCheckInData) {
+    private boolean checkInformationCheckIn(VehicleData vehicleData) {
         boolean checkVehicleType = vehicleTypeRepository.
-                existsById(informationCheckInData.getVehicleTypeID());
-        boolean checkLicensePlate = informationCheckInData.getLicensePlate().length() != 0;
+                existsById(vehicleData.getVehicleTypeID());
+        boolean checkLicensePlate = vehicleData.getLicensePlate().length() != 0;
         return checkLicensePlate && checkVehicleType;
     }
     @Override
-    public ResponseObject getInformationCheckInData(VehicleData informationCheckInData) {
-        if (checkInformationCheckInData(informationCheckInData)) {
-            return new ResponseObject(HttpStatus.OK, "Success", informationCheckInData);
+    public ResponseObject getInformationCheckInData(VehicleData vehicleData) {
+        if (checkInformationCheckInData(vehicleData)) {
+            return new ResponseObject(HttpStatus.OK, "Success", vehicleData);
         }
         return new ResponseObject(HttpStatus.FOUND, "Found", new VehicleData());
     }
@@ -83,12 +87,16 @@ public class CheckInServiceImpl implements CheckInService {
         boolean checkLicensePlate = vehicleData.getLicensePlate().length() > 0;
         return checkLicensePlate && checkVehicleType;
     }
-    private List<Ticket> getTicketIsCreated(CheckInData checkInData) {
+    private List<Ticket> getTicketIsCreated(CheckInData checkInData, VehicleData vehicleData) {
         Optional<EndUser> endUser = endUserRepository.findById(checkInData.getEndUserID());
         Optional<ParkingLot> parkingLot = parkingLotRepository.findById(checkInData.getParkingLotID());
-        return ticketsRepository.getTicketByEndUserIDAndParkingLot(endUser.get(), parkingLot.get());
+        return ticketsRepository.getTicketByEndUserIDAndParkingLot(endUser.get(), parkingLot.get(), vehicleData.getLicensePlate());
     }
     private VehicleData getInformationCheckInDataMock() {
-        return new VehicleData(1, "77C1-67567");
+        return new VehicleData(1, "77C1-6756799");
+    }
+    private boolean checkNumberSlotRemaining(CheckInData checkInData) {
+        Optional<ParkingLot> parkingLot = parkingLotRepository.findById(checkInData.getParkingLotID());
+        return parkingLot.get().getNumberSlotRemaining() > 0;
     }
 }

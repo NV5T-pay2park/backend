@@ -9,6 +9,9 @@ import pay2park.model.entityFromDB.Merchant;
 import pay2park.model.entityFromDB.VehicleType;
 import pay2park.service.editdata.EditDataService;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/")
 @CrossOrigin
