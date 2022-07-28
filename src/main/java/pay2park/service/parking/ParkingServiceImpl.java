@@ -110,8 +110,7 @@ public class ParkingServiceImpl implements ParkingService {
         }
 
 
-            // distance
-
+        // distance
         if (!coordinates.equals("")) {
             String[] coordinateParts = coordinates.split(",");
             double userLong = Double.parseDouble(coordinateParts[0]);
@@ -134,20 +133,12 @@ public class ParkingServiceImpl implements ParkingService {
                 parkingList.add(new ParkingListData(parkingLot, 0.0, 0));
             }
         }
-        if (district == "Tất cả"){
-            if (!coordinates.equals("")){
-                // get district nearest
-                district = "Quận 1";
-                //CollectionUtils.filter(parkingList, o -> ((ParkingLot) o).getDistrict().equals(district));
 
-            }
-        }
-        else{
-            //CollectionUtils.filter(parkingList, o -> ((ParkingLot) o).getDistrict().equals(district));
+        if (!district.equals("Tất cả")){
+            final String dt = district;
+            CollectionUtils.filter(parkingList, o -> ((ParkingListData) o).getDistrict().equals(dt));
         }
 
         return parkingList;
     }
-
-
 }
