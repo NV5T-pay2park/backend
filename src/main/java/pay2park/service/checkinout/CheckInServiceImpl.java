@@ -35,23 +35,24 @@ public class CheckInServiceImpl implements CheckInService {
     TicketService ticketService;
     @Autowired
     Socket socket;
+
     public ResponseObject checkIn(CheckInData checkInData) {
         ResponseTicketData ticket = new ResponseTicketData();
         socket.RequestToEnterLicensePlate(checkInData.getParkingLotID());
         VehicleData vehicleData = getInformationCheckInData();
-        if(!checkCheckInData(checkInData)) {
+        if (!checkCheckInData(checkInData)) {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
         }
-        if(!isValidInformationCheckIn(vehicleData)) {
+        if (!isValidInformationCheckIn(vehicleData)) {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
         }
-        if(!isValidNumberSlotRemaining(checkInData)) {
+        if (!isValidNumberSlotRemaining(checkInData)) {
             return new ResponseObject(HttpStatus.FOUND, "Sold out", ticket);
         }
         List<Ticket> ticketsIsCreated = getTicketIsCreated(checkInData, vehicleData);
-        if(ticketsIsCreated.size() > 0) {
+        if (ticketsIsCreated.size() > 0) {
             Ticket ticketIsCreated = ticketsIsCreated.get(0);
-            ticket = new ResponseTicketData(ticketIsCreated.getId(), ticketIsCreated.getCheckInTime(), null,null,
+            ticket = new ResponseTicketData(ticketIsCreated.getId(), ticketIsCreated.getCheckInTime(), null, null,
                     ticketIsCreated.getLicensePlates(), ticketIsCreated.getVehicleType().getVehicleTypeName(),
                     ticketIsCreated.getEndUser().getId(),
                     ticketIsCreated.getEndUser().getFirstName() + ' ' + ticketIsCreated.getEndUser().getLastName(),
@@ -68,6 +69,7 @@ public class CheckInServiceImpl implements CheckInService {
             return new ResponseObject(HttpStatus.OK, "Success", ticket);
         }
     }
+
     private boolean checkCheckInData(CheckInData checkInData) {
         boolean checkEndUserID = endUserRepository.
                 existsById(checkInData.getEndUserID());
@@ -75,12 +77,14 @@ public class CheckInServiceImpl implements CheckInService {
                 existsById(checkInData.getParkingLotID());
         return checkEndUserID && checkParkingLotID;
     }
+
     private boolean isValidInformationCheckIn(VehicleData vehicleData) {
         boolean checkVehicleType = vehicleTypeRepository.
                 existsById(vehicleData.getVehicleTypeID());
         boolean checkLicensePlate = vehicleData.getLicensePlate().length() != 0;
         return checkLicensePlate && checkVehicleType;
     }
+
     @Override
     public ResponseObject getInformationCheckInData(VehicleData vehicleData) {
         if (isValidInformationCheckInData(vehicleData)) {
@@ -88,19 +92,23 @@ public class CheckInServiceImpl implements CheckInService {
         }
         return new ResponseObject(HttpStatus.FOUND, "Found", "");
     }
+
     private boolean isValidInformationCheckInData(VehicleData vehicleData) {
         boolean checkVehicleType = vehicleTypeRepository.existsById(vehicleData.getVehicleTypeID());
         boolean checkLicensePlate = vehicleData.getLicensePlate().length() > 0;
         return checkLicensePlate && checkVehicleType;
     }
+
     private List<Ticket> getTicketIsCreated(CheckInData checkInData, VehicleData vehicleData) {
         Optional<EndUser> endUser = endUserRepository.findById(checkInData.getEndUserID());
         Optional<ParkingLot> parkingLot = parkingLotRepository.findById(checkInData.getParkingLotID());
         return ticketsRepository.getTicketByEndUserIDAndParkingLot(endUser.get(), parkingLot.get(), vehicleData.getLicensePlate());
     }
+
     private VehicleData getInformationCheckInData() {
         return new VehicleData(1, Extension.getLicensePlate());
     }
+
     private boolean isValidNumberSlotRemaining(CheckInData checkInData) {
         Optional<ParkingLot> parkingLot = parkingLotRepository.findById(checkInData.getParkingLotID());
         return parkingLot.get().getNumberSlotRemaining() > 0;

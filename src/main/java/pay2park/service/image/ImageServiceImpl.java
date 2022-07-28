@@ -27,26 +27,29 @@ public class ImageServiceImpl implements ImageService {
     @Autowired
     ParkingLotRepository parkingLotRepository;
     private final Cloudinary cloudinary = Singleton.getCloudinary();
+
     @Override
     public ResponseObject getImageByID(String id) {
         Optional<ParkingLotImage> parkingLotImage = parkingLotImageRepository.findById(id);
         return parkingLotImage.map(image -> new ResponseObject(HttpStatus.OK, "Success", image.getUrl()))
                 .orElseGet(() -> new ResponseObject(HttpStatus.FOUND, "ID is not valid", ""));
     }
+
     @Override
     public ResponseObject getAllImageByParkingLot(int parkingLotId) {
-        if(!checkParkingLotID(parkingLotId)) {
+        if (!checkParkingLotID(parkingLotId)) {
             return new ResponseObject(HttpStatus.FOUND, "Parking lot ID is not valid", "");
         }
         Optional<ParkingLot> parkingLot = parkingLotRepository.findById(parkingLotId);
         List<ParkingLotImage> responseData = parkingLotImageRepository.getAllImageByParkingLot(parkingLot.get());
         return new ResponseObject(HttpStatus.OK, "Success", responseData);
     }
+
     @Override
     public ResponseObject insertImage(MultipartFile multipartFile, int parkingLotID) {
         try {
             BufferedImage bufferedImage = ImageIO.read(multipartFile.getInputStream());
-            if(bufferedImage == null){
+            if (bufferedImage == null) {
                 return new ResponseObject(HttpStatus.FOUND, "File error", "");
             }
             Map cloudinaryResponse = cloudinary.uploader().upload(multipartFile.getBytes(), ObjectUtils.emptyMap());
@@ -61,9 +64,10 @@ public class ImageServiceImpl implements ImageService {
             return new ResponseObject(HttpStatus.FOUND, "File error", "");
         }
     }
+
     @Override
     public ResponseObject deleteImage(String id) {
-        if(!isExists(id)) return new ResponseObject(HttpStatus.FOUND, "Image is not exist", "");
+        if (!isExists(id)) return new ResponseObject(HttpStatus.FOUND, "Image is not exist", "");
         try {
             Map deleteResult = null;
             deleteResult = cloudinary.uploader().destroy(id, ObjectUtils.emptyMap());
@@ -74,9 +78,11 @@ public class ImageServiceImpl implements ImageService {
         }
 
     }
+
     public boolean isExists(String id) {
         return parkingLotImageRepository.existsById(id);
     }
+
     private boolean checkParkingLotID(int parkingLotID) {
         return parkingLotRepository.existsById(parkingLotID);
     }

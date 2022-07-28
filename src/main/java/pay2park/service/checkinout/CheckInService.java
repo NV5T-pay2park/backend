@@ -8,5 +8,6 @@ import pay2park.model.parking.VehicleData;
 @Service
 public interface CheckInService {
     ResponseObject checkIn(CheckInData checkInData);
+
     ResponseObject getInformationCheckInData(VehicleData informationCheckIn);
 }
