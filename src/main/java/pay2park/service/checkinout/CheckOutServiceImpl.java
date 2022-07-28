@@ -28,6 +28,7 @@ import pay2park.service.payment.QueryOrderService;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 
@@ -63,11 +64,17 @@ public class CheckOutServiceImpl implements CheckOutService {
     @Override
     public ResponseObject checkOut(CheckOutData checkOutData) throws IOException, InterruptedException, URISyntaxException {
 
-
-        // Calculate amount of ticket
-        Long amount = 60000L;
         Long ticketID = checkOutData.getTicketID();
         Integer endUserId = checkOutData.getEndUserID();
+        Instant time = Instant.now();
+        // Calculate amount of ticket
+        Ticket ticketCheckout = ticketsRepository.findById(checkOutData.getTicketID()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
+        Duration duration = Duration.between(ticketCheckout.getCheckInTime(), time);
+        double hourTime = duration.toHours();
+
+        List<PriceTicket> listPriceTicket = ticketsRepository.getPriceTicketByParkingLotId(ticketCheckout.getParkingLot());
+        int amount = calculateAmountOfTicket(hourTime, listPriceTicket);
+        System.out.println(amount);
 
         // Check checkout
         String appTransId = getCurrentTimeString("yyMMdd") + "_" + endUserId + ticketID.toString();
@@ -105,7 +112,6 @@ public class CheckOutServiceImpl implements CheckOutService {
         }
         if (flag.equals(1)) {
             // update ticket checkout time and slot of parking
-            Instant time = Instant.now();
             Ticket ticketUpdate = ticketsRepository.findById(ticketID).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
             ticketUpdate.setCheckOutTime(time);
             ticketsRepository.save(ticketUpdate);
@@ -140,18 +146,18 @@ public class CheckOutServiceImpl implements CheckOutService {
         return fmt.format(cal.getTimeInMillis());
     }
 
-    private int calculateAmountOfTicket(double parkingHour, PriceTicket[] PriceTickets) {
+    private int calculateAmountOfTicket(double parkingHour, List<PriceTicket> priceTicketList) {
         int result = 0;
-        for (int i = 0; i < PriceTickets.length; i++) {
+        for (int i = 0; i < priceTicketList.size(); i++) {
             double time = 0;
-            if (i + 1 < PriceTickets.length && parkingHour > PriceTickets[i+1].getPeriodTime()) {
-                time = PriceTickets[i+1].getPeriodTime() - PriceTickets[i].getPeriodTime();
+            if (i + 1 < priceTicketList.size() && parkingHour > priceTicketList.get(i+1).getPeriodTime()) {
+                time = priceTicketList.get(i+1).getPeriodTime() - priceTicketList.get(i).getPeriodTime();
             }
             else {
-                time = parkingHour - PriceTickets[i].getPeriodTime();
+                time = parkingHour - priceTicketList.get(i).getPeriodTime();
             }
-            int units = (int) Math.ceil(time / PriceTickets[i].getUnit());
-            result += units * PriceTickets[i].getPrice();
+            int units = (int) Math.ceil(time / priceTicketList.get(i).getUnit());
+            result += units * priceTicketList.get(i).getPrice();
         }
         return result;
     }

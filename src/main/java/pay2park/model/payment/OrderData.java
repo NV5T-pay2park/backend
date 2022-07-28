@@ -1,11 +1,13 @@
 package pay2park.model.payment;
 
+import javax.persistence.criteria.CriteriaBuilder;
+
 public class OrderData {
     private Long ticketId;
     private Long userId;
-    private Long amount;
+    private Integer amount;
 
-    public OrderData(Long ticketId, Long userId, Long amount) {
+    public OrderData(Long ticketId, Long userId, Integer amount) {
         this.ticketId = ticketId;
         this.userId = userId;
         this.amount = amount;
@@ -27,11 +29,11 @@ public class OrderData {
         this.userId = userId;
     }
 
-    public Long getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 }
