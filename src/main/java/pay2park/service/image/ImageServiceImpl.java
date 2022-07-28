@@ -27,6 +27,7 @@ public class ImageServiceImpl implements ImageService {
     @Autowired
     ParkingLotRepository parkingLotRepository;
     private final Cloudinary cloudinary = Singleton.getCloudinary();
+
     @Override
     public ResponseObject getImageByID(String id) {
         Optional<ParkingLotImage> parkingLotImage = parkingLotImageRepository.findById(id);

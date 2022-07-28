@@ -1,3 +1,5 @@
+
+
 DROP DATABASE IF EXISTS NV5T_parking_lot;
 CREATE DATABASE NV5T_parking_lot;
 USE NV5T_parking_lot;
@@ -41,10 +43,10 @@ CREATE TABLE parking_lots
     CONSTRAINT parking_lot_merchants_fk
         FOREIGN KEY (merchant_id) REFERENCES merchants (merchant_id)
 );
-
+-- DROP TABLE IF EXISTS parking_lot_images;
 CREATE TABLE parking_lot_images
 (
-    image_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    image_id VARCHAR(100) NOT NULL PRIMARY KEY,
     parking_lot_id INT NOT NULL,
     url TEXT NOT NULL,
     CONSTRAINT parking_lot_images_parking_lot_fk FOREIGN KEY (parking_lot_id) REFERENCES parking_lots(parking_lot_id)
@@ -140,9 +142,7 @@ CREATE TABLE payment_url
 	app_tran_id VARCHAR(50) NOT NULL PRIMARY KEY,
     order_url varchar(255) default null
 );
-
-
-
+ALTER TABLE NV5T_parking_lot.parking_lots ADD FULLTEXT(parking_lot_name, address);
 
 INSERT INTO NV5T_parking_lot.end_users (end_user_id, first_name, last_name, gender, phone, email) VALUES (1, 'Lee4an', 'whodahman', 1, '0416177645', 'whodahman@gmail.com');
 INSERT INTO NV5T_parking_lot.end_users (end_user_id, first_name, last_name, gender, phone, email) VALUES (2, 'Partypooper009', 'throwaway217217', 0, '0790529870', 'throwaway217217@gmail.com');
@@ -263,5 +263,4 @@ INSERT INTO NV5T_parking_lot.payment_url(app_tran_id, order_url) VALUES ('220726
 
 
 # fulltext index
-ALTER TABLE NV5T_parking_lot.parking_lots ADD FULLTEXT(parking_lot_name);
-
+ALTER TABLE NV5T_parking_lot.parking_lots ADD FULLTEXT(parking_lot_name, address);
