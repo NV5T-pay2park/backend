@@ -1,0 +1,29 @@
+@startuml
+
+
+participant "End-user (client)" as user
+participant "Service (Pay2Park)" as service
+database "Database (Pay2Park)" as DB
+
+autonumber
+activate user
+activate service
+user -> service: end-user want to login through ZaloPay app
+service -> service: validate user_id
+activate DB
+service -> DB: check if user_id created before
+alt user_id does not exist before
+DB --> service: return false
+service -> DB: insert new user
+DB --> service: insert new user success
+
+else user exists before
+DB --> service: return information of user
+
+deactivate DB
+end
+service --> user: return grand access message
+deactivate service
+deactivate user
+
+@enduml
