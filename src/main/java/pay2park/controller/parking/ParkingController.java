@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/")
+@CrossOrigin
 public class ParkingController {
     @Autowired
     private ParkingService parkingService;
@@ -39,21 +40,14 @@ public class ParkingController {
     }
 
 
-    @GetMapping("/filterParking")
+    @GetMapping("/searchAndFilterParking")
     @ResponseBody
-    public ResponseObject filterParking(@RequestParam String coordinates, @RequestParam String vehicleTypes) throws IOException {
+    public ResponseObject searchAndFilterParking(@RequestParam String stringSearch, @RequestParam String vehicleTypes, @RequestParam String district, @RequestParam String coordinates) throws IOException {
 
-        var data = parkingService.filterParking(coordinates, vehicleTypes);
+        var data = parkingService.searchAndFilterParking(stringSearch, vehicleTypes, district, coordinates);
         return
-                new ResponseObject(HttpStatus.OK, "filter parking successfully ", data);
+                new ResponseObject(HttpStatus.OK, "search and filter parking successfully ", data);
     }
 
-    @GetMapping("/searchParking")
-    @ResponseBody
-    public ResponseObject searchParking(@RequestParam String stringSearch) throws IOException {
-        var data = parkingService.searchParking(stringSearch);
-        return
-                new ResponseObject(HttpStatus.OK, "search parking successfully ", data);
-    }
 }
 

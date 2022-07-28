@@ -1,12 +1,17 @@
 package pay2park.model.checkinout;
 
-public class CheckOutData {
+public class PreCheckOutData {
     Long ticketID;
     int endUserID;
+    int parkingLotID;
 
-    public CheckOutData(Long ticketID, int endUserID) {
+    public PreCheckOutData() {
+    }
+
+    public PreCheckOutData(Long ticketID, int endUserID, int parkingLotID) {
         this.ticketID = ticketID;
         this.endUserID = endUserID;
+        this.parkingLotID = parkingLotID;
     }
 
     public Long getTicketID() {
@@ -24,4 +29,13 @@ public class CheckOutData {
     public void setEndUserID(int endUserID) {
         this.endUserID = endUserID;
     }
+
+    public int getParkingLotID() {
+        return parkingLotID;
+    }
+
+    public void setParkingLotID(int parkingLotID) {
+        this.parkingLotID = parkingLotID;
+    }
+
 }

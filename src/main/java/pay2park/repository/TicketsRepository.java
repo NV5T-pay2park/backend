@@ -14,9 +14,9 @@ import java.util.List;
 public interface TicketsRepository extends JpaRepository<Ticket, Long> {
     @Query(value = "SELECT ticket FROM Ticket ticket WHERE ticket.endUser = ?1")
     List<Ticket> getAllTicketByEndUserID(EndUser endUser);
-    @Query(value = "SELECT ticket FROM Ticket ticket WHERE ticket.endUser = ?1 AND ticket.parkingLot = ?2 AND ticket.checkOutTime IS NULL")
-    List<Ticket> getTicketByEndUserIDAndParkingLot(EndUser endUser, ParkingLot parkingLot);
-//    @Modifying
-//    @Query(value = "UPDATE ticket SET ticket.checkOutTime = ?1 Ticket ticket WHERE ticket.Id = ?2")
-//    void updateTicket(Instant instant, Long Id);
+    @Query(value = "SELECT ticket FROM Ticket ticket WHERE ticket.endUser = ?1 AND ticket.parkingLot = ?2 AND ticket.licensePlates = ?3 AND ticket.checkOutTime IS NULL")
+    List<Ticket> getTicketByEndUserIDAndParkingLot(EndUser endUser, ParkingLot parkingLot, String licensePlates);
+    @Modifying
+    @Query(value = "UPDATE tickets SET check_out_time = :time WHERE ticket_id = :ticketId", nativeQuery = true)
+    void updateTicketStatus(@Param("ticketId") Long ticketId,@Param("time") Instant time);
 }

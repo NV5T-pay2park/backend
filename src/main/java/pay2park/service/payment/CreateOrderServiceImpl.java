@@ -23,10 +23,10 @@ import java.util.*;
 @Service
 public class CreateOrderServiceImpl implements  CreateOrderService{
     private static Map<String, String> config = new HashMap<String, String>(){{
-        put("app_id", "999888");
-        put("key1", "BuwHniWv76aTdSaHlBoY1j6hWFDp7zG8");
-        put("key2", "4K0itMD70mzCdEycINM2ZwookqBJgPcD");
-        put("endpoint", "https://sb-openapi.zalopay.vn/v2/create");
+        put("app_id", "805");
+        put("key1", "pca7SCpBItgbQnT4tKr1yY5vpow6QMZ9");
+        put("key2", "82NZPr8nLJj8es3QhJOZgSVTsPwZ4gkS");
+        put("endpoint", "https://sbqc-openapi.zalopay.vn/v2/create");
     }};
 
     public static String getCurrentTimeString(String format) {
@@ -38,11 +38,9 @@ public class CreateOrderServiceImpl implements  CreateOrderService{
     @Override
     public ResponseOrderData createOrder(OrderData orderData) throws IOException {
         Random rand = new Random();
-        int random_id = rand.nextInt(1000);
         final Map embed_data = new HashMap(){{
 
         }};
-
 
         Map<String, Object> order = new HashMap<String, Object>(){{
             put("app_id", config.get("app_id"));
@@ -86,7 +84,6 @@ public class CreateOrderServiceImpl implements  CreateOrderService{
         for (String key : result.keySet()) {
             System.out.format("%s = %s\n", key, result.get(key));
         }
-        System.out.println(result.get("zp_trans_token"));
-        return new ResponseOrderData( (int)result.get("return_code"),appTransId, result.get("order_url").toString());
+        return new ResponseOrderData( (int)result.get("return_code"),appTransId, result.get("order_url").toString(), result.get("zp_trans_token").toString());
     };
 }

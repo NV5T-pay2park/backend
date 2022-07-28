@@ -1,29 +1,32 @@
 package pay2park.service.checkinout;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import pay2park.extension.Extension;
+import pay2park.exception.ResourceNotFoundException;
 import pay2park.model.ResponseObject;
 import pay2park.model.checkinout.CheckOutData;
-import pay2park.model.entityFromDB.EndUser;
+
+import pay2park.model.checkinout.PreCheckOutData;
 import pay2park.model.entityFromDB.ParkingLot;
+import pay2park.model.entityFromDB.PaymentUrl;
 import pay2park.model.entityFromDB.Ticket;
+
+import pay2park.model.payment.OrderData;
+import pay2park.model.payment.QueryData;
+import pay2park.model.payment.ResponseOrderData;
+import pay2park.model.payment.ResponseQueryData;
 import pay2park.repository.EndUserRepository;
 import pay2park.repository.ParkingLotRepository;
+import pay2park.repository.PaymentUrlRepository;
 import pay2park.repository.TicketsRepository;
+import pay2park.service.payment.CreateOrderService;
+import pay2park.service.payment.QueryOrderService;
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.*;
 
@@ -35,79 +38,97 @@ public class CheckOutServiceImpl implements CheckOutService {
     TicketsRepository ticketsRepository;
     @Autowired
     ParkingLotRepository parkingLotRepository;
+    @Autowired
+    PaymentUrlRepository paymentUrlRepository;
+    @Autowired
+    CreateOrderService createOrderService;
+    @Autowired
+    QueryOrderService queryOrderService;
 
     @Override
-    public ResponseObject checkOut(CheckOutData checkOutData) throws IOException {
+    public ResponseObject preCheckOut(PreCheckOutData checkOutData){
         if (!checkDataIsValid(checkOutData)) {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", "");
         }
-        if (!checkTicketIsValid(checkOutData)) {
-            return new ResponseObject(HttpStatus.FOUND, "Ticket is not valid", "");
+
+        Ticket ticket = ticketsRepository.findById(checkOutData.getTicketID()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: "+ checkOutData.getTicketID()));
+        if (ticket.getCheckOutTime() != null){
+            return new ResponseObject(HttpStatus.FOUND, "Ticket was checked out before", "");
         }
+        return new ResponseObject(HttpStatus.OK, "Pre checkout successfully", ticket.getLicensePlates());
+    }
+
+
+    @Override
+    public ResponseObject checkOut(CheckOutData checkOutData) throws IOException, InterruptedException, URISyntaxException {
+
+
+        // Calculate amount of ticket
+        Long amount = 60000L;
         Long ticketID = checkOutData.getTicketID();
-        Instant checkOutTime = Extension.getCheckInTime();
- //     ticketsRepository.updateTicket(checkOutTime, ticketID);
-        //
+        Integer endUserId = checkOutData.getEndUserID();
 
-        // call api thanh toan
-        Map<String, String> config = new HashMap<String, String>(){{
-            put("endpoint", "http://localhost:8080/api/"+"createOrder");
-        }};
-        Map<String, Object> param= new HashMap<String, Object>(){{
-            put("userId", 1);
-            put("ticketId", 2);
-            put("amount", 15000); // translation missing: en.docs.shared.sample_code.comments.app_trans_id
+        // Check checkout
+        String appTransId = getCurrentTimeString("yyMMdd") +"_"+ endUserId + ticketID.toString();
+        boolean appTransIdExist = paymentUrlRepository.existsById(appTransId);
 
-        }};
-        CloseableHttpClient client = HttpClients.createDefault();
-        HttpPost post = new HttpPost(config.get("endpoint"));
+        if (!appTransIdExist){
 
-        List<NameValuePair> params = new ArrayList<>();
-        for (Map.Entry<String, Object> e : param.entrySet()) {
-            params.add(new BasicNameValuePair(e.getKey(), e.getValue().toString()));
+            // call api payment
+            OrderData orderData = new OrderData(ticketID,(long) endUserId, amount);
+            ResponseOrderData responseOrderData = createOrderService.createOrder(orderData);
+            if (responseOrderData.getReturnCode() == 2){
+                return new ResponseObject(HttpStatus.FOUND, "payment failed", "");
+            }
+            paymentUrlRepository.save(new PaymentUrl(appTransId, responseOrderData.getOrderUrl(), responseOrderData.getZpTransToken()));
         }
 
-        // Content-Type: application/x-www-form-urlencoded
-        post.setEntity(new UrlEncodedFormEntity(params));
+        // query order status
+        Boolean flag = false;
+        int counter = 0;
+        while (true){
+            Thread.sleep(3000);
+            QueryData queryData = new QueryData(appTransId);
+            ResponseQueryData responseQueryData = queryOrderService.queryOrder(queryData);
 
-        CloseableHttpResponse res = client.execute(post);
-        BufferedReader rd = new BufferedReader(new InputStreamReader(res.getEntity().getContent()));
-        StringBuilder resultJsonStr = new StringBuilder();
-        String line;
+            if(responseQueryData.getReturnCode() == 1){
+                flag = true;
+                break;
+            }
+            counter += 1;
+            if (counter == 200) break;
+        }
+        if (flag.equals(true)){
+            // update ticket checkout time and slot of parking
+            Instant time = Instant.now();
+            Ticket ticketUpdate = ticketsRepository.findById(ticketID).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
+            ticketUpdate.setCheckOutTime(time);
+            ticketsRepository.save(ticketUpdate);
+            ParkingLot parkingLotUpdate = parkingLotRepository.findById(ticketUpdate.getParkingLot().getId()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
+            int newSlotRemaining = parkingLotUpdate.getNumberSlotRemaining() + 1;
+            parkingLotUpdate.setNumberSlotRemaining(newSlotRemaining);
+            parkingLotRepository.save(parkingLotUpdate);
 
-        while ((line = rd.readLine()) != null) {
-            resultJsonStr.append(line);
+            return new ResponseObject(HttpStatus.OK, "checkout successfully", "");
         }
 
-        JSONObject result = new JSONObject(resultJsonStr.toString());
-        for (String key : result.keySet()) {
-            System.out.format("%s = %s\n", key, result.get(key));
-        }
-
-        return new ResponseObject(HttpStatus.OK, "alo", "");
+        return new ResponseObject(HttpStatus.FOUND, "checkout failed", "");
     }
 
-    private boolean checkDataIsValid(CheckOutData checkOutData) {
-//        boolean checkTicketIsExist = ticketsRepository.
-//                existsById(checkOutData.getTicketID());
-//        boolean checkEndUserIDIsExist = endUserRepository.
-//                existsById(checkOutData.getEndUserID());
-//        boolean checkParkingLotIDIsExist = parkingLotRepository.
-//                existsById(checkOutData.getParkingLotID());
-//        boolean checkLicensePlateIsValid = checkOutData.getLicensePlate().length() > 0;
-//        return checkEndUserIDIsExist && checkTicketIsExist && checkParkingLotIDIsExist && checkLicensePlateIsValid;
-        return true;
+    private boolean checkDataIsValid(PreCheckOutData preCheckOutData) {
+        boolean checkTicketIsExist = ticketsRepository.
+                existsById(preCheckOutData.getTicketID());
+        boolean checkEndUserIDIsExist = endUserRepository.
+                existsById(preCheckOutData.getEndUserID());
+        boolean checkParkingLotIDIsExist = parkingLotRepository.
+                existsById(preCheckOutData.getParkingLotID());
+        return checkEndUserIDIsExist && checkTicketIsExist && checkParkingLotIDIsExist;
     }
 
-    private boolean checkTicketIsValid(CheckOutData checkOutData) {
-//        Optional<EndUser> endUser = endUserRepository.
-//                findById(checkOutData.getEndUserID());
-//        Optional<ParkingLot> parkingLot = parkingLotRepository.
-//                findById(checkOutData.getParkingLotID());
-//        List<Ticket> tickets = ticketsRepository.getTicketByEndUserIDAndParkingLot(endUser.get(), parkingLot.get());
-//        if (tickets.size() == 0) return false;
-//        Ticket ticket = tickets.get(0);
-//        return Objects.equals(ticket.getLicensePlates(), checkOutData.getLicensePlate());
-        return true;
+    public String getCurrentTimeString(String format) {
+        Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT+7"));
+        SimpleDateFormat fmt = new SimpleDateFormat(format);
+        fmt.setCalendar(cal);
+        return fmt.format(cal.getTimeInMillis());
     }
 }

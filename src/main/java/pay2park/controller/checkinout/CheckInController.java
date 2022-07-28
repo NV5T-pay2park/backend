@@ -1,21 +1,24 @@
 package pay2park.controller.checkinout;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pay2park.model.ResponseObject;
 import pay2park.model.checkinout.CheckInData;
 import pay2park.model.parking.VehicleData;
+import pay2park.repository.TicketsRepository;
 import pay2park.service.checkinout.CheckInService;
 import pay2park.service.ticket.TicketService;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class CheckInController {
     @Autowired
     CheckInService checkInService;
     @Autowired
-    TicketService ticketService;
+    TicketsRepository ticketsRepository;
     @PostMapping("/checkIn")
     public ResponseEntity<ResponseObject> checkIn(@RequestBody CheckInData checkInData) {
         ResponseObject responseObject = checkInService.checkIn(checkInData);
