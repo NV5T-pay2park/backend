@@ -74,7 +74,6 @@ public class CheckOutServiceImpl implements CheckOutService {
 
         List<PriceTicket> listPriceTicket = ticketsRepository.getPriceTicketByParkingLotId(ticketCheckout.getParkingLot());
         int amount = calculateAmountOfTicket(hourTime, listPriceTicket);
-        System.out.println(amount);
 
         // Check checkout
         String appTransId = getCurrentTimeString("yyMMdd") + "_" + endUserId + ticketID.toString();
