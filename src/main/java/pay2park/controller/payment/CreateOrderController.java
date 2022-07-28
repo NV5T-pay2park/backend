@@ -37,7 +37,7 @@ public class CreateOrderController {
     }
     @GetMapping(value = "/getCreateOrder")
     @ResponseBody
-    public ResponseObject getCreateOrder(@RequestParam Long userId, @RequestParam Long ticketId, @RequestParam Long amount) throws IOException {
+    public ResponseObject getCreateOrder(@RequestParam Long userId, @RequestParam Long ticketId, @RequestParam Integer amount) throws IOException {
         OrderData orderData = new OrderData(userId, ticketId, amount);
         ResponseOrderData data = createOrderService.createOrder(orderData);
         return data.getReturnCode() == 1 ?
