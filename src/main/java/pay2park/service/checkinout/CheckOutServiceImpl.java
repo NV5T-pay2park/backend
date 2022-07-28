@@ -85,7 +85,7 @@ public class CheckOutServiceImpl implements CheckOutService {
         }
 
         // query order status
-        Boolean flag = false;
+        Integer flag = 0;
         int counter = 0;
         while (true) {
             Thread.sleep(3000);
@@ -93,13 +93,17 @@ public class CheckOutServiceImpl implements CheckOutService {
             ResponseQueryData responseQueryData = queryOrderService.queryOrder(queryData);
 
             if (responseQueryData.getReturnCode() == 1) {
-                flag = true;
+                flag = 1;
+                break;
+            }
+            if (responseQueryData.getReturnCode() == 2) {
+                flag = 2;
                 break;
             }
             counter += 1;
             if (counter == 200) break;
         }
-        if (flag.equals(true)) {
+        if (flag.equals(1)) {
             // update ticket checkout time and slot of parking
             Instant time = Instant.now();
             Ticket ticketUpdate = ticketsRepository.findById(ticketID).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
@@ -111,6 +115,9 @@ public class CheckOutServiceImpl implements CheckOutService {
             parkingLotRepository.save(parkingLotUpdate);
 
             return new ResponseObject(HttpStatus.OK, "checkout successfully", "");
+        }
+        if(flag.equals(2)){
+            return new ResponseObject(HttpStatus.FOUND, "checkout failed because ZLP server", "");
         }
 
         return new ResponseObject(HttpStatus.FOUND, "checkout failed", "");
