@@ -48,13 +48,13 @@ public class CheckOutServiceImpl implements CheckOutService {
     QueryOrderService queryOrderService;
 
     @Override
-    public ResponseObject preCheckOut(PreCheckOutData checkOutData){
+    public ResponseObject preCheckOut(PreCheckOutData checkOutData) {
         if (!checkDataIsValid(checkOutData)) {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", "");
         }
 
-        Ticket ticket = ticketsRepository.findById(checkOutData.getTicketID()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: "+ checkOutData.getTicketID()));
-        if (ticket.getCheckOutTime() != null){
+        Ticket ticket = ticketsRepository.findById(checkOutData.getTicketID()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + checkOutData.getTicketID()));
+        if (ticket.getCheckOutTime() != null) {
             return new ResponseObject(HttpStatus.FOUND, "Ticket was checked out before", "");
         }
         return new ResponseObject(HttpStatus.OK, "Pre checkout successfully", ticket.getLicensePlates());
@@ -122,7 +122,7 @@ public class CheckOutServiceImpl implements CheckOutService {
 
             return new ResponseObject(HttpStatus.OK, "checkout successfully", "");
         }
-        if(flag.equals(2)){
+        if (flag.equals(2)) {
             return new ResponseObject(HttpStatus.FOUND, "checkout failed because ZLP server", "");
         }
 
@@ -150,10 +150,9 @@ public class CheckOutServiceImpl implements CheckOutService {
         int result = 0;
         for (int i = 0; i < priceTicketList.size(); i++) {
             double time = 0;
-            if (i + 1 < priceTicketList.size() && parkingHour > priceTicketList.get(i+1).getPeriodTime()) {
-                time = priceTicketList.get(i+1).getPeriodTime() - priceTicketList.get(i).getPeriodTime();
-            }
-            else {
+            if (i + 1 < priceTicketList.size() && parkingHour > priceTicketList.get(i + 1).getPeriodTime()) {
+                time = priceTicketList.get(i + 1).getPeriodTime() - priceTicketList.get(i).getPeriodTime();
+            } else {
                 time = parkingHour - priceTicketList.get(i).getPeriodTime();
             }
             int units = (int) Math.ceil(time / priceTicketList.get(i).getUnit());

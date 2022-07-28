@@ -9,5 +9,6 @@ import java.net.URISyntaxException;
 
 public interface CheckOutService {
     ResponseObject preCheckOut(PreCheckOutData preCheckOutData);
+
     ResponseObject checkOut(CheckOutData checkOutData) throws IOException, InterruptedException, URISyntaxException;
 }
