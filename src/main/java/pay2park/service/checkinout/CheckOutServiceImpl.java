@@ -132,11 +132,3 @@ public class CheckOutServiceImpl implements CheckOutService {
         return fmt.format(cal.getTimeInMillis());
     }
 }
-
-
-
-
-
-
-
-
