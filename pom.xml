@@ -77,8 +77,12 @@
 			<artifactId>cloudinary-http44</artifactId>
 			<version>1.32.2</version>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>

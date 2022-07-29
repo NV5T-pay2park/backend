@@ -107,7 +107,7 @@ public class CheckOutServiceImpl implements CheckOutService {
                 break;
             }
             counter += 1;
-            if (counter == 200) break;
+            if (counter == 100) break;
         }
         if (flag.equals(1)) {
             // update ticket checkout time and slot of parking
