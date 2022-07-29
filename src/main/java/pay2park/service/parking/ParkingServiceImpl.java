@@ -36,13 +36,10 @@ public class ParkingServiceImpl implements ParkingService {
         List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
 
         for (ParkingLot parkingLot : rawData) {
-
             parkingList.add(new ParkingListData(parkingLot, 3.4, 4));
-
         }
         return parkingList;
     }
-
 
     @Override
     public ParkingDetailData getParkingById(Integer parkingLotId, String coordinates) throws IOException {
