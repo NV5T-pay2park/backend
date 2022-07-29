@@ -31,3 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
+.m2/copy_reference_file.log
