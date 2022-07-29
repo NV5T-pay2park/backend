@@ -1,4 +1,5 @@
 package pay2park.service.payment;
+
 import pay2park.model.payment.QueryData;
 import pay2park.model.payment.ResponseQueryData;
 

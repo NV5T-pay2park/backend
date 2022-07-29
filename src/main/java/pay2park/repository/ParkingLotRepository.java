@@ -20,7 +20,7 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLot, Integer>
     @Query(value = "SELECT parkingLot FROM ParkingLot parkingLot WHERE parkingLot.parkingLotName LIKE %:string%")
     List<ParkingLot> searchWithLikeStringSearch(@Param("string") String stringSearch);
 
-    @Query(value = "SELECT * FROM parking_lots WHERE parking_lot_name LIKE %:string% AND parking_lot_id IN (:parkingLotIdList)", nativeQuery = true )
+    @Query(value = "SELECT * FROM parking_lots WHERE parking_lot_name LIKE %:string% AND parking_lot_id IN (:parkingLotIdList)", nativeQuery = true)
     List<ParkingLot> searchWithLikeStringSearchAndIdList(@Param("string") String stringSearch, @Param("parkingLotIdList") List<Integer> parkingLotIdList);
 }
 

@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class QueryOrderServiceImpl implements QueryOrderService{
-    private static final Map<String, String> config = new HashMap<String, String>(){{
+public class QueryOrderServiceImpl implements QueryOrderService {
+    private static final Map<String, String> config = new HashMap<String, String>() {{
         put("app_id", "805");
         put("key1", "pca7SCpBItgbQnT4tKr1yY5vpow6QMZ9");
         put("key2", "82NZPr8nLJj8es3QhJOZgSVTsPwZ4gkS");
@@ -35,7 +35,7 @@ public class QueryOrderServiceImpl implements QueryOrderService{
 
     public ResponseQueryData queryOrder(QueryData queryData) throws URISyntaxException, IOException {
         String app_trans_id = queryData.getAppTransId();  // Input your app_trans_id
-        String data = config.get("app_id") +"|"+ app_trans_id  +"|"+ config.get("key1"); // appid|app_trans_id|key1
+        String data = config.get("app_id") + "|" + app_trans_id + "|" + config.get("key1"); // appid|app_trans_id|key1
         String mac = HMACUtil.HMacHexStringEncode(HMACUtil.HMACSHA256, config.get("key1"), data);
 
         List<NameValuePair> params = new ArrayList<>();
@@ -63,7 +63,7 @@ public class QueryOrderServiceImpl implements QueryOrderService{
         for (String key : result.keySet()) {
             System.out.format("%s = %s\n", key, result.get(key));
         }
-        return new ResponseQueryData((int)result.get("return_code"));
+        return new ResponseQueryData((int) result.get("return_code"));
     }
 
 }

@@ -20,14 +20,16 @@ public class EditDataServiceImpl implements EditDataService {
     MerchantRepository merchantRepository;
     @Autowired
     ParkingLotRepository parkingLotRepository;
+
     @Override
     public String insertMerchant(Merchant merchant, String name) {
         merchant.setName(name);
         merchantRepository.save(merchant);
         return "YES";
     }
+
     @Override
-    public String insertParkingLot(int id, String name, String street, String ward, String district, String city){ //String name, String street, String ward, String district, String city) {
+    public String insertParkingLot(int id, String name, String street, String ward, String district, String city) { //String name, String street, String ward, String district, String city) {
         Optional<ParkingLot> parkingLot1 = parkingLotRepository.findById(id);
         ParkingLot parkingLot = parkingLot1.get();
         parkingLot.setParkingLotName(name);
@@ -38,12 +40,14 @@ public class EditDataServiceImpl implements EditDataService {
         parkingLotRepository.save(parkingLot);
         return "YES";
     }
+
     @Override
     public String insertVehicle(VehicleType vehicleType, String name) {
         vehicleType.setVehicleTypeName(name);
         vehicleTypeRepository.save(vehicleType);
         return "YES";
     }
+
     @Override
     public List<VehicleType> getAllVehicleType() {
         return vehicleTypeRepository.findAll();
