@@ -13,10 +13,10 @@ public class ParkingDetailData {
     private String district;
     private String city;
     private Double lat;
-    private Double ing;
+    private Double lng;
     private Integer status;
-    private Integer timeOpen;
-    private Integer timeClose;
+    private String timeOpen;
+    private String timeClose;
     private String phoneNumber;
     private Double distance;
     private Integer timeMoving;
@@ -32,7 +32,7 @@ public class ParkingDetailData {
         this.district = parkingLot.getDistrict();
         this.city = parkingLot.getCity();
         this.lat = parkingLot.getLat();
-        this.ing = parkingLot.getIng();
+        this.lng = parkingLot.getLng();
         this.status = parkingLot.getStatus();
         this.timeOpen = parkingLot.getTimeOpen();
         this.timeClose = parkingLot.getTimeClose();
@@ -98,12 +98,12 @@ public class ParkingDetailData {
         this.lat = lat;
     }
 
-    public Double getIng() {
-        return ing;
+    public Double getLng() {
+        return lng;
     }
 
-    public void setIng(Double ing) {
-        this.ing = ing;
+    public void setLng(Double lng) {
+        this.lng = lng;
     }
 
     public Integer getStatus() {
@@ -114,19 +114,19 @@ public class ParkingDetailData {
         this.status = status;
     }
 
-    public Integer getTimeOpen() {
+    public String getTimeOpen() {
         return timeOpen;
     }
 
-    public void setTimeOpen(Integer timeOpen) {
+    public void setTimeOpen(String timeOpen) {
         this.timeOpen = timeOpen;
     }
 
-    public Integer getTimeClose() {
+    public String getTimeClose() {
         return timeClose;
     }
 
-    public void setTimeClose(Integer timeClose) {
+    public void setTimeClose(String timeClose) {
         this.timeClose = timeClose;
     }
 
@@ -136,14 +136,6 @@ public class ParkingDetailData {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public List<PriceTicketData> getPriceTicketList() {
-        return priceTicketList;
-    }
-
-    public void setPriceTicketList(List<PriceTicketData> priceTicketList) {
-        this.priceTicketList = priceTicketList;
     }
 
     public Double getDistance() {
@@ -160,5 +152,13 @@ public class ParkingDetailData {
 
     public void setTimeMoving(Integer timeMoving) {
         this.timeMoving = timeMoving;
+    }
+
+    public List<PriceTicketData> getPriceTicketList() {
+        return priceTicketList;
+    }
+
+    public void setPriceTicketList(List<PriceTicketData> priceTicketList) {
+        this.priceTicketList = priceTicketList;
     }
 }
