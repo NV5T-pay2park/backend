@@ -25,6 +25,17 @@ public class EndUser {
     @Column(name = "email", length = 50)
     private String email;
 
+    @Column(name = "zalopay_id", length = 100)
+    private String zalopayId;
+
+    public String getZalopayId() {
+        return zalopayId;
+    }
+
+    public void setZalopayId(String zalopayId) {
+        this.zalopayId = zalopayId;
+    }
+
     public String getEmail() {
         return email;
     }

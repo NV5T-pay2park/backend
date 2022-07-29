@@ -1,6 +1,7 @@
 package pay2park.service.parking;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import pay2park.exception.ResourceNotFoundException;
@@ -53,7 +54,6 @@ public class ParkingServiceImpl implements ParkingService {
 
         for (PriceTicket priceTicket : priceTicketList) {
             priceTicketDataList.add(new PriceTicketData(priceTicket));
-
         }
 
         if (coordinates == "") {
@@ -68,14 +68,11 @@ public class ParkingServiceImpl implements ParkingService {
             String returnDistance = distance.getDistanceAndTimeGgApi(userLong, userLat, parking.getLat(), parking.getIng());
             String[] parts2 = returnDistance.split(",");
             return new ParkingDetailData(parking, Double.parseDouble(parts2[0]), Integer.parseInt(parts2[1]), priceTicketDataList);
-
-
         }
     }
 
     @Override
-    public List<ParkingListData> filterParking(String coordinates, String vehicleTypes) {
-
+    public List<ParkingListData> searchAndFilterParking(String stringSearch, String vehicleTypes, String district, String coordinates) {
         List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
         List<ParkingLot> rawData = new ArrayList<ParkingLot>();
 
@@ -85,11 +82,29 @@ public class ParkingServiceImpl implements ParkingService {
             for (String value : vehicleTypeParts) {
                 typesInt.add(Integer.parseInt(value));
             }
+            if (!stringSearch.equals("")) {
+                List<Integer> parkingLotIdList = parkingLotRepository.filterIdWithVehicleType(typesInt);
+                rawData = parkingLotRepository.searchWithStringSearchAndIdList(stringSearch, parkingLotIdList);
+                if (rawData.size() == 0) {
+                    rawData = parkingLotRepository.searchWithLikeStringSearchAndIdList(stringSearch, parkingLotIdList);
+                }
+            } else {
+                rawData = parkingLotRepository.filterWithVehicleType(typesInt);
+            }
 
-            rawData = parkingLotRepository.filterWithVehicleType(typesInt);
         } else {
-            rawData = parkingLotRepository.findAll();
+            if (!stringSearch.equals("")) {
+                rawData = parkingLotRepository.searchWithStringSearch(stringSearch);
+                if (rawData.size() == 0) {
+                    rawData = parkingLotRepository.searchWithLikeStringSearch(stringSearch);
+                }
+            } else {
+                rawData = parkingLotRepository.findAll();
+            }
         }
+
+
+        // distance
         if (!coordinates.equals("")) {
             String[] coordinateParts = coordinates.split(",");
             double userLong = Double.parseDouble(coordinateParts[0]);
@@ -98,7 +113,8 @@ public class ParkingServiceImpl implements ParkingService {
             Distance distance = new Distance();
             for (ParkingLot parkingLot : rawData) {
                 Double dt = distance.getDistance(userLong, userLat, parkingLot.getLat(), parkingLot.getIng());
-                parkingList.add(new ParkingListData(parkingLot, dt, 0));
+                int time = (int) (dt * 4);
+                parkingList.add(new ParkingListData(parkingLot, dt, time));
 
             }
             Collections.sort(parkingList, new Comparator<ParkingListData>() {
@@ -111,23 +127,12 @@ public class ParkingServiceImpl implements ParkingService {
                 parkingList.add(new ParkingListData(parkingLot, 0.0, 0));
             }
         }
+
+        if (!district.equals("Tất cả")) {
+            final String dt = district;
+            CollectionUtils.filter(parkingList, o -> ((ParkingListData) o).getDistrict().equals(dt));
+        }
+
         return parkingList;
-    }
-
-    @Override
-    public List<ParkingListData> searchParking(String stringSearch) {
-        List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
-        List<ParkingLot> rawData = new ArrayList<ParkingLot>();
-        rawData = parkingLotRepository.searchWithStringSearch(stringSearch);
-
-        if (rawData.size() == 0) {
-            rawData = parkingLotRepository.searchWithLikeStringSearch(stringSearch);
-        }
-        for (ParkingLot parkingLot : rawData) {
-
-            parkingList.add(new ParkingListData(parkingLot, 0.0, 0));
-
-        }
-        return parkingList.size() > 5 ? parkingList.subList(0, 5) : parkingList;
     }
 }

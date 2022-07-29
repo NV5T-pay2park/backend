@@ -1,14 +1,14 @@
 package pay2park.model.entityFromDB;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Entity
 @Table(name = "parking_lot_images")
 public class ParkingLotImage {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "image_id", nullable = false)
+    @Column(name = "image_id", nullable = false, length = 100)
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

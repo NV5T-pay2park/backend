@@ -6,9 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pay2park.model.ResponseObject;
 import pay2park.model.entityFromDB.Merchant;
-import pay2park.model.entityFromDB.ParkingLot;
 import pay2park.model.entityFromDB.VehicleType;
 import pay2park.service.editdata.EditDataService;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/")
@@ -22,10 +24,10 @@ public class EditDataController {
                 new ResponseObject(HttpStatus.OK, "", testService.insertVehicle(vehicleType, vehicleType.getVehicleTypeName())));
     }
     @PostMapping("insertParkingLot")
-    public ResponseEntity<ResponseObject> insertParkingLot(@RequestBody ParkingLot parkingLot) {
+    public ResponseEntity<ResponseObject> insertParkingLot(@RequestParam int id, @RequestParam String name, @RequestParam String street, @RequestParam String ward, @RequestParam String district, @RequestParam String city) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(HttpStatus.OK, "",
-                        testService.insertParkingLot(parkingLot, parkingLot.getParkingLotName(), parkingLot.getAddress())));
+                        testService.insertParkingLot(id, name, street, ward, district, city)));
     }
     @PostMapping("insertMerchant")
     public ResponseEntity<ResponseObject> insertMerchant(@RequestBody Merchant merchant) {

@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Random;
 import java.util.TimeZone;
 
 public class Extension {
@@ -25,6 +26,9 @@ public class Extension {
         return Instant.parse(time);
     }
     public static String getLicensePlate() {
-        return "77C1-12345";
+        Random random = new Random();
+        int licensePlate = random.nextInt(90000) + 10000;
+        int providerCode = random.nextInt(90) + 10;
+        return String.valueOf(providerCode) + "C1-" + String.valueOf(licensePlate);
     }
 }

@@ -6,25 +6,33 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pay2park.model.ResponseObject;
+import pay2park.model.entityFromDB.PaymentUrl;
 import pay2park.service.image.ImageService;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/")
 @CrossOrigin
 public class ImageController {
-//    @Autowired
-//    ImageService imageService;
+    @Autowired
+    ImageService imageService;
     @PostMapping("uploadImage")
-    public ResponseEntity<ResponseObject> upload(@RequestParam MultipartFile multipartFile) {
-        return null;
+    public ResponseEntity<ResponseObject> upload(@RequestParam MultipartFile multipartFile, @RequestParam int parkingLotID) {
+        ResponseObject responseObject = imageService.insertImage(multipartFile, parkingLotID);
+        return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
     }
-    @DeleteMapping("/delete")
-    public ResponseEntity<ResponseObject> deleteImage(@RequestParam("id") String id) {
-        return null;
+    @DeleteMapping("deleteImage")
+    public ResponseEntity<ResponseObject> deleteImage(@RequestParam String id) {
+        ResponseObject responseObject = imageService.deleteImage(id);
+        return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
+    }
+    @GetMapping("getAllImageByParkingLot")
+    public ResponseEntity<ResponseObject> getAllImageByParkingLot(@RequestParam int parkingLotID) {
+        ResponseObject responseObject = imageService.getAllImageByParkingLot(parkingLotID);
+        return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
+    }
+    @GetMapping("getImageByID")
+    public ResponseEntity<ResponseObject> getImageByID(@RequestParam String id) {
+        ResponseObject responseObject = imageService.getImageByID(id);
+        return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
     }
 }

@@ -42,7 +42,7 @@ public class QueryOrderController {
 
     @PostMapping("/queryOrder")
     @ResponseBody
-    public ResponseQueryData createOrder(QueryData queryData) throws IOException, URISyntaxException {
+    public ResponseQueryData queryOrder(QueryData queryData) throws IOException, URISyntaxException {
         ResponseQueryData data = queryOrderService.queryOrder(queryData);
         return data;
     }

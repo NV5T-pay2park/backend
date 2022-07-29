@@ -1,23 +1,16 @@
 package pay2park.service.checkinout;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import pay2park.exception.ResourceNotFoundException;
-import pay2park.extension.Extension;
 import pay2park.model.ResponseObject;
 import pay2park.model.checkinout.CheckOutData;
 
 import pay2park.model.checkinout.PreCheckOutData;
+import pay2park.model.entityFromDB.ParkingLot;
 import pay2park.model.entityFromDB.PaymentUrl;
+import pay2park.model.entityFromDB.PriceTicket;
 import pay2park.model.entityFromDB.Ticket;
 
 import pay2park.model.payment.OrderData;
@@ -32,13 +25,11 @@ import pay2park.service.payment.CreateOrderService;
 import pay2park.service.payment.QueryOrderService;
 
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalTime;
 import java.util.*;
 
 @Service
@@ -57,13 +48,13 @@ public class CheckOutServiceImpl implements CheckOutService {
     QueryOrderService queryOrderService;
 
     @Override
-    public ResponseObject preCheckOut(PreCheckOutData checkOutData) throws IOException {
+    public ResponseObject preCheckOut(PreCheckOutData checkOutData) {
         if (!checkDataIsValid(checkOutData)) {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", "");
         }
 
-        Ticket ticket = ticketsRepository.findById(checkOutData.getTicketID()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: "+ checkOutData.getTicketID()));
-        if (ticket.getCheckOutTime() != null){
+        Ticket ticket = ticketsRepository.findById(checkOutData.getTicketID()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + checkOutData.getTicketID()));
+        if (ticket.getCheckOutTime() != null) {
             return new ResponseObject(HttpStatus.FOUND, "Ticket was checked out before", "");
         }
         return new ResponseObject(HttpStatus.OK, "Pre checkout successfully", ticket.getLicensePlates());
@@ -73,50 +64,66 @@ public class CheckOutServiceImpl implements CheckOutService {
     @Override
     public ResponseObject checkOut(CheckOutData checkOutData) throws IOException, InterruptedException, URISyntaxException {
 
-
-        // Tính tiền các thứ nhận lại amount
-        Long amount = 60000L;
         Long ticketID = checkOutData.getTicketID();
         Integer endUserId = checkOutData.getEndUserID();
+        Instant time = Instant.now();
+        // Calculate amount of ticket
+        Ticket ticketCheckout = ticketsRepository.findById(checkOutData.getTicketID()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
+        Duration duration = Duration.between(ticketCheckout.getCheckInTime(), time);
+        double hourTime = duration.toHours();
 
-        // Kiem tra checkout
-        String appTransId = getCurrentTimeString("yyMMdd") +"_"+ endUserId + ticketID.toString();
+        List<PriceTicket> listPriceTicket = ticketsRepository.getPriceTicketByParkingLotId(ticketCheckout.getParkingLot());
+        int amount = calculateAmountOfTicket(hourTime, listPriceTicket);
+        System.out.println(amount);
+
+        // Check checkout
+        String appTransId = getCurrentTimeString("yyMMdd") + "_" + endUserId + ticketID.toString();
         boolean appTransIdExist = paymentUrlRepository.existsById(appTransId);
 
-        if (!appTransIdExist){
+        if (!appTransIdExist) {
 
-            // call api thanh toan
-            OrderData orderData = new OrderData(ticketID,(long) endUserId, amount);
+            // call api payment
+            OrderData orderData = new OrderData(ticketID, (long) endUserId, amount);
             ResponseOrderData responseOrderData = createOrderService.createOrder(orderData);
-            if (responseOrderData.getReturnCode() == 2){
+            if (responseOrderData.getReturnCode() == 2) {
                 return new ResponseObject(HttpStatus.FOUND, "payment failed", "");
             }
             paymentUrlRepository.save(new PaymentUrl(appTransId, responseOrderData.getOrderUrl(), responseOrderData.getZpTransToken()));
         }
 
         // query order status
-        Boolean flag = false;
+        Integer flag = 0;
         int counter = 0;
-        while (true){
+        while (true) {
             Thread.sleep(3000);
             QueryData queryData = new QueryData(appTransId);
             ResponseQueryData responseQueryData = queryOrderService.queryOrder(queryData);
 
-            if(responseQueryData.getReturnCode() == 1){
-                flag = true;
+            if (responseQueryData.getReturnCode() == 1) {
+                flag = 1;
+                break;
+            }
+            if (responseQueryData.getReturnCode() == 2) {
+                flag = 2;
                 break;
             }
             counter += 1;
             if (counter == 200) break;
         }
-        if (flag.equals(true)){
-            Instant time = Instant.now();
-            Ticket ticketUpdate = ticketsRepository.findById(ticketID).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));;
+        if (flag.equals(1)) {
+            // update ticket checkout time and slot of parking
+            Ticket ticketUpdate = ticketsRepository.findById(ticketID).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
             ticketUpdate.setCheckOutTime(time);
             ticketsRepository.save(ticketUpdate);
-
+            ParkingLot parkingLotUpdate = parkingLotRepository.findById(ticketUpdate.getParkingLot().getId()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
+            int newSlotRemaining = parkingLotUpdate.getNumberSlotRemaining() + 1;
+            parkingLotUpdate.setNumberSlotRemaining(newSlotRemaining);
+            parkingLotRepository.save(parkingLotUpdate);
 
             return new ResponseObject(HttpStatus.OK, "checkout successfully", "");
+        }
+        if (flag.equals(2)) {
+            return new ResponseObject(HttpStatus.FOUND, "checkout failed because ZLP server", "");
         }
 
         return new ResponseObject(HttpStatus.FOUND, "checkout failed", "");
@@ -138,12 +145,19 @@ public class CheckOutServiceImpl implements CheckOutService {
         fmt.setCalendar(cal);
         return fmt.format(cal.getTimeInMillis());
     }
+
+    private int calculateAmountOfTicket(double parkingHour, List<PriceTicket> priceTicketList) {
+        int result = 0;
+        for (int i = 0; i < priceTicketList.size(); i++) {
+            double time = 0;
+            if (i + 1 < priceTicketList.size() && parkingHour > priceTicketList.get(i + 1).getPeriodTime()) {
+                time = priceTicketList.get(i + 1).getPeriodTime() - priceTicketList.get(i).getPeriodTime();
+            } else {
+                time = parkingHour - priceTicketList.get(i).getPeriodTime();
+            }
+            int units = (int) Math.ceil(time / priceTicketList.get(i).getUnit());
+            result += units * priceTicketList.get(i).getPrice();
+        }
+        return result;
+    }
 }
-
-
-
-
-
-
-
-
