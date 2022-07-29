@@ -1,8 +1,6 @@
 package pay2park.model.parking;
 
 import pay2park.model.entityFromDB.ParkingLot;
-
-import javax.persistence.Column;
 import java.util.List;
 
 public class ParkingDetailData {
