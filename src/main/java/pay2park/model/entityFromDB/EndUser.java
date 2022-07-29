@@ -83,4 +83,15 @@ public class EndUser {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    public EndUser() {}
+
+    public EndUser(String zalopayID) {
+        this.zalopayId = zalopayID;
+        this.email = "NaN";
+        this.firstName = "NaN";
+        this.lastName = "NaN";
+        this.phone = "NaN";
+        this.gender = 1;
+    }
 }
