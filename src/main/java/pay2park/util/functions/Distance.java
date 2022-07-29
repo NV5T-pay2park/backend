@@ -34,7 +34,7 @@ public class Distance {
         String url = "https://maps.googleapis.com/maps/api/distancematrix/json?";
         url = url + "destinations=" + lat1 + "," + lon1;
         url = url + "&origins=" + lat2 + "," + lon2;
-        url = url + "&key=AIzaSyCuIMJTEeifSs3ISPf2WOCsoiMjsuurP5w";
+        url = url + "&key=AIzaSyDH75bfzU1Vy1VqSOAPBrVZ_OUCOlnLE8E";
 
         URL uri = new URL(url);
         HttpURLConnection con = (HttpURLConnection) uri.openConnection();

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import pay2park.exception.ResourceNotFoundException;
+import pay2park.extension.Extension;
 import pay2park.model.ResponseObject;
 import pay2park.model.checkinout.CheckOutData;
 
@@ -17,10 +18,7 @@ import pay2park.model.payment.OrderData;
 import pay2park.model.payment.QueryData;
 import pay2park.model.payment.ResponseOrderData;
 import pay2park.model.payment.ResponseQueryData;
-import pay2park.repository.EndUserRepository;
-import pay2park.repository.ParkingLotRepository;
-import pay2park.repository.PaymentUrlRepository;
-import pay2park.repository.TicketsRepository;
+import pay2park.repository.*;
 import pay2park.service.payment.CreateOrderService;
 import pay2park.service.payment.QueryOrderService;
 
@@ -46,6 +44,8 @@ public class CheckOutServiceImpl implements CheckOutService {
     CreateOrderService createOrderService;
     @Autowired
     QueryOrderService queryOrderService;
+    @Autowired
+    PriceTicketRepository priceTicketRepository;
 
     @Override
     public ResponseObject preCheckOut(PreCheckOutData checkOutData) {
@@ -66,16 +66,18 @@ public class CheckOutServiceImpl implements CheckOutService {
 
         Long ticketID = checkOutData.getTicketID();
         Integer endUserId = checkOutData.getEndUserID();
-        Instant time = Instant.now();
+        Instant time = Extension.getCheckOutTime();
         // Calculate amount of ticket
         Ticket ticketCheckout = ticketsRepository.findById(checkOutData.getTicketID()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
         Duration duration = Duration.between(ticketCheckout.getCheckInTime(), time);
-        double hourTime = duration.toHours();
-
-        List<PriceTicket> listPriceTicket = ticketsRepository.getPriceTicketByParkingLotId(ticketCheckout.getParkingLot());
+        double minuteTime = duration.toMinutes();
+        double hourTime = minuteTime/60;
+        List<PriceTicket> listPriceTicket = priceTicketRepository.getPriceTicketByParkingLotIdAndVehicleType(ticketCheckout.getParkingLot(), ticketCheckout.getVehicleType());
         int amount = calculateAmountOfTicket(hourTime, listPriceTicket);
-        System.out.println(amount);
 
+        if (amount <= 0) {
+            return new ResponseObject(HttpStatus.FOUND, "payment failed with amount of ticket", "");
+        }
         // Check checkout
         String appTransId = getCurrentTimeString("yyMMdd") + "_" + endUserId + ticketID.toString();
         boolean appTransIdExist = paymentUrlRepository.existsById(appTransId);
@@ -108,7 +110,7 @@ public class CheckOutServiceImpl implements CheckOutService {
                 break;
             }
             counter += 1;
-            if (counter == 200) break;
+            if (counter == 100) break;
         }
         if (flag.equals(1)) {
             // update ticket checkout time and slot of parking
@@ -146,7 +148,10 @@ public class CheckOutServiceImpl implements CheckOutService {
         return fmt.format(cal.getTimeInMillis());
     }
 
+
     private int calculateAmountOfTicket(double parkingHour, List<PriceTicket> priceTicketList) {
+        Comparator<PriceTicket> compareById = (PriceTicket o1, PriceTicket o2) -> o1.getPeriodTime().compareTo( o2.getPeriodTime() );
+        priceTicketList.sort(compareById);
         int result = 0;
         for (int i = 0; i < priceTicketList.size(); i++) {
             double time = 0;

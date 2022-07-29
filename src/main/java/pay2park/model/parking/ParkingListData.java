@@ -12,6 +12,8 @@ public class ParkingListData {
     private String ward;
     private String district;
     private String city;
+    private Double lat;
+    private Double ing;
     private Integer status;
     private String phoneNumber;
     private Double distance;
@@ -27,6 +29,8 @@ public class ParkingListData {
         this.ward = parkingLot.getWard();
         this.district = parkingLot.getDistrict();
         this.city = parkingLot.getCity();
+        this.lat = parkingLot.getLat();
+        this.ing = parkingLot.getIng();
         this.status = parkingLot.getStatus();
         this.phoneNumber = parkingLot.getPhoneNumber();
         this.distance = distance;
@@ -96,6 +100,22 @@ public class ParkingListData {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getIng() {
+        return ing;
+    }
+
+    public void setIng(Double ing) {
+        this.ing = ing;
     }
 
     public Integer getStatus() {
