@@ -13,14 +13,16 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 @Service
-public class QueryPaymentUrlServiceImpl implements  QueryPaymentUrlService{
+public class QueryPaymentUrlServiceImpl implements QueryPaymentUrlService {
     @Autowired
     private PaymentUrlRepository paymentUrlRepository;
 
     @Override
-    public PaymentUrl queryPaymentUrl(int endUserId, int ticketId){
+
+    public PaymentUrl queryPaymentUrl(int endUserId, Long ticketId){
         String appTransId = getCurrentTimeString("yyMMdd") +"_"+endUserId + ticketId;
         PaymentUrl paymentUrl =  paymentUrlRepository.findById(appTransId).orElseThrow(() -> new ResourceNotFoundException("Payment url not exist with app_tran_id: "+appTransId));
+
         return paymentUrl;
     }
 
@@ -30,5 +32,4 @@ public class QueryPaymentUrlServiceImpl implements  QueryPaymentUrlService{
         fmt.setCalendar(cal);
         return fmt.format(cal.getTimeInMillis());
     }
-
 }

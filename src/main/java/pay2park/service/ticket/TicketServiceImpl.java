@@ -33,9 +33,10 @@ public class TicketServiceImpl implements TicketService {
     private VehicleTypeRepository vehicleTypeRepository;
     @Autowired
     private ParkingLotRepository parkingLotRepository;
+
     @Override
     public ResponseTicketData createTicket(TicketData ticketData) {
-        if(!checkTicketData(ticketData)) return null;
+        if (!checkTicketData(ticketData)) return null;
         Long id = createTicketID(ticketData);
         Instant checkInTime = getCheckInTime();
         Instant checkInOut = null;
@@ -64,9 +65,10 @@ public class TicketServiceImpl implements TicketService {
             return new ResponseTicketData();
         }
     }
+
     @Override
     public ResponseObject getTicketByEndUserId(int endUserID) {
-        if(!endUserRepository.existsById(endUserID)) {
+        if (!endUserRepository.existsById(endUserID)) {
             return new ResponseObject(HttpStatus.FOUND, "End user is not valid",
                     new ArrayList<Ticket>());
         }
@@ -75,7 +77,7 @@ public class TicketServiceImpl implements TicketService {
         List<ResponseTicketData> dataResponse = ticketByEndUserID.stream().map(
                 i -> new ResponseTicketData(i.getId(), i.getCheckInTime(),
                         i.getCheckOutTime(),
-                        (i.getCheckOutTime() == null) ? null : calculateAmount(i.getId()),i.getLicensePlates(),
+                        (i.getCheckOutTime() == null) ? null : calculateAmount(i.getId()), i.getLicensePlates(),
                         i.getVehicleType().getVehicleTypeName(),
                         i.getEndUser().getId(),
                         i.getEndUser().getFirstName() + ' ' + i.getEndUser().getLastName(),
@@ -83,9 +85,11 @@ public class TicketServiceImpl implements TicketService {
                         !(i.getCheckOutTime() == null))).collect(Collectors.toList());
         return new ResponseObject(HttpStatus.OK, "Success", dataResponse);
     }
+
     private Integer calculateAmount(Long ticketID) {
         return 5000;
     }
+
     private Long createTicketID(TicketData ticketData) {
         String createTicketTime = Extension.getCurrentTimeString("yyMMddHHmmss");
         String parkingLotID = String.valueOf(ticketData.getParkingLotID());

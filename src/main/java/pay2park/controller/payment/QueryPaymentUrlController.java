@@ -21,10 +21,8 @@ public class QueryPaymentUrlController {
 
     @GetMapping("/queryPaymentUrl")
     @ResponseBody
-    public ResponseObject createOrder(@RequestParam(value = "endUserId") int endUserID, @RequestParam(value = "ticketId") int ticketId ) throws IOException, URISyntaxException {
+    public ResponseObject createOrder(@RequestParam(value = "endUserId") int endUserID, @RequestParam(value = "ticketId") Long ticketId ) throws IOException, URISyntaxException {
         var data = queryPaymentUrlService.queryPaymentUrl(endUserID, ticketId);
-
-
         return new ResponseObject(HttpStatus.OK, "query payment url successfully", data);
 
     }

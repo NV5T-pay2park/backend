@@ -17,10 +17,7 @@ import pay2park.model.payment.OrderData;
 import pay2park.model.payment.QueryData;
 import pay2park.model.payment.ResponseOrderData;
 import pay2park.model.payment.ResponseQueryData;
-import pay2park.repository.EndUserRepository;
-import pay2park.repository.ParkingLotRepository;
-import pay2park.repository.PaymentUrlRepository;
-import pay2park.repository.TicketsRepository;
+import pay2park.repository.*;
 import pay2park.service.payment.CreateOrderService;
 import pay2park.service.payment.QueryOrderService;
 
@@ -28,6 +25,7 @@ import pay2park.service.payment.QueryOrderService;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 
@@ -45,15 +43,17 @@ public class CheckOutServiceImpl implements CheckOutService {
     CreateOrderService createOrderService;
     @Autowired
     QueryOrderService queryOrderService;
+    @Autowired
+    PriceTicketRepository priceTicketRepository;
 
     @Override
-    public ResponseObject preCheckOut(PreCheckOutData checkOutData){
+    public ResponseObject preCheckOut(PreCheckOutData checkOutData) {
         if (!checkDataIsValid(checkOutData)) {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", "");
         }
 
-        Ticket ticket = ticketsRepository.findById(checkOutData.getTicketID()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: "+ checkOutData.getTicketID()));
-        if (ticket.getCheckOutTime() != null){
+        Ticket ticket = ticketsRepository.findById(checkOutData.getTicketID()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + checkOutData.getTicketID()));
+        if (ticket.getCheckOutTime() != null) {
             return new ResponseObject(HttpStatus.FOUND, "Ticket was checked out before", "");
         }
         return new ResponseObject(HttpStatus.OK, "Pre checkout successfully", ticket.getLicensePlates());
@@ -63,12 +63,17 @@ public class CheckOutServiceImpl implements CheckOutService {
     @Override
     public ResponseObject checkOut(CheckOutData checkOutData) throws IOException, InterruptedException, URISyntaxException {
 
-
-        // Calculate amount of ticket
-        Long amount = 60000L;
         Long ticketID = checkOutData.getTicketID();
         Integer endUserId = checkOutData.getEndUserID();
+        Instant time = Instant.now();
+        // Calculate amount of ticket
+        Ticket ticketCheckout = ticketsRepository.findById(checkOutData.getTicketID()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
+        Duration duration = Duration.between(ticketCheckout.getCheckInTime(), time);
+        double hourTime = duration.toHours();
 
+        List<PriceTicket> listPriceTicket = priceTicketRepository.getPriceTicketByParkingLotId(ticketCheckout.getParkingLot());
+        int amount = calculateAmountOfTicket(hourTime, listPriceTicket);
+        if (amount <= 0) amount = 60000;
         // Check checkout
         String appTransId = getCurrentTimeString("yyMMdd") + "_" + endUserId + ticketID.toString();
         boolean appTransIdExist = paymentUrlRepository.existsById(appTransId);
@@ -85,7 +90,7 @@ public class CheckOutServiceImpl implements CheckOutService {
         }
 
         // query order status
-        Boolean flag = false;
+        Integer flag = 0;
         int counter = 0;
         while (true) {
             Thread.sleep(3000);
@@ -93,15 +98,18 @@ public class CheckOutServiceImpl implements CheckOutService {
             ResponseQueryData responseQueryData = queryOrderService.queryOrder(queryData);
 
             if (responseQueryData.getReturnCode() == 1) {
-                flag = true;
+                flag = 1;
+                break;
+            }
+            if (responseQueryData.getReturnCode() == 2) {
+                flag = 2;
                 break;
             }
             counter += 1;
-            if (counter == 200) break;
+            if (counter == 100) break;
         }
-        if (flag.equals(true)) {
+        if (flag.equals(1)) {
             // update ticket checkout time and slot of parking
-            Instant time = Instant.now();
             Ticket ticketUpdate = ticketsRepository.findById(ticketID).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
             ticketUpdate.setCheckOutTime(time);
             ticketsRepository.save(ticketUpdate);
@@ -111,6 +119,9 @@ public class CheckOutServiceImpl implements CheckOutService {
             parkingLotRepository.save(parkingLotUpdate);
 
             return new ResponseObject(HttpStatus.OK, "checkout successfully", "");
+        }
+        if (flag.equals(2)) {
+            return new ResponseObject(HttpStatus.FOUND, "checkout failed because ZLP server", "");
         }
 
         return new ResponseObject(HttpStatus.FOUND, "checkout failed", "");
@@ -133,6 +144,7 @@ public class CheckOutServiceImpl implements CheckOutService {
         return fmt.format(cal.getTimeInMillis());
     }
 
+
     private int calculateAmountOfTicket(double parkingHour, PriceTicket[] PriceTickets) {
         Arrays.sort(PriceTickets, new Comparator<PriceTicket>() {
             @Override
@@ -141,16 +153,15 @@ public class CheckOutServiceImpl implements CheckOutService {
             }
         });
         int result = 0;
-        for (int i = 0; i < PriceTickets.length; i++) {
+        for (int i = 0; i < priceTicketList.size(); i++) {
             double time = 0;
-            if (i + 1 < PriceTickets.length && parkingHour > PriceTickets[i+1].getPeriodTime()) {
-                time = PriceTickets[i+1].getPeriodTime() - PriceTickets[i].getPeriodTime();
+            if (i + 1 < priceTicketList.size() && parkingHour > priceTicketList.get(i + 1).getPeriodTime()) {
+                time = priceTicketList.get(i + 1).getPeriodTime() - priceTicketList.get(i).getPeriodTime();
+            } else {
+                time = parkingHour - priceTicketList.get(i).getPeriodTime();
             }
-            else {
-                time = parkingHour - PriceTickets[i].getPeriodTime();
-            }
-            int units = (int) Math.ceil(time / PriceTickets[i].getUnit());
-            result += units * PriceTickets[i].getPrice();
+            int units = (int) Math.ceil(time / priceTicketList.get(i).getUnit());
+            result += units * priceTicketList.get(i).getPrice();
         }
         return result;
     }

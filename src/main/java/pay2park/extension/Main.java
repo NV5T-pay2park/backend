@@ -3,6 +3,8 @@ package pay2park.extension;
 import java.time.Instant;
 import java.util.Optional;
 
+import static pay2park.extension.Extension.getLicensePlate;
+
 public class Main {
     public static String getTime() {
         String time2 = Extension.getCurrentTimeString("yyyy-MM-dd") + 'T' + Extension.getCurrentTimeString("HH:mm:ss") + 'Z';
@@ -11,8 +13,6 @@ public class Main {
     }
 
     public static void main(String []args) {
-        Integer a = null;
-        Optional<Integer> check = Optional.of(a);
-        System.out.println(check.get());
+        System.out.println(getLicensePlate());
     }
 }

@@ -8,30 +8,29 @@ public class ParkingListData {
     private String parkingLotName;
     private Integer timeOpen;
     private Integer timeClose;
-    private String address;
+    private String street;
+    private String ward;
+    private String district;
+    private String city;
+    private Double lat;
+    private Double ing;
     private Integer status;
     private String phoneNumber;
     private Double distance;
     private Integer timeMoving;
 
 
-    public ParkingListData(Integer id, String parkingLotName, Integer timeOpen, Integer timeClose, String address, Integer status, String phoneNumber, Double distance , Integer timeMoving) {
-        this.id = id;
-        this.parkingLotName = parkingLotName;
-        this.timeOpen = timeOpen;
-        this.timeClose = timeClose;
-        this.address = address;
-        this.status = status;
-        this.phoneNumber = phoneNumber;
-        this.distance = distance;
-        this.timeMoving = timeMoving;
-    }
     public ParkingListData(ParkingLot parkingLot, Double distance, Integer timeMoving){
         this.id = parkingLot.getId();
         this.parkingLotName = parkingLot.getParkingLotName();
         this.timeOpen = parkingLot.getTimeOpen();
         this.timeClose = parkingLot.getTimeClose();
-        this.address = parkingLot.getStreet() + ", " +  parkingLot.getWard() + ", " + parkingLot.getDistrict() + ", " + parkingLot.getCity();
+        this.street = parkingLot.getStreet();
+        this.ward = parkingLot.getWard();
+        this.district = parkingLot.getDistrict();
+        this.city = parkingLot.getCity();
+        this.lat = parkingLot.getLat();
+        this.ing = parkingLot.getIng();
         this.status = parkingLot.getStatus();
         this.phoneNumber = parkingLot.getPhoneNumber();
         this.distance = distance;
@@ -71,12 +70,52 @@ public class ParkingListData {
         this.timeClose = timeClose;
     }
 
-    public String getAddress() {
-        return address;
+    public String getStreet() {
+        return street;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getWard() {
+        return ward;
+    }
+
+    public void setWard(String ward) {
+        this.ward = ward;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getIng() {
+        return ing;
+    }
+
+    public void setIng(Double ing) {
+        this.ing = ing;
     }
 
     public Integer getStatus() {

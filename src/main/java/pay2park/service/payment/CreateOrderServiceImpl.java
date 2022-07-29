@@ -21,8 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
-public class CreateOrderServiceImpl implements  CreateOrderService{
-    private static Map<String, String> config = new HashMap<String, String>(){{
+public class CreateOrderServiceImpl implements CreateOrderService {
+    private static Map<String, String> config = new HashMap<String, String>() {{
         put("app_id", "805");
         put("key1", "pca7SCpBItgbQnT4tKr1yY5vpow6QMZ9");
         put("key2", "82NZPr8nLJj8es3QhJOZgSVTsPwZ4gkS");
@@ -35,20 +35,21 @@ public class CreateOrderServiceImpl implements  CreateOrderService{
         fmt.setCalendar(cal);
         return fmt.format(cal.getTimeInMillis());
     }
+
     @Override
     public ResponseOrderData createOrder(OrderData orderData) throws IOException {
         Random rand = new Random();
-        final Map embed_data = new HashMap(){{
+        final Map embed_data = new HashMap() {{
 
         }};
 
-        Map<String, Object> order = new HashMap<String, Object>(){{
+        Map<String, Object> order = new HashMap<String, Object>() {{
             put("app_id", config.get("app_id"));
-            put("app_trans_id", getCurrentTimeString("yyMMdd") +"_"+ orderData.getUserId().toString() + orderData.getTicketId().toString()); // translation missing: en.docs.shared.sample_code.comments.app_trans_id
+            put("app_trans_id", getCurrentTimeString("yyMMdd") + "_" + orderData.getUserId().toString() + orderData.getTicketId().toString()); // translation missing: en.docs.shared.sample_code.comments.app_trans_id
             put("app_time", System.currentTimeMillis()); // miliseconds
             put("app_user", "DicBRxUCu86qoxntyDR_VTIeTpdXF0hfRUI1q-QPVyg");
             put("amount", orderData.getAmount());
-            put("description", "Pay2Park - Payment for the order #"+orderData.getUserId().toString() + orderData.getTicketId().toString());
+            put("description", "Pay2Park - Payment for the order #" + orderData.getUserId().toString() + orderData.getTicketId().toString());
             put("bank_code", "zalopayapp");
             put("item", "[]");
             put("embed_data", new JSONObject(embed_data).toString());
@@ -56,8 +57,8 @@ public class CreateOrderServiceImpl implements  CreateOrderService{
         String appTransId = order.get("app_trans_id").toString();
 
         // app_id +”|”+ app_trans_id +”|”+ appuser +”|”+ amount +"|" + app_time +”|”+ embed_data +"|" +item
-        String data = order.get("app_id") +"|"+ order.get("app_trans_id") +"|"+ order.get("app_user") +"|"+ order.get("amount")
-                +"|"+ order.get("app_time") +"|"+ order.get("embed_data") +"|"+ order.get("item");
+        String data = order.get("app_id") + "|" + order.get("app_trans_id") + "|" + order.get("app_user") + "|" + order.get("amount")
+                + "|" + order.get("app_time") + "|" + order.get("embed_data") + "|" + order.get("item");
         order.put("mac", HMACUtil.HMacHexStringEncode(HMACUtil.HMACSHA256, config.get("key1"), data));
 
         CloseableHttpClient client = HttpClients.createDefault();
@@ -84,6 +85,8 @@ public class CreateOrderServiceImpl implements  CreateOrderService{
         for (String key : result.keySet()) {
             System.out.format("%s = %s\n", key, result.get(key));
         }
-        return new ResponseOrderData( (int)result.get("return_code"),appTransId, result.get("order_url").toString(), result.get("zp_trans_token").toString());
-    };
+        return new ResponseOrderData((int) result.get("return_code"), appTransId, result.get("order_url").toString(), result.get("zp_trans_token").toString());
+    }
+
+    ;
 }
