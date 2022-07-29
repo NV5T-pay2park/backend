@@ -25,6 +25,12 @@ public class Extension {
                 Extension.getCurrentTimeString("HH:mm:ss") + 'Z';
         return Instant.parse(time);
     }
+    public static Instant getCheckOutTime() {
+        String time = Extension.getCurrentTimeString("yyyy-MM-dd") + 'T' +
+                Extension.getCurrentTimeString("HH:mm:ss") + 'Z';
+        return Instant.parse(time);
+    }
+
     public static String getLicensePlate() {
         Random random = new Random();
         int licensePlate = random.nextInt(90000) + 10000;

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import pay2park.exception.ResourceNotFoundException;
+import pay2park.extension.Extension;
 import pay2park.model.ResponseObject;
 import pay2park.model.checkinout.CheckOutData;
 
@@ -65,15 +66,18 @@ public class CheckOutServiceImpl implements CheckOutService {
 
         Long ticketID = checkOutData.getTicketID();
         Integer endUserId = checkOutData.getEndUserID();
-        Instant time = Instant.now();
+        Instant time = Extension.getCheckOutTime();
         // Calculate amount of ticket
         Ticket ticketCheckout = ticketsRepository.findById(checkOutData.getTicketID()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
         Duration duration = Duration.between(ticketCheckout.getCheckInTime(), time);
-        double hourTime = duration.toHours();
-
-        List<PriceTicket> listPriceTicket = priceTicketRepository.getPriceTicketByParkingLotId(ticketCheckout.getParkingLot());
+        double minuteTime = duration.toMinutes();
+        double hourTime = minuteTime/60;
+        List<PriceTicket> listPriceTicket = priceTicketRepository.getPriceTicketByParkingLotIdAndVehicleType(ticketCheckout.getParkingLot(), ticketCheckout.getVehicleType());
         int amount = calculateAmountOfTicket(hourTime, listPriceTicket);
-        if (amount <= 0) amount = 60000;
+
+        if (amount <= 0) {
+            return new ResponseObject(HttpStatus.FOUND, "payment failed with amount of ticket", "");
+        }
         // Check checkout
         String appTransId = getCurrentTimeString("yyMMdd") + "_" + endUserId + ticketID.toString();
         boolean appTransIdExist = paymentUrlRepository.existsById(appTransId);
@@ -145,13 +149,9 @@ public class CheckOutServiceImpl implements CheckOutService {
     }
 
 
-    private int calculateAmountOfTicket(double parkingHour, PriceTicket[] PriceTickets) {
-        Arrays.sort(PriceTickets, new Comparator<PriceTicket>() {
-            @Override
-            public int compare(PriceTicket o1, PriceTicket o2) {
-                return o1.getPeriodTime().compareTo(o2.getPeriodTime());
-            }
-        });
+    private int calculateAmountOfTicket(double parkingHour, List<PriceTicket> priceTicketList) {
+        Comparator<PriceTicket> compareById = (PriceTicket o1, PriceTicket o2) -> o1.getPeriodTime().compareTo( o2.getPeriodTime() );
+        Collections.sort(priceTicketList, compareById);
         int result = 0;
         for (int i = 0; i < priceTicketList.size(); i++) {
             double time = 0;
