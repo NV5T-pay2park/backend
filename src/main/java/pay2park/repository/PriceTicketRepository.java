@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import pay2park.model.entityFromDB.ParkingLot;
 import pay2park.model.entityFromDB.PriceTicket;
 import pay2park.model.entityFromDB.PriceTicketId;
+import pay2park.model.entityFromDB.VehicleType;
 
 import java.util.List;
 
