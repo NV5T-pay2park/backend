@@ -134,6 +134,12 @@ public class CheckOutServiceImpl implements CheckOutService {
     }
 
     private int calculateAmountOfTicket(double parkingHour, PriceTicket[] PriceTickets) {
+        Arrays.sort(PriceTickets, new Comparator<PriceTicket>() {
+            @Override
+            public int compare(PriceTicket o1, PriceTicket o2) {
+                return o1.getPeriodTime().compareTo(o2.getPeriodTime());
+            }
+        });
         int result = 0;
         for (int i = 0; i < PriceTickets.length; i++) {
             double time = 0;

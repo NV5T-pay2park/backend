@@ -42,6 +42,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-taglib</artifactId>
+			<version>1.4.4</version>
+		</dependency>
+
 
 
 		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
