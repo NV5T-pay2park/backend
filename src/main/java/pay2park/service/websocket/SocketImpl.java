@@ -19,7 +19,7 @@ public class SocketImpl implements Socket {
 
     @Override
     public boolean RequestToEnterLicensePlate(int parkingLotID) {
-        SocketMessageData socketMessageData = new SocketMessageData(-1, "entry license plate");
+        SocketMessageData socketMessageData = new SocketMessageData(-1, "“enter license plate and vehicle type”");
         return sendToMerchant(parkingLotID, socketMessageData);
     }
 
