@@ -7,5 +7,5 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public interface QueryPaymentUrlService {
-    PaymentUrl queryPaymentUrl(int endUserId, int ticketId) throws IOException, URISyntaxException;
+    PaymentUrl queryPaymentUrl(int endUserId, Long ticketId) throws IOException, URISyntaxException;
 }
