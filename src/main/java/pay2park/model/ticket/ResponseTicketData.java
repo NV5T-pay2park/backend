@@ -5,8 +5,8 @@ import java.util.Date;
 
 public class ResponseTicketData {
     private Long ticketID;
-    private Instant checkInTime;
-    private Instant checkOutTime;
+    private String checkInTime;
+    private String checkOutTime;
     Integer total;
     private String licensePlate;
     private String vehicleType;
@@ -20,7 +20,7 @@ public class ResponseTicketData {
 
     }
 
-    public ResponseTicketData(Long ticketID, Instant checkInTime, Instant checkOutTime, Integer total,
+    public ResponseTicketData(Long ticketID, String checkInTime, String checkOutTime, Integer total,
                               String licensePlate, String vehicleType, int endUserID, String endUserName, int parkingLotID, String parkingLotName, boolean status) {
         this.ticketID = ticketID;
         this.checkInTime = checkInTime;
@@ -43,19 +43,19 @@ public class ResponseTicketData {
         this.ticketID = ticketID;
     }
 
-    public Instant getCheckInTime() {
+    public String getCheckInTime() {
         return checkInTime;
     }
 
-    public void setCheckInTime(Instant checkInTime) {
+    public void setCheckInTime(String checkInTime) {
         this.checkInTime = checkInTime;
     }
 
-    public Instant getCheckOutTime() {
+    public String getCheckOutTime() {
         return checkOutTime;
     }
 
-    public void setCheckOutTime(Instant checkOutTime) {
+    public void setCheckOutTime(String checkOutTime) {
         this.checkOutTime = checkOutTime;
     }
 
