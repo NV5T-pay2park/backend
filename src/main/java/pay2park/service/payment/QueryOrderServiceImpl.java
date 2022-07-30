@@ -28,8 +28,8 @@ import java.util.Map;
 public class QueryOrderServiceImpl implements QueryOrderService {
     private static final Map<String, String> config = new HashMap<String, String>() {{
         put("app_id", "999888");
-        put("key1", "pca7SCpBItgbQnT4tKr1yY5vpow6QMZ9");
-        put("key2", "82NZPr8nLJj8es3QhJOZgSVTsPwZ4gkS");
+        put("key1", "BuwHniWv76aTdSaHlBoY1j6hWFDp7zG8");
+        put("key2", "4K0itMD70mzCdEycINM2ZwookqBJgPcD");
         put("endpoint", "https://sb-openapi.zalopay.vn/v2/query");
     }};
 

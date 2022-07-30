@@ -20,18 +20,6 @@ public class ParkingLot {
     @Column(name = "number_slot_remaining", nullable = false)
     private Integer numberSlotRemaining;
 
-    @Column(name = "street", length = 100)
-    private String street;
-
-    @Column(name = "ward", length = 100)
-    private String ward;
-
-    @Column(name = "district", length = 100)
-    private String district;
-
-    @Column(name = "city", length = 100)
-    private String city;
-
     @Column(name = "status", nullable = false)
     private Integer status;
 
@@ -42,37 +30,60 @@ public class ParkingLot {
     @Column(name = "lat", nullable = false)
     private Double lat;
 
-    @Column(name = "ing", nullable = false)
-    private Double ing;
+    @Column(name = "lng", nullable = false)
+    private Double lng;
 
-    @Column(name = "time_open", nullable = false)
-    private Integer timeOpen;
+    @Column(name = "time_open", nullable = false, length = 10)
+    private String timeOpen;
 
-    @Column(name = "time_close", nullable = false)
-    private Integer timeClose;
+    @Column(name = "time_close", nullable = false, length = 10)
+    private String timeClose;
 
     @Column(name = "phone_number", length = 10)
     private String phoneNumber;
 
-    public ParkingLot() {
+    @Column(name = "city", length = 100)
+    private String city;
+
+    @Column(name = "district", length = 100)
+    private String district;
+
+    @Column(name = "street", length = 100)
+    private String street;
+
+    @Column(name = "ward", length = 100)
+    private String ward;
+
+    public String getWard() {
+        return ward;
     }
 
-    public ParkingLot(Integer id, String parkingLotName, Integer numberSlot, Integer numberSlotRemaining, String street, String ward, String district, String city, Integer status, Merchant merchant, Double lat, Double ing, Integer timeOpen, Integer timeClose, String phoneNumber) {
-        this.id = id;
-        this.parkingLotName = parkingLotName;
-        this.numberSlot = numberSlot;
-        this.numberSlotRemaining = numberSlotRemaining;
-        this.street = street;
+    public void setWard(String ward) {
         this.ward = ward;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
         this.district = district;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
         this.city = city;
-        this.status = status;
-        this.merchant = merchant;
-        this.lat = lat;
-        this.ing = ing;
-        this.timeOpen = timeOpen;
-        this.timeClose = timeClose;
-        this.phoneNumber = phoneNumber;
     }
 
     public String getPhoneNumber() {
@@ -83,28 +94,28 @@ public class ParkingLot {
         this.phoneNumber = phoneNumber;
     }
 
-    public Integer getTimeClose() {
+    public String getTimeClose() {
         return timeClose;
     }
 
-    public void setTimeClose(Integer timeClose) {
+    public void setTimeClose(String timeClose) {
         this.timeClose = timeClose;
     }
 
-    public Integer getTimeOpen() {
+    public String getTimeOpen() {
         return timeOpen;
     }
 
-    public void setTimeOpen(Integer timeOpen) {
+    public void setTimeOpen(String timeOpen) {
         this.timeOpen = timeOpen;
     }
 
-    public Double getIng() {
-        return ing;
+    public Double getLng() {
+        return lng;
     }
 
-    public void setIng(Double ing) {
-        this.ing = ing;
+    public void setLng(Double lng) {
+        this.lng = lng;
     }
 
     public Double getLat() {
@@ -129,38 +140,6 @@ public class ParkingLot {
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
-    public String getWard() {
-        return ward;
-    }
-
-    public void setWard(String ward) {
-        this.ward = ward;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
     }
 
     public Integer getNumberSlotRemaining() {
