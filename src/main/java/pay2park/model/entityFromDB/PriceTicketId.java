@@ -18,6 +18,15 @@ public class PriceTicketId implements Serializable {
     @Column(name = "period_time", nullable = false)
     private Integer periodTime;
 
+    public PriceTicketId() {
+    }
+
+    public PriceTicketId(Integer parkingLotId, Integer vehicleTypeId, Integer periodTime) {
+        this.parkingLotId = parkingLotId;
+        this.vehicleTypeId = vehicleTypeId;
+        this.periodTime = periodTime;
+    }
+
     public Integer getPeriodTime() {
         return periodTime;
     }
