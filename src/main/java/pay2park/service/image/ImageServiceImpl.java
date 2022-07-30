@@ -82,7 +82,6 @@ public class ImageServiceImpl implements ImageService {
     public boolean isExists(String id) {
         return parkingLotImageRepository.existsById(id);
     }
-
     private boolean checkParkingLotID(int parkingLotID) {
         return parkingLotRepository.existsById(parkingLotID);
     }
