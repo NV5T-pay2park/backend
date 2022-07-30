@@ -54,52 +54,6 @@ public class ParkingLot {
     @Column(name = "ward", length = 100)
     private String ward;
 
-    @Column(name = "address", nullable = false, length = 100)
-    private String address;
-
-    @Column(name = "ing", nullable = false)
-    private Double ing;
-
-    public ParkingLot() {
-    }
-
-    public ParkingLot(Integer id, String parkingLotName, Integer numberSlot, Integer numberSlotRemaining,
-                      Integer status, Merchant merchant, Double lat, Double lng, String timeOpen, String timeClose, String phoneNumber, String city, String district, String street, String ward, String address, Double ing) {
-        this.id = id;
-        this.parkingLotName = parkingLotName;
-        this.numberSlot = numberSlot;
-        this.numberSlotRemaining = numberSlotRemaining;
-        this.status = status;
-        this.merchant = merchant;
-        this.lat = lat;
-        this.lng = lng;
-        this.timeOpen = timeOpen;
-        this.timeClose = timeClose;
-        this.phoneNumber = phoneNumber;
-        this.city = city;
-        this.district = district;
-        this.street = street;
-        this.ward = ward;
-        this.address = address;
-        this.ing = ing;
-    }
-
-    public Double getIng() {
-        return ing;
-    }
-
-    public void setIng(Double ing) {
-        this.ing = ing;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getWard() {
         return ward;
     }

@@ -4,7 +4,6 @@ import pay2park.model.entityFromDB.ParkingLot;
 import pay2park.model.entityFromDB.ParkingLotImage;
 
 public class ParkingMerchantListData {
-
     public Integer id;
     public String name;
     public String timeOpen;

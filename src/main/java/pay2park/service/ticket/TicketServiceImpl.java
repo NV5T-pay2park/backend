@@ -82,7 +82,7 @@ public class TicketServiceImpl implements TicketService {
                         i.getEndUser().getId(),
                         i.getEndUser().getFirstName() + ' ' + i.getEndUser().getLastName(),
                         i.getParkingLot().getId(), i.getParkingLot().getParkingLotName(),
-                        !(i.getCheckOutTime() == null))).collect(Collectors.toList());
+                        !(i.getCheckOutTime() == null))).sorted((t1, t2) -> t2.getCheckInTime().compareTo(t1.getCheckInTime())).collect(Collectors.toList());
         return new ResponseObject(HttpStatus.OK, "Success", dataResponse);
     }
 

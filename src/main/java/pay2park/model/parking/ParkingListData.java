@@ -13,7 +13,7 @@ public class ParkingListData {
     private String district;
     private String city;
     private Double lat;
-    private Double ing;
+    private Double lng;
     private Integer status;
     private String phoneNumber;
     private Double distance;
@@ -30,7 +30,7 @@ public class ParkingListData {
         this.district = parkingLot.getDistrict();
         this.city = parkingLot.getCity();
         this.lat = parkingLot.getLat();
-        this.ing = parkingLot.getIng();
+        this.lng = parkingLot.getLng();
         this.status = parkingLot.getStatus();
         this.phoneNumber = parkingLot.getPhoneNumber();
         this.distance = distance;
@@ -110,12 +110,12 @@ public class ParkingListData {
         this.lat = lat;
     }
 
-    public Double getIng() {
-        return ing;
+    public Double getLng() {
+        return lng;
     }
 
-    public void setIng(Double ing) {
-        this.ing = ing;
+    public void setLng(Double lng) {
+        this.lng = lng;
     }
 
     public Integer getStatus() {
