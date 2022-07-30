@@ -48,7 +48,7 @@ public class CheckInServiceImpl implements CheckInService {
         if (!pendingTicketRepository.addPendingTicket(checkInData)) {
             return new ResponseObject(HttpStatus.FOUND, "This user already in queue", ticket);
         }
-        socket.RequestToEnterLicensePlate(checkInData.getParkingLotID());
+        socket.RequestToEnterLicensePlate(checkInData);
         VehicleData vehicleData = getInformationCheckInData(checkInData);
 
         if (!isValidInformationCheckIn(vehicleData)) {
