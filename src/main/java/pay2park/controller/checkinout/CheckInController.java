@@ -19,11 +19,13 @@ public class CheckInController {
     CheckInService checkInService;
     @Autowired
     TicketsRepository ticketsRepository;
+
     @PostMapping("/checkIn")
     public ResponseEntity<ResponseObject> checkIn(@RequestBody CheckInData checkInData) {
         ResponseObject responseObject = checkInService.checkIn(checkInData);
         return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
     }
+
     @PostMapping("/sendInformationCheckIn")
     public ResponseEntity<ResponseObject> getInformationCheckInData(
             @RequestBody VehicleData informationCheckIn) {
