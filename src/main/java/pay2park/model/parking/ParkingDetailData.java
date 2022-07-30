@@ -100,7 +100,9 @@ public class ParkingDetailData {
         return lng;
     }
 
-    public void setLng(Double lng) {
+    public void setLng(Double lng)
+
+    {
         this.lng = lng;
     }
 
