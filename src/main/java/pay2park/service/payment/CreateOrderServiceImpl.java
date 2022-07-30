@@ -22,7 +22,7 @@ import java.util.*;
 
 @Service
 public class CreateOrderServiceImpl implements CreateOrderService {
-    private static Map<String, String> config = new HashMap<String, String>() {{
+    private static final Map<String, String> config = new HashMap<String, String>() {{
         put("app_id", "805");
         put("key1", "pca7SCpBItgbQnT4tKr1yY5vpow6QMZ9");
         put("key2", "82NZPr8nLJj8es3QhJOZgSVTsPwZ4gkS");
@@ -88,5 +88,4 @@ public class CreateOrderServiceImpl implements CreateOrderService {
         return new ResponseOrderData((int) result.get("return_code"), appTransId, result.get("order_url").toString(), result.get("zp_trans_token").toString());
     }
 
-    ;
 }

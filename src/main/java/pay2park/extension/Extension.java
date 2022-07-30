@@ -35,6 +35,6 @@ public class Extension {
         Random random = new Random();
         int licensePlate = random.nextInt(90000) + 10000;
         int providerCode = random.nextInt(90) + 10;
-        return String.valueOf(providerCode) + "C1-" + String.valueOf(licensePlate);
+        return providerCode + "C1-" + licensePlate;
     }
 }

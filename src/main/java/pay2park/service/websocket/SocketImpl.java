@@ -13,7 +13,7 @@ public class SocketImpl implements Socket {
 
     @Override
     public boolean sendToMerchant(int parkingLotID, SocketMessageData socketMessageData) {
-        template.convertAndSend("/user/" + String.valueOf(parkingLotID) + "/merchant" , socketMessageData);
+        template.convertAndSend("/user/" + parkingLotID + "/merchant" , socketMessageData);
         return true;
     }
 

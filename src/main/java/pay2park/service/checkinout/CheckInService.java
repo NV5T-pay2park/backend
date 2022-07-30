@@ -9,5 +9,5 @@ import pay2park.model.parking.VehicleData;
 public interface CheckInService {
     ResponseObject checkIn(CheckInData checkInData);
 
-    ResponseObject getInformationCheckInData(VehicleData informationCheckIn);
+    ResponseObject getInformationCheckInData(CheckInData checkInData, VehicleData informationCheckIn);
 }
