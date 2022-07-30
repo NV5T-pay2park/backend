@@ -3,6 +3,7 @@ package pay2park.service.checkinout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import pay2park.extension.Extension;
 import pay2park.model.ResponseObject;
 import pay2park.model.checkinout.CheckInData;
 import pay2park.model.entityFromDB.EndUser;
