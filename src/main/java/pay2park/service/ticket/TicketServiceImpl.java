@@ -7,6 +7,7 @@ import pay2park.extension.Extension;
 import pay2park.model.ResponseObject;
 import pay2park.model.entityFromDB.EndUser;
 import pay2park.model.entityFromDB.ParkingLot;
+import pay2park.model.entityFromDB.Ticket;
 import pay2park.model.entityFromDB.VehicleType;
 import pay2park.model.ticket.TicketData;
 import pay2park.model.ticket.ResponseTicketData;
@@ -49,17 +50,18 @@ public class TicketServiceImpl implements TicketService {
         Optional<ParkingLot> parkingLot = parkingLotRepository.findById(parkingLotID);
         String parkingLotName = parkingLotRepository.findById(parkingLotID).get().getParkingLotName();
         String vehicleTypeName = vehicleTypeRepository.findById(ticketData.getVehicleType()).get().getVehicleTypeName();
-        Ticket ticket = new Ticket(id, checkInTime, null, null,
-                licensePlate, vehicleType.get(), endUser.get(), parkingLot.get());
+        Ticket ticket = new Ticket(id, checkInTime, null,
+                licensePlate, vehicleType.get(), endUser.get(), parkingLot.get(), null);
         try {
+
             ticketsRepository.save(ticket);
             ParkingLot parkingLotUpdate = parkingLot.get();
             int numberSlotRemaining = parkingLotUpdate.getNumberSlotRemaining();
             parkingLotUpdate.setNumberSlotRemaining(numberSlotRemaining - 1);
             parkingLotRepository.save(parkingLotUpdate);
-            return new ResponseTicketData(id, checkInTime, checkInOut, amount, licensePlate, vehicleTypeName, endUserID,
+            return new ResponseTicketData(id, checkInTime, checkInOut, licensePlate, vehicleTypeName, endUserID,
                     endUser.get().getFirstName() + ' ' + endUser.get().getLastName(),
-                    parkingLotID, parkingLotName, false);
+                    parkingLotID, parkingLotName, false, amount);
         } catch (Exception e) {
             return new ResponseTicketData();
         }
@@ -75,13 +77,12 @@ public class TicketServiceImpl implements TicketService {
         List<Ticket> ticketByEndUserID = ticketsRepository.getAllTicketByEndUserID(endUser.get());
         List<ResponseTicketData> dataResponse = ticketByEndUserID.stream().map(
                 i -> new ResponseTicketData(i.getId(), i.getCheckInTime(),
-                        i.getCheckOutTime(),
-                        i.getAmount(), i.getLicensePlates(),
+                        i.getCheckOutTime(), i.getLicensePlates(),
                         i.getVehicleType().getVehicleTypeName(),
                         i.getEndUser().getId(),
                         i.getEndUser().getFirstName() + ' ' + i.getEndUser().getLastName(),
                         i.getParkingLot().getId(), i.getParkingLot().getParkingLotName(),
-                        !(i.getCheckOutTime() == null))).sorted((t1, t2) -> t2.getCheckInTime().compareTo(t1.getCheckInTime())).collect(Collectors.toList());
+                        !(i.getCheckOutTime() == null), i.getAmount())).sorted((t1, t2) -> t2.getCheckInTime().compareTo(t1.getCheckInTime())).collect(Collectors.toList());
         return new ResponseObject(HttpStatus.OK, "Success", dataResponse);
     }
 

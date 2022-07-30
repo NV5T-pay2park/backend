@@ -8,6 +8,7 @@ import pay2park.model.ResponseObject;
 import pay2park.model.checkinout.CheckInData;
 import pay2park.model.entityFromDB.EndUser;
 import pay2park.model.entityFromDB.ParkingLot;
+import pay2park.model.entityFromDB.Ticket;
 import pay2park.model.parking.VehicleData;
 import pay2park.model.ticket.TicketData;
 import pay2park.model.ticket.ResponseTicketData;
@@ -51,11 +52,11 @@ public class CheckInServiceImpl implements CheckInService {
         List<Ticket> ticketsIsCreated = getTicketIsCreated(checkInData, vehicleData);
         if (ticketsIsCreated.size() > 0) {
             Ticket ticketIsCreated = ticketsIsCreated.get(0);
-            ticket = new ResponseTicketData(ticketIsCreated.getId(), ticketIsCreated.getCheckInTime(), null, null,
+            ticket = new ResponseTicketData(ticketIsCreated.getId(), ticketIsCreated.getCheckInTime(), null,
                     ticketIsCreated.getLicensePlates(), ticketIsCreated.getVehicleType().getVehicleTypeName(),
                     ticketIsCreated.getEndUser().getId(),
                     ticketIsCreated.getEndUser().getFirstName() + ' ' + ticketIsCreated.getEndUser().getLastName(),
-                    ticketIsCreated.getParkingLot().getId(), ticketIsCreated.getParkingLot().getParkingLotName(), false);
+                    ticketIsCreated.getParkingLot().getId(), ticketIsCreated.getParkingLot().getParkingLotName(), false, null);
             socket.SendCheckInFail(checkInData.getParkingLotID());
             return new ResponseObject(HttpStatus.BAD_REQUEST, "Ticket is created", ticket);
         } else {

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pay2park.model.entityFromDB.EndUser;
 import pay2park.model.entityFromDB.ParkingLot;
+import pay2park.model.entityFromDB.Ticket;
 
 import java.util.List;
 

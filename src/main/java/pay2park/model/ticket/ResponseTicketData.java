@@ -7,7 +7,6 @@ public class ResponseTicketData {
     private Long ticketID;
     private Instant checkInTime;
     private Instant checkOutTime;
-    private Integer amount;
     private String licensePlate;
     private String vehicleType;
     private int endUserID;
@@ -15,17 +14,16 @@ public class ResponseTicketData {
     private int parkingLotID;
     private String parkingLotName;
     private boolean status;
-
+    private Integer amount;
     public ResponseTicketData() {
 
     }
 
-    public ResponseTicketData(Long ticketID, Instant checkInTime, Instant checkOutTime, Integer amount,
-                              String licensePlate, String vehicleType, int endUserID, String endUserName, int parkingLotID, String parkingLotName, boolean status) {
+    public ResponseTicketData(Long ticketID, Instant checkInTime, Instant checkOutTime,
+                              String licensePlate, String vehicleType, int endUserID, String endUserName, int parkingLotID, String parkingLotName, boolean status , Integer amount) {
         this.ticketID = ticketID;
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
-        this.amount = amount;
         this.licensePlate = licensePlate;
         this.vehicleType = vehicleType;
         this.endUserID = endUserID;
@@ -33,6 +31,7 @@ public class ResponseTicketData {
         this.parkingLotID = parkingLotID;
         this.parkingLotName = parkingLotName;
         this.status = status;
+        this.amount = amount;
     }
 
     public Long getTicketID() {
@@ -57,14 +56,6 @@ public class ResponseTicketData {
 
     public void setCheckOutTime(Instant checkOutTime) {
         this.checkOutTime = checkOutTime;
-    }
-
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
     }
 
     public String getLicensePlate() {
@@ -121,5 +112,13 @@ public class ResponseTicketData {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 }
