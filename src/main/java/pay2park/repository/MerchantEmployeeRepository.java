@@ -14,6 +14,7 @@ public interface MerchantEmployeeRepository extends JpaRepository<MerchantEmploy
     List<MerchantEmployee> getMerchantEmployeeByPhoneAndUserNameAndPassword(
             String employeePhone, String employeeUserName, String employeePhonePassword);
 
-    @Query(value = "SELECT employee.password FROM MerchantEmployee employee WHERE employee.phone = ?1")
-    List<String> password(String employeePhone);
+    @Query(value = "SELECT employee.password FROM MerchantEmployee employee " +
+            "WHERE employee.phone = ?1 AND employee.userName = ?2")
+    List<String> password(String employeePhone, String userName);
 }

@@ -35,7 +35,7 @@ public class MerchantEmployeeLoginService {
         }
 
         String password = requestData.getPassword();
-        if (!isValidPassword(phone, password)) {
+        if (!isValidPassword(phone, userName, password)) {
             return new ResponseObject(HttpStatus.FOUND, "wrong password", null);
         }
 
@@ -77,8 +77,8 @@ public class MerchantEmployeeLoginService {
         return true;
     }
     
-    boolean isValidPassword(String phone, String password) {
-        List<String> passwordList =  merchantEmployeeRepository.password(phone);
+    boolean isValidPassword(String phone, String userName, String password) {
+        List<String> passwordList =  merchantEmployeeRepository.password(phone, userName);
         if (passwordList.size() != 1) return false;
         return passwordList.get(0).equals(Hash.getHash(password));
     }
