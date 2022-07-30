@@ -7,8 +7,8 @@ public class ParkingMerchantListData {
 
     public Integer id;
     public String name;
-    public Integer timeOpen;
-    public Integer timeClose;
+    public String timeOpen;
+    public String timeClose;
     public Integer currentServing;
     public String address;
     public String phone;

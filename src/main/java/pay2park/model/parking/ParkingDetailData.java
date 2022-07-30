@@ -13,8 +13,8 @@ public class ParkingDetailData {
     private Double lat;
     private Double ing;
     private Integer status;
-    private Integer timeOpen;
-    private Integer timeClose;
+    private String timeOpen;
+    private String timeClose;
     private String phoneNumber;
     private Double distance;
     private Integer timeMoving;
@@ -112,19 +112,19 @@ public class ParkingDetailData {
         this.status = status;
     }
 
-    public Integer getTimeOpen() {
+    public String getTimeOpen() {
         return timeOpen;
     }
 
-    public void setTimeOpen(Integer timeOpen) {
+    public void setTimeOpen(String timeOpen) {
         this.timeOpen = timeOpen;
     }
 
-    public Integer getTimeClose() {
+    public String getTimeClose() {
         return timeClose;
     }
 
-    public void setTimeClose(Integer timeClose) {
+    public void setTimeClose(String timeClose) {
         this.timeClose = timeClose;
     }
 

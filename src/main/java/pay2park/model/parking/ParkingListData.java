@@ -6,8 +6,8 @@ public class ParkingListData {
 
     private Integer id;
     private String parkingLotName;
-    private Integer timeOpen;
-    private Integer timeClose;
+    private String timeOpen;
+    private String timeClose;
     private String street;
     private String ward;
     private String district;
@@ -54,19 +54,19 @@ public class ParkingListData {
         this.parkingLotName = parkingLotName;
     }
 
-    public Integer getTimeOpen() {
+    public String getTimeOpen() {
         return timeOpen;
     }
 
-    public void setTimeOpen(Integer timeOpen) {
+    public void setTimeOpen(String timeOpen) {
         this.timeOpen = timeOpen;
     }
 
-    public Integer getTimeClose() {
+    public String getTimeClose() {
         return timeClose;
     }
 
-    public void setTimeClose(Integer timeClose) {
+    public void setTimeClose(String timeClose) {
         this.timeClose = timeClose;
     }
 
