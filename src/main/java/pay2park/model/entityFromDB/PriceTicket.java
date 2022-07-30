@@ -28,6 +28,18 @@ public class PriceTicket {
     @Column(name = "unit", nullable = false)
     private Integer unit;
 
+    public PriceTicket() {
+    }
+
+    public PriceTicket(PriceTicketId id, ParkingLot parkingLot, VehicleType vehicleType, Integer periodTime, Integer price, Integer unit) {
+        this.id = id;
+        this.parkingLot = parkingLot;
+        this.vehicleType = vehicleType;
+        this.periodTime = periodTime;
+        this.price = price;
+        this.unit = unit;
+    }
+
     public Integer getPeriodTime() {
         return periodTime;
     }

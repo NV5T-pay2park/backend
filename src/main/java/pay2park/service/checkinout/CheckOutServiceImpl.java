@@ -71,13 +71,14 @@ public class CheckOutServiceImpl implements CheckOutService {
         Ticket ticketCheckout = ticketsRepository.findById(checkOutData.getTicketID()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
         Duration duration = Duration.between(ticketCheckout.getCheckInTime(), time);
         double minuteTime = duration.toMinutes();
-        double hourTime = minuteTime / 60;
+        double hourTime = minuteTime/60;
         List<PriceTicket> listPriceTicket = priceTicketRepository.getPriceTicketByParkingLotIdAndVehicleType(ticketCheckout.getParkingLot(), ticketCheckout.getVehicleType());
         int amount = calculateAmountOfTicket(hourTime, listPriceTicket);
 
         if (amount <= 0) {
             return new ResponseObject(HttpStatus.FOUND, "payment failed with amount of ticket", "");
         }
+
         // Check checkout
         String appTransId = getCurrentTimeString("yyMMdd") + "_" + endUserId + ticketID.toString();
         boolean appTransIdExist = paymentUrlRepository.existsById(appTransId);
@@ -131,7 +132,7 @@ public class CheckOutServiceImpl implements CheckOutService {
         return new ResponseObject(HttpStatus.FOUND, "checkout failed", "");
     }
 
-    private boolean checkDataIsValid(PreCheckOutData preCheckOutData) {
+    public boolean checkDataIsValid(PreCheckOutData preCheckOutData) {
         boolean checkTicketIsExist = ticketsRepository.
                 existsById(preCheckOutData.getTicketID());
         boolean checkEndUserIDIsExist = endUserRepository.
@@ -149,14 +150,9 @@ public class CheckOutServiceImpl implements CheckOutService {
     }
 
 
-    private int calculateAmountOfTicket(double parkingHour, List<PriceTicket> priceTicketList) {
-<<<<<<< HEAD
+    public int calculateAmountOfTicket(double parkingHour, List<PriceTicket> priceTicketList) {
         Comparator<PriceTicket> compareById = (PriceTicket o1, PriceTicket o2) -> o1.getPeriodTime().compareTo( o2.getPeriodTime() );
         Collections.sort(priceTicketList, compareById);
-=======
-        Comparator<PriceTicket> compareById = (PriceTicket o1, PriceTicket o2) -> o1.getPeriodTime().compareTo(o2.getPeriodTime());
-        priceTicketList.sort(compareById);
->>>>>>> 288e4c6a9bce277422d4ddd5cc17a560a6cd0d2e
         int result = 0;
         for (int i = 0; i < priceTicketList.size(); i++) {
             double time = 0;

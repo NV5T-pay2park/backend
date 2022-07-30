@@ -82,9 +82,6 @@ public class CreateOrderServiceImpl implements CreateOrderService {
         }
 
         JSONObject result = new JSONObject(resultJsonStr.toString());
-        for (String key : result.keySet()) {
-            System.out.format("%s = %s\n", key, result.get(key));
-        }
         return new ResponseOrderData((int) result.get("return_code"), appTransId, result.get("order_url").toString(), result.get("zp_trans_token").toString());
     }
 
