@@ -60,7 +60,8 @@ public class ParkingServiceImpl implements ParkingService {
         }
 
         if (coordinates.equals("")) {
-            return new ParkingDetailData(parking, 0.0, 0, priceTicketDataList);
+            return new ParkingDetailData(parking, 0.0, 0, priceTicketDataList,
+                    getImageList(parkingLotImageRepository.getAllImageByParkingLot(parking)));
         } else {
             String[] parts1 = coordinates.split(",");
             double userLong = Double.parseDouble(parts1[0]);
@@ -70,7 +71,8 @@ public class ParkingServiceImpl implements ParkingService {
 
             String returnDistance = Distance.getDistanceAndTimeGgApi(userLong, userLat, parking.getLat(), parking.getLng());
             String[] parts2 = returnDistance.split(",");
-            return new ParkingDetailData(parking, Double.parseDouble(parts2[0]), Integer.parseInt(parts2[1]), priceTicketDataList);
+            return new ParkingDetailData(parking, Double.parseDouble(parts2[0]), Integer.parseInt(parts2[1]),
+                    priceTicketDataList, getImageList(parkingLotImageRepository.getAllImageByParkingLot(parking)));
         }
     }
 
@@ -85,12 +87,11 @@ public class ParkingServiceImpl implements ParkingService {
             for (String value : vehicleTypeParts) {
                 typesInt.add(Integer.parseInt(value));
             }
-            if(!stringSearch.equals("")){
+            if (!stringSearch.equals("")) {
                 List<Integer> parkingLotIdList = new ArrayList<Integer>();
-                if(vehicleTypeParts.length == 1){
+                if (vehicleTypeParts.length == 1) {
                     parkingLotIdList = priceTicketRepository.filterIdWithAVehicleType(typesInt.get(0));
-                }
-                else{
+                } else {
                     List<Integer> parkingLotIdList1 = priceTicketRepository.filterIdWithAVehicleType(typesInt.get(0));
                     List<Integer> parkingLotIdList2 = priceTicketRepository.filterIdWithAVehicleType(typesInt.get(1));
                     parkingLotIdList1.retainAll(parkingLotIdList2);
@@ -102,12 +103,10 @@ public class ParkingServiceImpl implements ParkingService {
                     rawData = parkingLotRepository.searchWithLikeStringSearchAndIdList(stringSearch, parkingLotIdList);
                 }
 
-            }
-            else{
-                if(vehicleTypeParts.length == 1){
+            } else {
+                if (vehicleTypeParts.length == 1) {
                     rawData = priceTicketRepository.filterWithAVehicleType(typesInt.get(0));
-                }
-                else{
+                } else {
                     List<ParkingLot> rawData1 = priceTicketRepository.filterWithAVehicleType(typesInt.get(0));
                     List<ParkingLot> rawData2 = priceTicketRepository.filterWithAVehicleType(typesInt.get(1));
                     rawData1.retainAll(rawData2);
@@ -127,7 +126,6 @@ public class ParkingServiceImpl implements ParkingService {
                 rawData = parkingLotRepository.findAll();
             }
         }
-
         // distance
         if (!coordinates.equals("")) {
             String[] coordinateParts = coordinates.split(",");
@@ -160,6 +158,7 @@ public class ParkingServiceImpl implements ParkingService {
         }
         return parkingList;
     }
+
     private List<ImageResponse> getImageList(List<ParkingLotImage> parkingLotImages) {
         return parkingLotImages.stream().map(i ->
                 new ImageResponse(i.getId(), i.getUrl())).collect(Collectors.toList());
