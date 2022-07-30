@@ -3,6 +3,7 @@ package pay2park.service.login;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import pay2park.model.ResponseObject;
 import pay2park.model.entityFromDB.MerchantEmployee;
@@ -17,6 +18,7 @@ import pay2park.security.Hash;
 import java.util.List;
 
 @Service
+@Component
 public class MerchantEmployeeLoginService {
     @Autowired
     MerchantEmployeeRepository merchantEmployeeRepository;

@@ -5,6 +5,15 @@ public class MerchantEmployeeRequestLoginData {
     private String password = "";
     private String userName = null;
 
+    public MerchantEmployeeRequestLoginData() {}
+
+    public MerchantEmployeeRequestLoginData(String phone, String userName, String password) {
+        this.phone = phone;
+        this.userName = userName;
+        this.password = password;
+    }
+
+
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -19,13 +28,6 @@ public class MerchantEmployeeRequestLoginData {
 
     public String getPassword() {
         return password;
-    }
-
-    public MerchantEmployeeRequestLoginData() {}
-
-    public MerchantEmployeeRequestLoginData(String phone, String password) {
-        this.phone = phone;
-        this.password = password;
     }
 
     public String getUserName() {
