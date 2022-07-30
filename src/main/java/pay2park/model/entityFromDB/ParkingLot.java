@@ -1,6 +1,7 @@
 package pay2park.model.entityFromDB;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Entity
 @Table(name = "parking_lots")
@@ -37,7 +38,7 @@ public class ParkingLot {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "merchant_id", nullable = false)
-    private Merchant merchant;
+    private Optional<Merchant> merchant;
 
     @Column(name = "lat", nullable = false)
     private Double lat;
@@ -57,7 +58,7 @@ public class ParkingLot {
     public ParkingLot() {
     }
 
-    public ParkingLot(Integer id, String parkingLotName, Integer numberSlot, Integer numberSlotRemaining, String street, String ward, String district, String city, Integer status, Merchant merchant, Double lat, Double ing, Integer timeOpen, Integer timeClose, String phoneNumber) {
+    public ParkingLot(Integer id, String parkingLotName, Integer numberSlot, Integer numberSlotRemaining, String street, String ward, String district, String city, Integer status, Optional<Merchant> merchant, Double lat, Double ing, Integer timeOpen, Integer timeClose, String phoneNumber) {
         this.id = id;
         this.parkingLotName = parkingLotName;
         this.numberSlot = numberSlot;
@@ -115,11 +116,11 @@ public class ParkingLot {
         this.lat = lat;
     }
 
-    public Merchant getMerchant() {
+    public Optional<Merchant> getMerchant() {
         return merchant;
     }
 
-    public void setMerchant(Merchant merchant) {
+    public void setMerchant(Optional<Merchant> merchant) {
         this.merchant = merchant;
     }
 
