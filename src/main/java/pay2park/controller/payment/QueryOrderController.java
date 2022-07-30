@@ -24,6 +24,3 @@ public class QueryOrderController {
         return data;
     }
 }
-
-
-

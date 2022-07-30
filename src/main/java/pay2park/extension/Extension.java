@@ -2,10 +2,7 @@ package pay2park.extension;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Random;
-import java.util.TimeZone;
+import java.util.*;
 
 public class Extension {
     public static String getCurrentTimeString(String format) {
@@ -36,5 +33,10 @@ public class Extension {
         int licensePlate = random.nextInt(90000) + 10000;
         int providerCode = random.nextInt(90) + 10;
         return providerCode + "C1-" + licensePlate;
+    }
+    public static String formatTime(Instant instant) {
+        Date myDate = Date.from(instant);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        return formatter.format(myDate);
     }
 }

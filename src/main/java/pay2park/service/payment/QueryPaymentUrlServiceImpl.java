@@ -16,16 +16,13 @@ import java.util.TimeZone;
 public class QueryPaymentUrlServiceImpl implements QueryPaymentUrlService {
     @Autowired
     private PaymentUrlRepository paymentUrlRepository;
-
     @Override
-
-    public PaymentUrl queryPaymentUrl(int endUserId, Long ticketId){
-        String appTransId = getCurrentTimeString("yyMMdd") +"_"+endUserId + ticketId;
-        PaymentUrl paymentUrl =  paymentUrlRepository.findById(appTransId).orElseThrow(() -> new ResourceNotFoundException("Payment url not exist with app_tran_id: "+appTransId));
+    public PaymentUrl queryPaymentUrl(int endUserId, Long ticketId) {
+        String appTransId = getCurrentTimeString("yyMMdd") + "_" + endUserId + ticketId;
+        PaymentUrl paymentUrl = paymentUrlRepository.findById(appTransId).orElseThrow(() -> new ResourceNotFoundException("Payment url not exist with app_tran_id: " + appTransId));
 
         return paymentUrl;
     }
-
     public static String getCurrentTimeString(String format) {
         Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT+7"));
         SimpleDateFormat fmt = new SimpleDateFormat(format);
