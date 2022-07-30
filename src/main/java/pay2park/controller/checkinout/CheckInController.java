@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pay2park.model.ResponseObject;
 import pay2park.model.checkinout.CheckInData;
-import pay2park.model.parking.VehicleData;
+import pay2park.model.checkinout.CheckInInformation;
 import pay2park.service.checkinout.CheckInService;
 
 @RestController
@@ -23,8 +23,8 @@ public class CheckInController {
 
     @PostMapping("/sendInformationCheckIn")
     public ResponseEntity<ResponseObject> getInformationCheckInData(
-            @RequestBody VehicleData informationCheckIn) {
-        ResponseObject responseObject = checkInService.getInformationCheckInData(informationCheckIn);
+            @RequestBody CheckInInformation informationCheckIn) {
+        ResponseObject responseObject = checkInService.getInformationCheckInData(informationCheckIn.getCheckInData(), informationCheckIn.getVehicleData());
         return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
     }
 }

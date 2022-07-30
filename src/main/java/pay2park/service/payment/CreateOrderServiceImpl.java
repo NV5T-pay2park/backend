@@ -88,5 +88,4 @@ public class CreateOrderServiceImpl implements CreateOrderService {
         return new ResponseOrderData((int) result.get("return_code"), appTransId, result.get("order_url").toString(), result.get("zp_trans_token").toString());
     }
 
-    ;
 }
