@@ -22,9 +22,6 @@ public class CheckOutController {
     @Autowired
     CheckOutService checkOutService;
 
-    @Autowired
-    TicketService ticketService;
-
     @PostMapping("/preCheckOut")
     public ResponseEntity<ResponseObject> preCheckOut(@RequestBody PreCheckOutData preCheckOutData) throws IOException {
         ResponseObject responseObject = checkOutService.preCheckOut(preCheckOutData);

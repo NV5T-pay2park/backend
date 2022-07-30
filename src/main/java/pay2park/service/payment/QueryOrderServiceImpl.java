@@ -27,10 +27,10 @@ import java.util.Map;
 @Service
 public class QueryOrderServiceImpl implements QueryOrderService {
     private static final Map<String, String> config = new HashMap<String, String>() {{
-        put("app_id", "805");
+        put("app_id", "999888");
         put("key1", "pca7SCpBItgbQnT4tKr1yY5vpow6QMZ9");
         put("key2", "82NZPr8nLJj8es3QhJOZgSVTsPwZ4gkS");
-        put("endpoint", "https://sbqc-openapi.zalopay.vn/v2/query");
+        put("endpoint", "https://sb-openapi.zalopay.vn/v2/query");
     }};
 
     public ResponseQueryData queryOrder(QueryData queryData) throws URISyntaxException, IOException {
