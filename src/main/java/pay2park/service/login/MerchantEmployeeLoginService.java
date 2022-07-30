@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import pay2park.model.ResponseObject;
-import pay2park.model.entityFromDB.Merchant;
 import pay2park.model.entityFromDB.MerchantEmployee;
 import pay2park.model.entityFromDB.Permission;
 import pay2park.model.login.MerchantEmployeePermissions;
@@ -29,13 +28,23 @@ public class MerchantEmployeeLoginService {
         if (!isValidPhoneLoginData(phone)) {
             return new ResponseObject(HttpStatus.FOUND, "invalid phone number", null);
         }
-        String password = requestData.getPassword();
-        if (!isValidPassword(phone, password)) {
-            return new ResponseObject(HttpStatus.FOUND, "invalid phone or password", null);
+
+        String userName = requestData.getUserName();
+        if (userName != null && !isValidUserName(userName)) {
+            return new ResponseObject(HttpStatus.FOUND, "invalid user name", null);
         }
 
-        MerchantEmployee merchantEmployee = merchantEmployeeRepository
-                .getMerchantEmployeeByPhoneAndPassword(phone, Hash.getHash(password)).get(0);
+        String password = requestData.getPassword();
+        if (!isValidPassword(phone, password)) {
+            return new ResponseObject(HttpStatus.FOUND, "wrong password", null);
+        }
+
+        List<MerchantEmployee> merchantEmployees = merchantEmployeeRepository
+                .getMerchantEmployeeByPhoneAndUserNameAndPassword(phone, userName, Hash.getHash(password));
+        if (merchantEmployees.size() < 1) {
+            return new ResponseObject(HttpStatus.FOUND, "this user is not created before", null);
+        }
+        MerchantEmployee merchantEmployee = merchantEmployees.get(0);
 
         Permission permission = permissionRepository.getPermissionById(
                 merchantEmployee.getPermission().getId()
@@ -59,6 +68,12 @@ public class MerchantEmployeeLoginService {
         for (int i = 0; i < phone.length(); ++i)
             if (phone.charAt(i) < '0' || phone.charAt(i) > '9')
                 return false;
+        return true;
+    }
+
+    boolean isValidUserName(String userName) {
+        for (int i = 0; i < userName.length(); ++i)
+            if (userName.charAt(i) == ' ') return false;
         return true;
     }
     
