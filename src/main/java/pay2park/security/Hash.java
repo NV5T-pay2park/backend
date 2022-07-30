@@ -44,4 +44,8 @@ public class Hash {
         hashedPassword = sb.toString();
         return hashedPassword;
     }
+
+//    public static void main(String[] args) {
+//        System.out.println("Hashed: " + Hash.getHash("12345678") + " len: " + Hash.getHash("12345678").length());
+//    }
 }
