@@ -124,11 +124,11 @@ public class CheckOutServiceImpl implements CheckOutService {
             parkingLotRepository.save(parkingLotUpdate);
 
             // Add transaction
-            Transaction transaction = new Transaction();
-            transaction.setTransactionType("38");
-            transaction.setTransactionDate(Instant.parse(getCurrentTimeString("yyMMdd")));
-            transaction.setTicket(ticketUpdate);
-            transactionRepository.save(transaction);
+//            Transaction transaction = new Transaction();
+//            transaction.setTransactionType("38");
+//            transaction.setTransactionDate(Instant.now());
+//            transaction.setTicket(ticketUpdate);
+//            transactionRepository.save(transaction);
 
             return new ResponseObject(HttpStatus.OK, "checkout successfully", "");
         }
