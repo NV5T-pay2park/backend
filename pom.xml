@@ -95,6 +95,10 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+<<<<<<< HEAD
+=======
+			<version>4.12</version>
+>>>>>>> 73b6d4dbaa5799a4b5b692b376cc9413c3dd9916
 			<scope>test</scope>
 		</dependency>
 

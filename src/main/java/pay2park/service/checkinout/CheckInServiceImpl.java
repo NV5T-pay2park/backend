@@ -52,12 +52,16 @@ public class CheckInServiceImpl implements CheckInService {
         List<Ticket> ticketsIsCreated = getTicketIsCreated(checkInData, vehicleData);
         if (ticketsIsCreated.size() > 0) {
             Ticket ticketIsCreated = ticketsIsCreated.get(0);
+<<<<<<< HEAD
             ticket = new ResponseTicketData(ticketIsCreated.getId(), Extension.formatTime(ticketIsCreated.getCheckInTime()),
                     null, null,
+=======
+            ticket = new ResponseTicketData(ticketIsCreated.getId(), ticketIsCreated.getCheckInTime(), null,
+>>>>>>> 73b6d4dbaa5799a4b5b692b376cc9413c3dd9916
                     ticketIsCreated.getLicensePlates(), ticketIsCreated.getVehicleType().getVehicleTypeName(),
                     ticketIsCreated.getEndUser().getId(),
                     ticketIsCreated.getEndUser().getFirstName() + ' ' + ticketIsCreated.getEndUser().getLastName(),
-                    ticketIsCreated.getParkingLot().getId(), ticketIsCreated.getParkingLot().getParkingLotName(), false);
+                    ticketIsCreated.getParkingLot().getId(), ticketIsCreated.getParkingLot().getParkingLotName(), false, null);
             socket.SendCheckInFail(checkInData.getParkingLotID());
             return new ResponseObject(HttpStatus.BAD_REQUEST, "Ticket is created", ticket);
         } else {

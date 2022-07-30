@@ -14,10 +14,12 @@ import java.util.List;
 @RequestMapping("/api/parkingMerchant/")
 @CrossOrigin
 public class ParkingMerchantController {
-
     @Autowired
     ParkingMerchantService parkingMerchantService;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 73b6d4dbaa5799a4b5b692b376cc9413c3dd9916
     @GetMapping("/{merchantId}/list")
     @ResponseBody
     public ResponseObject list(@PathVariable int merchantId) throws IOException {
