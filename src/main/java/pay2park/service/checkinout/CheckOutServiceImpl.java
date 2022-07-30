@@ -78,6 +78,7 @@ public class CheckOutServiceImpl implements CheckOutService {
         if (amount <= 0) {
             return new ResponseObject(HttpStatus.FOUND, "payment failed with amount of ticket", "");
         }
+        System.out.println(amount);
         // Check checkout
         String appTransId = getCurrentTimeString("yyMMdd") + "_" + endUserId + ticketID.toString();
         boolean appTransIdExist = paymentUrlRepository.existsById(appTransId);
@@ -131,7 +132,7 @@ public class CheckOutServiceImpl implements CheckOutService {
         return new ResponseObject(HttpStatus.FOUND, "checkout failed", "");
     }
 
-    private boolean checkDataIsValid(PreCheckOutData preCheckOutData) {
+    public boolean checkDataIsValid(PreCheckOutData preCheckOutData) {
         boolean checkTicketIsExist = ticketsRepository.
                 existsById(preCheckOutData.getTicketID());
         boolean checkEndUserIDIsExist = endUserRepository.
@@ -149,7 +150,7 @@ public class CheckOutServiceImpl implements CheckOutService {
     }
 
 
-    private int calculateAmountOfTicket(double parkingHour, List<PriceTicket> priceTicketList) {
+    public int calculateAmountOfTicket(double parkingHour, List<PriceTicket> priceTicketList) {
         Comparator<PriceTicket> compareById = (PriceTicket o1, PriceTicket o2) -> o1.getPeriodTime().compareTo( o2.getPeriodTime() );
         Collections.sort(priceTicketList, compareById);
         int result = 0;
