@@ -16,8 +16,8 @@ public class MerchantEmployeeLoginController {
     @Autowired
     MerchantEmployeeLoginService loginService;
 
-    @PostMapping("api/loginmerchant/")
-    public ResponseEntity catchNewLoginMerchant(
+    @PostMapping("api/loginmerchant")
+    public ResponseEntity<ResponseObject> catchNewLoginMerchant(
             @RequestParam(value = "phone", defaultValue = "") String phone,
             @RequestParam(value = "password", defaultValue = "") String password) {
         ResponseObject res = loginService.login(new MerchantEmployeeRequestLoginData(phone, password));
