@@ -1,10 +1,11 @@
 package pay2park.service.websocket;
 
+import pay2park.model.checkinout.CheckInData;
 import pay2park.model.websocket.SocketMessageData;
 
 public interface Socket {
-    public boolean sendToMerchant(int parkingLotID, SocketMessageData socketMessageData);
-    public boolean RequestToEnterLicensePlate(int parkingLotID);
-    public boolean SendCheckInSuccessful(int parkingLotID);
-    public boolean SendCheckInFail(int parkingLotID);
+    boolean sendToMerchant(int parkingLotID, SocketMessageData socketMessageData);
+    boolean RequestToEnterLicensePlate(CheckInData checkInData);
+    boolean SendCheckInSuccessful(int parkingLotID);
+    boolean SendCheckInFail(int parkingLotID);
 }
