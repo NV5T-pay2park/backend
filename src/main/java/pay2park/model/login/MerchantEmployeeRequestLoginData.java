@@ -1,8 +1,8 @@
 package pay2park.model.login;
 
 public class MerchantEmployeeRequestLoginData {
-    private String phone;
-    private String password;
+    private String phone = "";
+    private String password = "";
 
     public void setPhone(String phone) {
         this.phone = phone;
