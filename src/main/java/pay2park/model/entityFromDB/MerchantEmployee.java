@@ -5,6 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "merchant_employees")
 public class MerchantEmployee {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
@@ -22,7 +23,7 @@ public class MerchantEmployee {
     @Column(name = "gender", nullable = false)
     private Integer gender;
 
-    @Column(name = "password", length = 20)
+    @Column(name = "password", length = 100)
     private String password;
 
     @Column(name = "email", length = 50)

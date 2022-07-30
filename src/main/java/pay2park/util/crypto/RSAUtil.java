@@ -12,8 +12,8 @@ import java.util.Base64;
 
 public class RSAUtil {
 
-    private static KeyFactory keyFactory;
-    private static Cipher cipher;
+    private static final KeyFactory keyFactory;
+    private static final Cipher cipher;
 
     static {
         try {

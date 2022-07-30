@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
+import static pay2park.extension.Extension.formatTime;
 import static pay2park.extension.Extension.getCheckInTime;
 
 @Service
@@ -58,7 +59,7 @@ public class TicketServiceImpl implements TicketService {
             int numberSlotRemaining = parkingLotUpdate.getNumberSlotRemaining();
             parkingLotUpdate.setNumberSlotRemaining(numberSlotRemaining - 1);
             parkingLotRepository.save(parkingLotUpdate);
-            return new ResponseTicketData(id, checkInTime, checkInOut, total, licensePlate, vehicleTypeName, endUserID,
+            return new ResponseTicketData(id, Extension.formatTime(checkInTime), null, total, licensePlate, vehicleTypeName, endUserID,
                     endUser.get().getFirstName() + ' ' + endUser.get().getLastName(),
                     parkingLotID, parkingLotName, false);
         } catch (Exception e) {
@@ -75,14 +76,14 @@ public class TicketServiceImpl implements TicketService {
         Optional<EndUser> endUser = endUserRepository.findById(endUserID);
         List<Ticket> ticketByEndUserID = ticketsRepository.getAllTicketByEndUserID(endUser.get());
         List<ResponseTicketData> dataResponse = ticketByEndUserID.stream().map(
-                i -> new ResponseTicketData(i.getId(), i.getCheckInTime(),
-                        i.getCheckOutTime(),
+                i -> new ResponseTicketData(i.getId(), Extension.formatTime(i.getCheckInTime()),
+                        null,
                         (i.getCheckOutTime() == null) ? null : calculateAmount(i.getId()), i.getLicensePlates(),
                         i.getVehicleType().getVehicleTypeName(),
                         i.getEndUser().getId(),
                         i.getEndUser().getFirstName() + ' ' + i.getEndUser().getLastName(),
                         i.getParkingLot().getId(), i.getParkingLot().getParkingLotName(),
-                        !(i.getCheckOutTime() == null))).collect(Collectors.toList());
+                        !(i.getCheckOutTime() == null))).sorted((t1, t2) -> t2.getCheckInTime().compareTo(t1.getCheckInTime())).collect(Collectors.toList());
         return new ResponseObject(HttpStatus.OK, "Success", dataResponse);
     }
 

@@ -6,14 +6,14 @@ public class ParkingListData {
 
     private Integer id;
     private String parkingLotName;
-    private Integer timeOpen;
-    private Integer timeClose;
+    private String timeOpen;
+    private String timeClose;
     private String street;
     private String ward;
     private String district;
     private String city;
     private Double lat;
-    private Double ing;
+    private Double lng;
     private Integer status;
     private String phoneNumber;
     private Double distance;
@@ -30,7 +30,7 @@ public class ParkingListData {
         this.district = parkingLot.getDistrict();
         this.city = parkingLot.getCity();
         this.lat = parkingLot.getLat();
-        this.ing = parkingLot.getIng();
+        this.lng = parkingLot.getLng();
         this.status = parkingLot.getStatus();
         this.phoneNumber = parkingLot.getPhoneNumber();
         this.distance = distance;
@@ -54,19 +54,19 @@ public class ParkingListData {
         this.parkingLotName = parkingLotName;
     }
 
-    public Integer getTimeOpen() {
+    public String getTimeOpen() {
         return timeOpen;
     }
 
-    public void setTimeOpen(Integer timeOpen) {
+    public void setTimeOpen(String timeOpen) {
         this.timeOpen = timeOpen;
     }
 
-    public Integer getTimeClose() {
+    public String getTimeClose() {
         return timeClose;
     }
 
-    public void setTimeClose(Integer timeClose) {
+    public void setTimeClose(String timeClose) {
         this.timeClose = timeClose;
     }
 
@@ -110,12 +110,12 @@ public class ParkingListData {
         this.lat = lat;
     }
 
-    public Double getIng() {
-        return ing;
+    public Double getLng() {
+        return lng;
     }
 
-    public void setIng(Double ing) {
-        this.ing = ing;
+    public void setLng(Double lng) {
+        this.lng = lng;
     }
 
     public Integer getStatus() {

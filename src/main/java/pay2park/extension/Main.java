@@ -13,6 +13,6 @@ public class Main {
     }
 
     public static void main(String []args) {
-        System.out.println(getLicensePlate());
+        System.out.println(Extension.formatTime(Instant.now()));
     }
 }

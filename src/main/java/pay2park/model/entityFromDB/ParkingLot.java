@@ -1,6 +1,7 @@
 package pay2park.model.entityFromDB;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Entity
 @Table(name = "parking_lots")
@@ -20,123 +21,59 @@ public class ParkingLot {
     @Column(name = "number_slot_remaining", nullable = false)
     private Integer numberSlotRemaining;
 
+    @Column(name = "status", nullable = false)
+    private Integer status;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "merchant_id", nullable = false)
+    private Optional<Merchant> merchant;
+
+    @Column(name = "lat", nullable = false)
+    private Double lat;
+
+    @Column(name = "lng", nullable = false)
+    private Double lng;
+
+    @Column(name = "time_open", nullable = false, length = 10)
+    private String timeOpen;
+
+    @Column(name = "time_close", nullable = false, length = 10)
+    private String timeClose;
+
+    @Column(name = "phone_number", length = 10)
+    private String phoneNumber;
+
+    @Column(name = "city", length = 100)
+    private String city;
+
+    @Column(name = "district", length = 100)
+    private String district;
+
     @Column(name = "street", length = 100)
     private String street;
 
     @Column(name = "ward", length = 100)
     private String ward;
 
-    @Column(name = "district", length = 100)
-    private String district;
-
-    @Column(name = "city", length = 100)
-    private String city;
-
-    @Column(name = "status", nullable = false)
-    private Integer status;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "merchant_id", nullable = false)
-    private Merchant merchant;
-
-    @Column(name = "lat", nullable = false)
-    private Double lat;
-
-    @Column(name = "ing", nullable = false)
-    private Double ing;
-
-    @Column(name = "time_open", nullable = false)
-    private Integer timeOpen;
-
-    @Column(name = "time_close", nullable = false)
-    private Integer timeClose;
-
-    @Column(name = "phone_number", length = 10)
-    private String phoneNumber;
-
-    public ParkingLot() {
-    }
-
-    public ParkingLot(Integer id, String parkingLotName, Integer numberSlot, Integer numberSlotRemaining, String street, String ward, String district, String city, Integer status, Merchant merchant, Double lat, Double ing, Integer timeOpen, Integer timeClose, String phoneNumber) {
+    public ParkingLot(Integer id, String parkingLotName, Integer numberSlot, Integer numberSlotRemaining, String street, String ward, String district, String city, Integer status, Optional<Merchant> merchant, Double lat, Double ing, Integer timeOpen, Integer timeClose, String phoneNumber) {
         this.id = id;
         this.parkingLotName = parkingLotName;
         this.numberSlot = numberSlot;
         this.numberSlotRemaining = numberSlotRemaining;
         this.street = street;
         this.ward = ward;
-        this.district = district;
-        this.city = city;
-        this.status = status;
-        this.merchant = merchant;
-        this.lat = lat;
-        this.ing = ing;
-        this.timeOpen = timeOpen;
-        this.timeClose = timeClose;
-        this.phoneNumber = phoneNumber;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getWard() {
+        return ward;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public String getStreet() {
+        return street;
     }
 
-    public Integer getTimeClose() {
-        return timeClose;
-    }
-
-    public void setTimeClose(Integer timeClose) {
-        this.timeClose = timeClose;
-    }
-
-    public Integer getTimeOpen() {
-        return timeOpen;
-    }
-
-    public void setTimeOpen(Integer timeOpen) {
-        this.timeOpen = timeOpen;
-    }
-
-    public Double getIng() {
-        return ing;
-    }
-
-    public void setIng(Double ing) {
-        this.ing = ing;
-    }
-
-    public Double getLat() {
-        return lat;
-    }
-
-    public void setLat(Double lat) {
-        this.lat = lat;
-    }
-
-    public Merchant getMerchant() {
-        return merchant;
-    }
-
-    public void setMerchant(Merchant merchant) {
-        this.merchant = merchant;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
     public String getDistrict() {
@@ -147,20 +84,68 @@ public class ParkingLot {
         this.district = district;
     }
 
-    public String getWard() {
-        return ward;
+    public String getCity() {
+        return city;
     }
 
-    public void setWard(String ward) {
-        this.ward = ward;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getStreet() {
-        return street;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getTimeClose() {
+        return timeClose;
+    }
+
+    public void setTimeClose(String timeClose) {
+        this.timeClose = timeClose;
+    }
+
+    public String getTimeOpen() {
+        return timeOpen;
+    }
+
+    public void setTimeOpen(String timeOpen) {
+        this.timeOpen = timeOpen;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Optional<Merchant> getMerchant() {
+        return merchant;
+    }
+
+    public void setMerchant(Optional<Merchant> merchant) {
+        this.merchant = merchant;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Integer getNumberSlotRemaining() {

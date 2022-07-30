@@ -53,7 +53,7 @@ public class ParkingServiceImpl implements ParkingService {
             priceTicketDataList.add(new PriceTicketData(priceTicket));
         }
 
-        if (coordinates == "") {
+        if (coordinates.equals("")) {
             return new ParkingDetailData(parking, 0.0, 0, priceTicketDataList);
         } else {
             String[] parts1 = coordinates.split(",");
@@ -62,7 +62,7 @@ public class ParkingServiceImpl implements ParkingService {
 
             Distance distance = new Distance();
 
-            String returnDistance = distance.getDistanceAndTimeGgApi(userLong, userLat, parking.getLat(), parking.getIng());
+            String returnDistance = distance.getDistanceAndTimeGgApi(userLong, userLat, parking.getLat(), parking.getLng());
             String[] parts2 = returnDistance.split(",");
             return new ParkingDetailData(parking, Double.parseDouble(parts2[0]), Integer.parseInt(parts2[1]), priceTicketDataList);
         }
@@ -131,7 +131,7 @@ public class ParkingServiceImpl implements ParkingService {
 
             Distance distance = new Distance();
             for (ParkingLot parkingLot : rawData) {
-                Double dt = distance.getDistance(userLong, userLat, parkingLot.getLat(), parkingLot.getIng());
+                Double dt = distance.getDistance(userLong, userLat, parkingLot.getLat(), parkingLot.getLng());
                 int time = (int) (dt * 4);
                 parkingList.add(new ParkingListData(parkingLot, dt, time));
 
