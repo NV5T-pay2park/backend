@@ -9,6 +9,8 @@ import pay2park.model.ResponseObject;
 import pay2park.model.entityFromDB.PaymentUrl;
 import pay2park.service.image.ImageService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/")
 @CrossOrigin
@@ -16,8 +18,8 @@ public class ImageController {
     @Autowired
     ImageService imageService;
     @PostMapping("uploadImage")
-    public ResponseEntity<ResponseObject> upload(@RequestParam MultipartFile multipartFile, @RequestParam int parkingLotID) {
-        ResponseObject responseObject = imageService.insertImage(multipartFile, parkingLotID);
+    public ResponseEntity<ResponseObject> upload(@RequestBody List<MultipartFile> multipartFiles, @RequestBody int parkingLotID) {
+        ResponseObject responseObject = imageService.insertImage(multipartFiles, parkingLotID);
         return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
     }
     @DeleteMapping("deleteImage")
