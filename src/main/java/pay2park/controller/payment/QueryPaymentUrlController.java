@@ -8,7 +8,6 @@ import pay2park.service.payment.QueryPaymentUrlService;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-
 @RestController
 @RequestMapping("/api/")
 @CrossOrigin
