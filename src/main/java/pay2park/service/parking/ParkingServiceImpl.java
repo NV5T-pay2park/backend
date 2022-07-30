@@ -6,10 +6,13 @@ import org.springframework.stereotype.Service;
 
 import pay2park.exception.ResourceNotFoundException;
 import pay2park.model.entityFromDB.ParkingLot;
+import pay2park.model.entityFromDB.ParkingLotImage;
 import pay2park.model.entityFromDB.PriceTicket;
+import pay2park.model.image.ImageResponse;
 import pay2park.model.parking.ParkingDetailData;
 import pay2park.model.parking.ParkingListData;
 import pay2park.model.parking.PriceTicketData;
+import pay2park.repository.ParkingLotImageRepository;
 import pay2park.repository.ParkingLotRepository;
 
 import pay2park.repository.PriceTicketRepository;
@@ -20,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ParkingServiceImpl implements ParkingService {
@@ -28,7 +32,8 @@ public class ParkingServiceImpl implements ParkingService {
     private ParkingLotRepository parkingLotRepository;
     @Autowired
     private PriceTicketRepository priceTicketRepository;
-
+    @Autowired
+    private ParkingLotImageRepository parkingLotImageRepository;
 
     @Override
     public List<ParkingListData> getAllParking() {
@@ -36,7 +41,8 @@ public class ParkingServiceImpl implements ParkingService {
         List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
 
         for (ParkingLot parkingLot : rawData) {
-            parkingList.add(new ParkingListData(parkingLot, 3.4, 4));
+            parkingList.add(new ParkingListData(parkingLot, 3.4, 4,
+                    getImageList(parkingLotImageRepository.getAllImageByParkingLot(parkingLot))));
         }
         return parkingList;
     }
@@ -62,7 +68,7 @@ public class ParkingServiceImpl implements ParkingService {
 
             Distance distance = new Distance();
 
-            String returnDistance = distance.getDistanceAndTimeGgApi(userLong, userLat, parking.getLat(), parking.getLng());
+            String returnDistance = Distance.getDistanceAndTimeGgApi(userLong, userLat, parking.getLat(), parking.getLng());
             String[] parts2 = returnDistance.split(",");
             return new ParkingDetailData(parking, Double.parseDouble(parts2[0]), Integer.parseInt(parts2[1]), priceTicketDataList);
         }
@@ -122,28 +128,29 @@ public class ParkingServiceImpl implements ParkingService {
             }
         }
 
-
         // distance
         if (!coordinates.equals("")) {
             String[] coordinateParts = coordinates.split(",");
             double userLong = Double.parseDouble(coordinateParts[0]);
             double userLat = Double.parseDouble(coordinateParts[1]);
 
-            Distance distance = new Distance();
+//            Distance distance = new Distance();
             for (ParkingLot parkingLot : rawData) {
-                Double dt = distance.getDistance(userLong, userLat, parkingLot.getLat(), parkingLot.getLng());
+                double dt = Distance.getDistance(userLong, userLat, parkingLot.getLat(), parkingLot.getLng());
                 int time = (int) (dt * 4);
-                parkingList.add(new ParkingListData(parkingLot, dt, time));
+                parkingList.add(new ParkingListData(parkingLot, dt, time,
+                        getImageList(parkingLotImageRepository.getAllImageByParkingLot(parkingLot))));
 
             }
-            Collections.sort(parkingList, new Comparator<ParkingListData>() {
+            parkingList.sort(new Comparator<ParkingListData>() {
                 public int compare(ParkingListData s1, ParkingListData s2) {
                     return s1.getDistance().compareTo(s2.getDistance());
                 }
             });
         } else {
             for (ParkingLot parkingLot : rawData) {
-                parkingList.add(new ParkingListData(parkingLot, 0.0, 0));
+                parkingList.add(new ParkingListData(parkingLot, 0.0, 0,
+                        getImageList(parkingLotImageRepository.getAllImageByParkingLot(parkingLot))));
             }
         }
 
@@ -151,7 +158,10 @@ public class ParkingServiceImpl implements ParkingService {
             final String dt = district;
             CollectionUtils.filter(parkingList, o -> ((ParkingListData) o).getDistrict().equals(dt));
         }
-
         return parkingList;
+    }
+    private List<ImageResponse> getImageList(List<ParkingLotImage> parkingLotImages) {
+        return parkingLotImages.stream().map(i ->
+                new ImageResponse(i.getId(), i.getUrl())).collect(Collectors.toList());
     }
 }
