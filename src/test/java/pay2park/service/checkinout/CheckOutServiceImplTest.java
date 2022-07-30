@@ -44,8 +44,6 @@ class CheckOutServiceImplTest {
     PaymentUrlRepository paymentUrlRepository;
 
     @InjectMocks
-    CreateOrderService createOrderService = new CreateOrderServiceImpl();
-    @InjectMocks
     CheckOutServiceImpl checkOutServiceImpl = new CheckOutServiceImpl();
 
     @BeforeEach

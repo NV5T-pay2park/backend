@@ -7,7 +7,6 @@ import pay2park.extension.Extension;
 import pay2park.model.ResponseObject;
 import pay2park.model.entityFromDB.EndUser;
 import pay2park.model.entityFromDB.ParkingLot;
-import pay2park.model.entityFromDB.Ticket;
 import pay2park.model.entityFromDB.VehicleType;
 import pay2park.model.ticket.TicketData;
 import pay2park.model.ticket.ResponseTicketData;
@@ -40,7 +39,7 @@ public class TicketServiceImpl implements TicketService {
         Long id = createTicketID(ticketData);
         Instant checkInTime = getCheckInTime();
         Instant checkInOut = null;
-        Integer total = null;
+        Integer amount = null;
         String licensePlate = ticketData.getLicensePlate();
         int vehicleTypeID = ticketData.getVehicleType();
         Optional<VehicleType> vehicleType = vehicleTypeRepository.findById(vehicleTypeID);
@@ -50,7 +49,7 @@ public class TicketServiceImpl implements TicketService {
         Optional<ParkingLot> parkingLot = parkingLotRepository.findById(parkingLotID);
         String parkingLotName = parkingLotRepository.findById(parkingLotID).get().getParkingLotName();
         String vehicleTypeName = vehicleTypeRepository.findById(ticketData.getVehicleType()).get().getVehicleTypeName();
-        Ticket ticket = new Ticket(id, checkInTime, null,
+        Ticket ticket = new Ticket(id, checkInTime, null, null,
                 licensePlate, vehicleType.get(), endUser.get(), parkingLot.get());
         try {
             ticketsRepository.save(ticket);
@@ -58,7 +57,7 @@ public class TicketServiceImpl implements TicketService {
             int numberSlotRemaining = parkingLotUpdate.getNumberSlotRemaining();
             parkingLotUpdate.setNumberSlotRemaining(numberSlotRemaining - 1);
             parkingLotRepository.save(parkingLotUpdate);
-            return new ResponseTicketData(id, checkInTime, checkInOut, total, licensePlate, vehicleTypeName, endUserID,
+            return new ResponseTicketData(id, checkInTime, checkInOut, amount, licensePlate, vehicleTypeName, endUserID,
                     endUser.get().getFirstName() + ' ' + endUser.get().getLastName(),
                     parkingLotID, parkingLotName, false);
         } catch (Exception e) {
@@ -77,7 +76,7 @@ public class TicketServiceImpl implements TicketService {
         List<ResponseTicketData> dataResponse = ticketByEndUserID.stream().map(
                 i -> new ResponseTicketData(i.getId(), i.getCheckInTime(),
                         i.getCheckOutTime(),
-                        (i.getCheckOutTime() == null) ? null : calculateAmount(i.getId()), i.getLicensePlates(),
+                        i.getAmount(), i.getLicensePlates(),
                         i.getVehicleType().getVehicleTypeName(),
                         i.getEndUser().getId(),
                         i.getEndUser().getFirstName() + ' ' + i.getEndUser().getLastName(),
@@ -86,9 +85,7 @@ public class TicketServiceImpl implements TicketService {
         return new ResponseObject(HttpStatus.OK, "Success", dataResponse);
     }
 
-    private Integer calculateAmount(Long ticketID) {
-        return 5000;
-    }
+
 
     private Long createTicketID(TicketData ticketData) {
         String createTicketTime = Extension.getCurrentTimeString("yyMMddHHmmss");

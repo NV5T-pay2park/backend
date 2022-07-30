@@ -7,7 +7,7 @@ public class ResponseTicketData {
     private Long ticketID;
     private Instant checkInTime;
     private Instant checkOutTime;
-    Integer total;
+    private Integer amount;
     private String licensePlate;
     private String vehicleType;
     private int endUserID;
@@ -20,12 +20,12 @@ public class ResponseTicketData {
 
     }
 
-    public ResponseTicketData(Long ticketID, Instant checkInTime, Instant checkOutTime, Integer total,
+    public ResponseTicketData(Long ticketID, Instant checkInTime, Instant checkOutTime, Integer amount,
                               String licensePlate, String vehicleType, int endUserID, String endUserName, int parkingLotID, String parkingLotName, boolean status) {
         this.ticketID = ticketID;
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
-        this.total = total;
+        this.amount = amount;
         this.licensePlate = licensePlate;
         this.vehicleType = vehicleType;
         this.endUserID = endUserID;
@@ -59,12 +59,12 @@ public class ResponseTicketData {
         this.checkOutTime = checkOutTime;
     }
 
-    public Integer getTotal() {
-        return total;
+    public Integer getAmount() {
+        return amount;
     }
 
-    public void setTotal(Integer total) {
-        this.total = total;
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 
     public String getLicensePlate() {

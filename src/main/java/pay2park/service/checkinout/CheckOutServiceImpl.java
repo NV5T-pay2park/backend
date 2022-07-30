@@ -12,7 +12,6 @@ import pay2park.model.checkinout.PreCheckOutData;
 import pay2park.model.entityFromDB.ParkingLot;
 import pay2park.model.entityFromDB.PaymentUrl;
 import pay2park.model.entityFromDB.PriceTicket;
-import pay2park.model.entityFromDB.Ticket;
 
 import pay2park.model.payment.OrderData;
 import pay2park.model.payment.QueryData;
@@ -78,7 +77,6 @@ public class CheckOutServiceImpl implements CheckOutService {
         if (amount <= 0) {
             return new ResponseObject(HttpStatus.FOUND, "payment failed with amount of ticket", "");
         }
-        System.out.println(amount);
         // Check checkout
         String appTransId = getCurrentTimeString("yyMMdd") + "_" + endUserId + ticketID.toString();
         boolean appTransIdExist = paymentUrlRepository.existsById(appTransId);

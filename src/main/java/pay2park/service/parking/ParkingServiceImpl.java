@@ -36,7 +36,7 @@ public class ParkingServiceImpl implements ParkingService {
         List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
 
         for (ParkingLot parkingLot : rawData) {
-            parkingList.add(new ParkingListData(parkingLot, 3.4, 4));
+            parkingList.add(new ParkingListData(parkingLot, 0.0, 0));
         }
         return parkingList;
     }
