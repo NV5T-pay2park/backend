@@ -23,13 +23,10 @@ public class ParkingController {
     @GetMapping("/getAllParking")
     @ResponseBody
     public ResponseObject getAllParking() throws IOException {
-
         List<ParkingListData> data = parkingService.getAllParking();
         return
                 new ResponseObject(HttpStatus.OK, "get all parking successfully", data);
     }
-
-
     @GetMapping("/getAllParking/{parkingLotId}")
     @ResponseBody
     public ResponseObject getParkingById(
