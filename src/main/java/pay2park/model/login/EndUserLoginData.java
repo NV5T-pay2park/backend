@@ -1,6 +1,6 @@
 package pay2park.model.login;
 
-public class LoginData {
+public class EndUserLoginData {
     String zalopayID;
 
     int endUserID;
@@ -22,7 +22,7 @@ public class LoginData {
     }
 
 
-    public LoginData(String zalopayID) {
+    public EndUserLoginData(String zalopayID) {
         this.zalopayID = zalopayID;
     }
 }

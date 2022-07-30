@@ -12,7 +12,6 @@ public class PriceTicketData {
 
     private Integer price;
 
-
     private Integer unit;
 
 

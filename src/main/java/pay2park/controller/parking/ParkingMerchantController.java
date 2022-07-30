@@ -19,8 +19,6 @@ public class ParkingMerchantController {
     @Autowired
     ParkingMerchantService parkingMerchantService;
 
-
-
     @GetMapping("/{merchantId}/list")
     @ResponseBody
     public ResponseObject list(@PathVariable int merchantId) throws IOException {

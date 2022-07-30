@@ -23,10 +23,10 @@ import java.util.*;
 @Service
 public class CreateOrderServiceImpl implements CreateOrderService {
     private static Map<String, String> config = new HashMap<String, String>() {{
-        put("app_id", "805");
-        put("key1", "pca7SCpBItgbQnT4tKr1yY5vpow6QMZ9");
-        put("key2", "82NZPr8nLJj8es3QhJOZgSVTsPwZ4gkS");
-        put("endpoint", "https://sbqc-openapi.zalopay.vn/v2/create");
+        put("app_id", "999888");
+        put("key1", "BuwHniWv76aTdSaHlBoY1j6hWFDp7zG8");
+        put("key2", "4K0itMD70mzCdEycINM2ZwookqBJgPcD");
+        put("endpoint", "https://sb-openapi.zalopay.vn/v2/create");
     }};
 
     public static String getCurrentTimeString(String format) {
@@ -47,7 +47,7 @@ public class CreateOrderServiceImpl implements CreateOrderService {
             put("app_id", config.get("app_id"));
             put("app_trans_id", getCurrentTimeString("yyMMdd") + "_" + orderData.getUserId().toString() + orderData.getTicketId().toString()); // translation missing: en.docs.shared.sample_code.comments.app_trans_id
             put("app_time", System.currentTimeMillis()); // miliseconds
-            put("app_user", "DicBRxUCu86qoxntyDR_VTIeTpdXF0hfRUI1q-QPVyg");
+            put("app_user", "FRESHER TEST");
             put("amount", orderData.getAmount());
             put("description", "Pay2Park - Payment for the order #" + orderData.getUserId().toString() + orderData.getTicketId().toString());
             put("bank_code", "zalopayapp");
@@ -88,5 +88,4 @@ public class CreateOrderServiceImpl implements CreateOrderService {
         return new ResponseOrderData((int) result.get("return_code"), appTransId, result.get("order_url").toString(), result.get("zp_trans_token").toString());
     }
 
-    ;
 }
