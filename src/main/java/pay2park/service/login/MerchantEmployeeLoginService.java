@@ -31,7 +31,7 @@ public class MerchantEmployeeLoginService {
         }
         String password = requestData.getPassword();
         if (!isValidPassword(phone, password)) {
-            return new ResponseObject(HttpStatus.FOUND, "invalid username ", null);
+            return new ResponseObject(HttpStatus.FOUND, "invalid phone or password", null);
         }
 
         MerchantEmployee merchantEmployee = merchantEmployeeRepository
@@ -48,6 +48,7 @@ public class MerchantEmployeeLoginService {
         responsePermissions.setAllowExport(permission.getAllowExport() == 1);
 
         MerchantEmployeeResponseLoginData responseData = new MerchantEmployeeResponseLoginData();
+        responseData.setUserId(merchantEmployee.getId());
         responseData.setPhone(merchantEmployee.getPhone());
         responseData.setUserName(merchantEmployee.getUserName());
         responseData.setPermissions(responsePermissions);
