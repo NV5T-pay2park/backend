@@ -119,7 +119,6 @@ public class CheckInServiceImpl implements CheckInService {
         Instant startTime = Instant.now();
         while (pendingTicketRepository.isPendingTicket(checkInData)){
             Instant now = Instant.now();
-            System.out.println(Duration.between(startTime, now).toSeconds());
             if(Duration.between(startTime, now).toSeconds() > 60) {
                 pendingTicketRepository.removePendingTicket(checkInData);
                 return null;
