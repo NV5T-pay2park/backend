@@ -117,8 +117,6 @@ public class TicketServiceImpl implements TicketService {
         return new ResponseTicketData(ticket);
     }
 
-
-
     private Long createTicketID(TicketData ticketData) {
         String createTicketTime = Extension.getCurrentTimeString("yyMMddHHmmss");
         String parkingLotID = String.valueOf(ticketData.getParkingLotID());
