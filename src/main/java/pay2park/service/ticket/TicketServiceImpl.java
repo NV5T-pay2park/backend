@@ -3,6 +3,7 @@ package pay2park.service.ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import pay2park.exception.ResourceNotFoundException;
 import pay2park.extension.Extension;
 import pay2park.model.ResponseObject;
 import pay2park.model.entityFromDB.EndUser;
@@ -87,6 +88,12 @@ public class TicketServiceImpl implements TicketService {
                         !(i.getCheckOutTime() == null), i.getAmount())).
                 sorted((t1, t2) -> t2.getCheckInTime().compareTo(t1.getCheckInTime())).collect(Collectors.toList());
         return new ResponseObject(HttpStatus.OK, "Success", dataResponse);
+    }
+
+    @Override
+    public ResponseTicketData getTicketById(Long id){
+        Ticket ticket = ticketsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + id));
+        return new ResponseTicketData(ticket);
     }
 
 

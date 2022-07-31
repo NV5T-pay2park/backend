@@ -1,6 +1,7 @@
 package pay2park.model.ticket;
 
-import java.util.Date;
+import pay2park.extension.Extension;
+import pay2park.model.entityFromDB.Ticket;
 
 public class ResponseTicketData {
     private Long ticketID;
@@ -33,6 +34,20 @@ public class ResponseTicketData {
         this.status = status;
         this.amount = amount;
     }
+    public ResponseTicketData(Ticket ticket){
+        this.ticketID = ticket.getId();
+        this.checkInTime = Extension.formatTime(ticket.getCheckInTime());
+        this.checkOutTime = Extension.formatTime(ticket.getCheckOutTime());
+        this.licensePlate = ticket.getLicensePlates();
+        this.vehicleType = ticket.getVehicleType().getVehicleTypeName();
+        this.endUserID = ticket.getEndUser().getId();
+        this.endUserName = ticket.getEndUser().getFirstName() + " " + ticket.getEndUser().getLastName();
+        this.parkingLotID = ticket.getParkingLot().getId();
+        this.parkingLotName = ticket.getParkingLot().getParkingLotName();
+        this.status = ticket.getCheckOutTime() != null;
+        this.amount = ticket.getAmount();
+    }
+
 
     public Long getTicketID() {
         return ticketID;
