@@ -47,15 +47,18 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public ResponseObject insertImage(List<MultipartFile> multipartFiles, int parkingLotID) {
+        if (multipartFiles == null) {
+            return new ResponseObject(HttpStatus.FOUND, "Null data error", "");
+        }
         if(multipartFiles.size() == 0) {
-            new ResponseObject(HttpStatus.FOUND, "File error", "");
+            return new ResponseObject(HttpStatus.FOUND, "No Image File error", "");
         }
         if (!checkImageList(multipartFiles)) {
-            new ResponseObject(HttpStatus.FOUND, "File error", "");
+            return new ResponseObject(HttpStatus.FOUND, "File error", "");
         }
         List<byte[]> imageByteList = getImageByteList(multipartFiles);
         if (imageByteList.size() != multipartFiles.size()) {
-            new ResponseObject(HttpStatus.FOUND, "File error", "");
+            return new ResponseObject(HttpStatus.FOUND, "File error", "");
         }
         List<ParkingLotImage> parkingLotImages = new ArrayList<>();
         for(byte[] imageBytes : imageByteList) {
