@@ -3,6 +3,16 @@ package pay2park.model.login;
 public class MerchantEmployeeRequestLoginData {
     private String phone = "";
     private String password = "";
+    private String userName = null;
+
+    public MerchantEmployeeRequestLoginData() {}
+
+    public MerchantEmployeeRequestLoginData(String phone, String userName, String password) {
+        this.phone = phone;
+        this.userName = userName;
+        this.password = password;
+    }
+
 
     public void setPhone(String phone) {
         this.phone = phone;
@@ -20,10 +30,11 @@ public class MerchantEmployeeRequestLoginData {
         return password;
     }
 
-    public MerchantEmployeeRequestLoginData() {}
+    public String getUserName() {
+        return userName;
+    }
 
-    public MerchantEmployeeRequestLoginData(String phone, String password) {
-        this.phone = phone;
-        this.password = password;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

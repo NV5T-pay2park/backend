@@ -9,11 +9,12 @@ import pay2park.service.login.MerchantEmployeeLoginService;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/api")
 public class MerchantEmployeeLoginController {
     @Autowired
     MerchantEmployeeLoginService loginService;
 
-    @PostMapping("api/loginmerchant")
+    @PostMapping("/loginmerchant")
     public ResponseEntity<ResponseObject> catchNewLoginMerchant(@RequestBody MerchantEmployeeRequestLoginData req) {
         ResponseObject res = loginService.login(req);
         return ResponseEntity.status(res.getStatus()).body(res);

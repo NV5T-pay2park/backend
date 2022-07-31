@@ -9,6 +9,9 @@ public class ResponseQueryData {
         this.returnCode = returnCode;
     }
 
+    public ResponseQueryData() {
+    }
+
     public int getReturnCode() {
         return returnCode;
     }

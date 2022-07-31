@@ -1,6 +1,9 @@
 package pay2park.model.parking;
 
 import pay2park.model.entityFromDB.ParkingLot;
+import pay2park.model.image.ImageResponse;
+
+import java.util.List;
 
 public class ParkingListData {
 
@@ -18,9 +21,10 @@ public class ParkingListData {
     private String phoneNumber;
     private Double distance;
     private Integer timeMoving;
+    private List<ImageResponse> images;
 
 
-    public ParkingListData(ParkingLot parkingLot, Double distance, Integer timeMoving){
+    public ParkingListData(ParkingLot parkingLot, Double distance, Integer timeMoving, List<ImageResponse> images){
         this.id = parkingLot.getId();
         this.parkingLotName = parkingLot.getParkingLotName();
         this.timeOpen = parkingLot.getTimeOpen();
@@ -35,6 +39,7 @@ public class ParkingListData {
         this.phoneNumber = parkingLot.getPhoneNumber();
         this.distance = distance;
         this.timeMoving = timeMoving;
+        this.images = images;
     }
 
 
@@ -148,5 +153,13 @@ public class ParkingListData {
 
     public void setTimeMoving(Integer timeMoving) {
         this.timeMoving = timeMoving;
+    }
+
+    public List<ImageResponse> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ImageResponse> images) {
+        this.images = images;
     }
 }

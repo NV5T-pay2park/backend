@@ -13,6 +13,9 @@ public class ResponseOrderData {
         this.zpTransToken = zpTransToken;
     }
 
+    public ResponseOrderData() {
+    }
+
     public int getReturnCode() {
         return returnCode;
     }

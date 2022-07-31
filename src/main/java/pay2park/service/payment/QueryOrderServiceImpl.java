@@ -60,9 +60,6 @@ public class QueryOrderServiceImpl implements QueryOrderService {
         }
 
         JSONObject result = new JSONObject(resultJsonStr.toString());
-        for (String key : result.keySet()) {
-            System.out.format("%s = %s\n", key, result.get(key));
-        }
         return new ResponseQueryData((int) result.get("return_code"));
     }
 
