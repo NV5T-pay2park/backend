@@ -37,6 +37,7 @@ public class Extension {
     public static String formatTime(Instant instant) {
         Date myDate = Date.from(instant);
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        formatter.setCalendar(new GregorianCalendar(TimeZone.getTimeZone("GMT+7")));
         return formatter.format(myDate);
     }
 }

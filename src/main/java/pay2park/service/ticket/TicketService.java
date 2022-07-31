@@ -7,6 +7,7 @@ import pay2park.model.ticket.ResponseTicketData;
 
 public interface TicketService {
     ResponseTicketData createTicket(TicketData ticketData);
+    ResponseTicketData getTicketById(Long id);
     ResponseObject getTicketByEndUserId(int endUserID);
 
     ResponseObject getTicketByParkingLotId(int parkingLotId);

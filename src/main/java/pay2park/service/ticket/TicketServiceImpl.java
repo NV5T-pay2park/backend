@@ -3,6 +3,7 @@ package pay2park.service.ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import pay2park.exception.ResourceNotFoundException;
 import pay2park.extension.Extension;
 import pay2park.model.ResponseObject;
 import pay2park.model.entityFromDB.EndUser;
@@ -41,7 +42,7 @@ public class TicketServiceImpl implements TicketService {
         Long id = createTicketID(ticketData);
         Instant checkInTime = getCheckInTime();
         Instant checkInOut = null;
-        Integer total = null;
+        Integer amount = null;
         String licensePlate = ticketData.getLicensePlate();
         int vehicleTypeID = ticketData.getVehicleType();
         Optional<VehicleType> vehicleType = vehicleTypeRepository.findById(vehicleTypeID);
@@ -52,16 +53,17 @@ public class TicketServiceImpl implements TicketService {
         String parkingLotName = parkingLotRepository.findById(parkingLotID).get().getParkingLotName();
         String vehicleTypeName = vehicleTypeRepository.findById(ticketData.getVehicleType()).get().getVehicleTypeName();
         Ticket ticket = new Ticket(id, checkInTime, null,
-                licensePlate, vehicleType.get(), endUser.get(), parkingLot.get());
+                licensePlate, vehicleType.get(), endUser.get(), parkingLot.get(), null);
         try {
             ticketsRepository.save(ticket);
             ParkingLot parkingLotUpdate = parkingLot.get();
             int numberSlotRemaining = parkingLotUpdate.getNumberSlotRemaining();
             parkingLotUpdate.setNumberSlotRemaining(numberSlotRemaining - 1);
             parkingLotRepository.save(parkingLotUpdate);
-            return new ResponseTicketData(id, Extension.formatTime(checkInTime), null, total, licensePlate, vehicleTypeName, endUserID,
+            return new ResponseTicketData(id, Extension.formatTime(checkInTime), null,
+                    licensePlate, vehicleTypeName, endUserID,
                     endUser.get().getFirstName() + ' ' + endUser.get().getLastName(),
-                    parkingLotID, parkingLotName, false);
+                    parkingLotID, parkingLotName, false, amount);
         } catch (Exception e) {
             return new ResponseTicketData();
         }
@@ -77,39 +79,45 @@ public class TicketServiceImpl implements TicketService {
         List<Ticket> ticketByEndUserID = ticketsRepository.getAllTicketByEndUserID(endUser.get());
         List<ResponseTicketData> dataResponse = ticketByEndUserID.stream().map(
                 i -> new ResponseTicketData(i.getId(), Extension.formatTime(i.getCheckInTime()),
-                        null,
-                        (i.getCheckOutTime() == null) ? null : calculateAmount(i.getId()), i.getLicensePlates(),
+                        (i.getCheckOutTime() == null) ? null : Extension.formatTime(i.getCheckOutTime()),
+                        i.getLicensePlates(),
                         i.getVehicleType().getVehicleTypeName(),
                         i.getEndUser().getId(),
                         i.getEndUser().getFirstName() + ' ' + i.getEndUser().getLastName(),
                         i.getParkingLot().getId(), i.getParkingLot().getParkingLotName(),
-                        !(i.getCheckOutTime() == null))).sorted((t1, t2) -> t2.getCheckInTime().compareTo(t1.getCheckInTime())).collect(Collectors.toList());
+                        !(i.getCheckOutTime() == null), i.getAmount())).
+                sorted((t1, t2) -> t2.getCheckInTime().compareTo(t1.getCheckInTime())).collect(Collectors.toList());
         return new ResponseObject(HttpStatus.OK, "Success", dataResponse);
     }
 
     @Override
     public ResponseObject getTicketByParkingLotId(int parkingLotId) {
         if (!parkingLotRepository.existsById(parkingLotId)) {
-            return new ResponseObject(HttpStatus.FOUND, "Parking lot is not valid",
+            return new ResponseObject(HttpStatus.FOUND, "End user is not valid",
                     new ArrayList<Ticket>());
         }
-        Optional<ParkingLot> parkingLot = parkingLotRepository.findById(parkingLotId);
-        List<Ticket> ticketByEndUserID = ticketsRepository.getAllTicketByParkingLotID(parkingLot.get());
-        List<ResponseTicketData> dataResponse = ticketByEndUserID.stream().map(
-                i -> new ResponseTicketData(i.getId(), Extension.formatTime(i.getCheckInTime()),
-                        null,
-                        (i.getCheckOutTime() == null) ? null : calculateAmount(i.getId()), i.getLicensePlates(),
-                        i.getVehicleType().getVehicleTypeName(),
-                        i.getEndUser().getId(),
-                        i.getEndUser().getFirstName() + ' ' + i.getEndUser().getLastName(),
-                        i.getParkingLot().getId(), i.getParkingLot().getParkingLotName(),
-                        !(i.getCheckOutTime() == null))).sorted((t1, t2) -> t2.getCheckInTime().compareTo(t1.getCheckInTime())).collect(Collectors.toList());
+        Optional<ParkingLot> parkingLotOptional = parkingLotRepository.findById(parkingLotId);
+        List<Ticket> ticketList = ticketsRepository.getAllTicketByParkingLotID(parkingLotOptional.get());
+        List<ResponseTicketData> dataResponse = ticketList.stream().map(
+                        ticket -> new ResponseTicketData(ticket.getId(), Extension.formatTime(ticket.getCheckInTime()),
+                                (ticket.getCheckOutTime() == null) ? null : Extension.formatTime(ticket.getCheckOutTime()),
+                                ticket.getLicensePlates(),
+                                ticket.getVehicleType().getVehicleTypeName(),
+                                ticket.getEndUser().getId(),
+                                ticket.getEndUser().getFirstName() + ' ' + ticket.getEndUser().getLastName(),
+                                ticket.getParkingLot().getId(), ticket.getParkingLot().getParkingLotName(),
+                                !(ticket.getCheckOutTime() == null), ticket.getAmount())).
+                sorted((t1, t2) -> t2.getCheckInTime().compareTo(t1.getCheckInTime())).collect(Collectors.toList());
         return new ResponseObject(HttpStatus.OK, "Success", dataResponse);
     }
 
-    private Integer calculateAmount(Long ticketID) {
-        return 5000;
+    @Override
+    public ResponseTicketData getTicketById(Long id){
+        Ticket ticket = ticketsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + id));
+        return new ResponseTicketData(ticket);
     }
+
+
 
     private Long createTicketID(TicketData ticketData) {
         String createTicketTime = Extension.getCurrentTimeString("yyMMddHHmmss");

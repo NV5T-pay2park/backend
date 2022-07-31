@@ -10,7 +10,7 @@ public class ParkingLotListData {
     public String timeClose;
     public Integer currentServing;
     public String address;
-    public String phone;
+    public String phoneNumber;
     public Integer status;
     public String image;
 
@@ -21,7 +21,7 @@ public class ParkingLotListData {
         this.timeClose = parkingLot.getTimeClose();
         this.currentServing = parkingLot.getNumberSlot() - parkingLot.getNumberSlotRemaining();
         this.address = parkingLot.getStreet() + ", " +  parkingLot.getWard() + ", " + parkingLot.getDistrict() + ", " + parkingLot.getCity();
-        this.phone = parkingLot.getPhoneNumber();
+        this.phoneNumber = parkingLot.getPhoneNumber();
         this.status = parkingLot.getStatus();
         this.image = parkingLotImage.getUrl();
     }
@@ -33,7 +33,7 @@ public class ParkingLotListData {
         this.timeClose = parkingLot.getTimeClose();
         this.currentServing = parkingLot.getNumberSlot() - parkingLot.getNumberSlotRemaining();
         this.address = parkingLot.getStreet() + ", " +  parkingLot.getWard() + ", " + parkingLot.getDistrict() + ", " + parkingLot.getCity();
-        this.phone = parkingLot.getPhoneNumber();
+        this.phoneNumber = parkingLot.getPhoneNumber();
         this.status = parkingLot.getStatus();
         this.image = null;
     }

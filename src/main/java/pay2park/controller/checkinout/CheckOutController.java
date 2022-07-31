@@ -18,6 +18,7 @@ import java.net.URISyntaxException;
 public class CheckOutController {
     @Autowired
     CheckOutService checkOutService;
+
     @PostMapping("/preCheckOut")
     public ResponseEntity<ResponseObject> preCheckOut(@RequestBody PreCheckOutData preCheckOutData) throws IOException {
         ResponseObject responseObject = checkOutService.preCheckOut(preCheckOutData);

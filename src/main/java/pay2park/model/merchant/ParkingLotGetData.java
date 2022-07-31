@@ -18,7 +18,7 @@ public class ParkingLotGetData {
     public Double lng;
     public String timeOpen;
     public String timeClose;
-    public String phone;
+    public String phoneNumber;
     public List<PriceWithVehicle> priceTable;
 
     public ParkingLotGetData(ParkingLot parkingLot, List<PriceTicket> priceTickets) {
@@ -32,7 +32,7 @@ public class ParkingLotGetData {
         this.lng = parkingLot.getLng();
         this.timeOpen = parkingLot.getTimeOpen();
         this.timeClose = parkingLot.getTimeClose();
-        this.phone = parkingLot.getPhoneNumber();
+        this.phoneNumber = parkingLot.getPhoneNumber();
 
         this.priceTable = new ArrayList<>();
         for (PriceTicket priceTicket : priceTickets) {

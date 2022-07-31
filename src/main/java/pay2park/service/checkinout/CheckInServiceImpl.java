@@ -58,12 +58,12 @@ public class CheckInServiceImpl implements CheckInService {
         List<Ticket> ticketsIsCreated = getTicketIsCreated(checkInData, vehicleData);
         if (ticketsIsCreated.size() > 0) {
             Ticket ticketIsCreated = ticketsIsCreated.get(0);
-            ticket = new ResponseTicketData(ticketIsCreated.getId(), Extension.formatTime(ticketIsCreated.getCheckInTime()),
-                    null, null,
+            ticket = new ResponseTicketData(ticketIsCreated.getId(),
+                    Extension.formatTime(ticketIsCreated.getCheckInTime()), null,
                     ticketIsCreated.getLicensePlates(), ticketIsCreated.getVehicleType().getVehicleTypeName(),
                     ticketIsCreated.getEndUser().getId(),
                     ticketIsCreated.getEndUser().getFirstName() + ' ' + ticketIsCreated.getEndUser().getLastName(),
-                    ticketIsCreated.getParkingLot().getId(), ticketIsCreated.getParkingLot().getParkingLotName(), false);
+                    ticketIsCreated.getParkingLot().getId(), ticketIsCreated.getParkingLot().getParkingLotName(), false, null);
             socket.SendCheckInFail(checkInData.getParkingLotID());
             return new ResponseObject(HttpStatus.BAD_REQUEST, "Ticket is created", ticket);
         } else {
@@ -86,6 +86,9 @@ public class CheckInServiceImpl implements CheckInService {
     }
 
     private boolean isValidInformationCheckIn(VehicleData vehicleData) {
+        if (vehicleData == null) {
+            return false;
+        }
         boolean checkVehicleType = vehicleTypeRepository.
                 existsById(vehicleData.getVehicleTypeID());
         boolean checkLicensePlate = vehicleData.getLicensePlate().length() != 0;
