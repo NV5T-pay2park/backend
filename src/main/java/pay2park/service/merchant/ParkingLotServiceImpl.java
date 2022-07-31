@@ -82,12 +82,7 @@ public class ParkingLotServiceImpl implements ParkingLotService {
                 VehicleType vehicleType = vehicleTypeOptional.get();
 
                 for (PriceItem priceItem : priceWithVehicle.prices) {
-
-                    PriceTicket priceTicket = new PriceTicket(parkingLot, vehicleType, priceItem);
-
-                    priceTicket.setId(new PriceTicketId(parkingLot.getId(), vehicleType.getId(), priceItem.periodTime));
-
-                    priceTicketRepository.save(priceTicket);
+                    priceTicketRepository.save(new PriceTicket(parkingLot, vehicleType, priceItem));
                 }
             }
 
@@ -151,15 +146,7 @@ public class ParkingLotServiceImpl implements ParkingLotService {
                 VehicleType vehicleType = vehicleTypeOptional.get();
 
                 for (PriceItem priceItem : priceWithVehicle.prices) {
-                    PriceTicket priceTicket = new PriceTicket();
-
-                    priceTicket.setParkingLot(parkingLot);
-                    priceTicket.setVehicleType(vehicleType);
-                    priceTicket.setPeriodTime(priceItem.periodTime);
-                    priceTicket.setPrice(priceItem.price);
-                    priceTicket.setUnit(priceItem.unit);
-
-                    priceTicketRepository.save(priceTicket);
+                    priceTicketRepository.save(new PriceTicket(parkingLot, vehicleType, priceItem));
                 }
             }
 
