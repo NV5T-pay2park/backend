@@ -59,8 +59,10 @@ public class TicketServiceImpl implements TicketService {
             int numberSlotRemaining = parkingLotUpdate.getNumberSlotRemaining();
             parkingLotUpdate.setNumberSlotRemaining(numberSlotRemaining - 1);
             parkingLotRepository.save(parkingLotUpdate);
-            return new ResponseTicketData(id, checkInTime, checkInOut, licensePlate, vehicleTypeName, endUserID,
-                    endUser.get().getFirstName() + ' ' + endUser.get().getLastName(), parkingLotID, parkingLotName, false, amount);
+            return new ResponseTicketData(id, Extension.formatTime(checkInTime), Extension.formatTime(checkInOut),
+                    licensePlate, vehicleTypeName, endUserID,
+                    endUser.get().getFirstName() + ' ' + endUser.get().getLastName(),
+                    parkingLotID, parkingLotName, false, amount);
         } catch (Exception e) {
             return new ResponseTicketData();
         }
@@ -75,19 +77,15 @@ public class TicketServiceImpl implements TicketService {
         Optional<EndUser> endUser = endUserRepository.findById(endUserID);
         List<Ticket> ticketByEndUserID = ticketsRepository.getAllTicketByEndUserID(endUser.get());
         List<ResponseTicketData> dataResponse = ticketByEndUserID.stream().map(
-<<<<<<< HEAD
                 i -> new ResponseTicketData(i.getId(), Extension.formatTime(i.getCheckInTime()),
-                        null,
-                        (i.getCheckOutTime() == null) ? null : calculateAmount(i.getId()), i.getLicensePlates(),
-=======
-                i -> new ResponseTicketData(i.getId(), i.getCheckInTime(),
-                        i.getCheckOutTime(), i.getLicensePlates(),
->>>>>>> 73b6d4dbaa5799a4b5b692b376cc9413c3dd9916
+                        (i.getCheckOutTime() == null) ? null : Extension.formatTime(i.getCheckOutTime()),
+                        i.getLicensePlates(),
                         i.getVehicleType().getVehicleTypeName(),
                         i.getEndUser().getId(),
                         i.getEndUser().getFirstName() + ' ' + i.getEndUser().getLastName(),
                         i.getParkingLot().getId(), i.getParkingLot().getParkingLotName(),
-                        !(i.getCheckOutTime() == null), i.getAmount())).sorted((t1, t2) -> t2.getCheckInTime().compareTo(t1.getCheckInTime())).collect(Collectors.toList());
+                        !(i.getCheckOutTime() == null), i.getAmount())).
+                sorted((t1, t2) -> t2.getCheckInTime().compareTo(t1.getCheckInTime())).collect(Collectors.toList());
         return new ResponseObject(HttpStatus.OK, "Success", dataResponse);
     }
 

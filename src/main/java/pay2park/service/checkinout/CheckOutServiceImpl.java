@@ -156,14 +156,8 @@ public class CheckOutServiceImpl implements CheckOutService {
         return fmt.format(cal.getTimeInMillis());
     }
 
-
-<<<<<<< HEAD
-    private int calculateAmountOfTicket(double parkingHour, List<PriceTicket> priceTicketList) {
-        Comparator<PriceTicket> compareById = (PriceTicket o1, PriceTicket o2) -> o1.getPeriodTime().compareTo(o2.getPeriodTime());
-=======
     public int calculateAmountOfTicket(double parkingHour, List<PriceTicket> priceTicketList) {
-        Comparator<PriceTicket> compareById = (PriceTicket o1, PriceTicket o2) -> o1.getPeriodTime().compareTo( o2.getPeriodTime() );
->>>>>>> 73b6d4dbaa5799a4b5b692b376cc9413c3dd9916
+        Comparator<PriceTicket> compareById = (PriceTicket o1, PriceTicket o2) -> o1.getPeriodTime().compareTo(o2.getPeriodTime());
         priceTicketList.sort(compareById);
         int result = 0;
         for (int i = 0; i < priceTicketList.size(); i++) {

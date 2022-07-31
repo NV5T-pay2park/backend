@@ -16,7 +16,7 @@ public class ImageController {
     @Autowired
     ImageService imageService;
     @PostMapping("uploadImage")
-    public ResponseEntity<ResponseObject> upload(@RequestBody List<MultipartFile> multipartFiles, @RequestBody int parkingLotID) {
+    public ResponseEntity<ResponseObject> upload(@ModelAttribute List<MultipartFile> multipartFiles, @RequestParam int parkingLotID) {
         ResponseObject responseObject = imageService.insertImage(multipartFiles, parkingLotID);
         return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
     }

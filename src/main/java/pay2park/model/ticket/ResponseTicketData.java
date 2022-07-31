@@ -1,18 +1,11 @@
 package pay2park.model.ticket;
 
-import java.time.Instant;
 import java.util.Date;
 
 public class ResponseTicketData {
     private Long ticketID;
-<<<<<<< HEAD
     private String checkInTime;
     private String checkOutTime;
-    Integer total;
-=======
-    private Instant checkInTime;
-    private Instant checkOutTime;
->>>>>>> 73b6d4dbaa5799a4b5b692b376cc9413c3dd9916
     private String licensePlate;
     private String vehicleType;
     private int endUserID;
@@ -25,13 +18,9 @@ public class ResponseTicketData {
 
     }
 
-<<<<<<< HEAD
-    public ResponseTicketData(Long ticketID, String checkInTime, String checkOutTime, Integer total,
-                              String licensePlate, String vehicleType, int endUserID, String endUserName, int parkingLotID, String parkingLotName, boolean status) {
-=======
-    public ResponseTicketData(Long ticketID, Instant checkInTime, Instant checkOutTime,
-                              String licensePlate, String vehicleType, int endUserID, String endUserName, int parkingLotID, String parkingLotName, boolean status , Integer amount) {
->>>>>>> 73b6d4dbaa5799a4b5b692b376cc9413c3dd9916
+    public ResponseTicketData(Long ticketID, String checkInTime, String checkOutTime,
+                              String licensePlate, String vehicleType, int endUserID, String endUserName,
+                              int parkingLotID, String parkingLotName, boolean status , Integer amount) {
         this.ticketID = ticketID;
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
