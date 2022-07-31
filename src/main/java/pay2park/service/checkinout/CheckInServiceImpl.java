@@ -45,13 +45,12 @@ public class CheckInServiceImpl implements CheckInService {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
         }
 
-//        if (!pendingTicketRepository.addPendingTicket(checkInData)) {
-//            return new ResponseObject(HttpStatus.FOUND, "This user already in queue", ticket);
-//        }
-//        socket.RequestToEnterLicensePlate(checkInData);
-//        VehicleData vehicleData = getInformationCheckInData(checkInData);
+        if (!pendingTicketRepository.addPendingTicket(checkInData)) {
+            return new ResponseObject(HttpStatus.FOUND, "This user already in queue", ticket);
+        }
+        socket.RequestToEnterLicensePlate(checkInData);
+        VehicleData vehicleData = getInformationCheckInData(checkInData);
 
-        VehicleData vehicleData = new VehicleData(1, Extension.getLicensePlate());
         if (!isValidInformationCheckIn(vehicleData)) {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
         }
@@ -86,7 +85,10 @@ public class CheckInServiceImpl implements CheckInService {
         return checkEndUserID && checkParkingLotID;
     }
 
-    private boolean isValidInformationCheckIn(VehicleData vehicleData) {
+    public boolean isValidInformationCheckIn(VehicleData vehicleData) {
+        if (vehicleData == null) {
+            return false;
+        }
         boolean checkVehicleType = vehicleTypeRepository.
                 existsById(vehicleData.getVehicleTypeID());
         boolean checkLicensePlate = vehicleData.getLicensePlate().length() != 0;
@@ -107,14 +109,15 @@ public class CheckInServiceImpl implements CheckInService {
         return ticketsRepository.getTicketByEndUserIDAndParkingLot(endUser.get(), parkingLot.get(), vehicleData.getLicensePlate());
     }
 
-    public ResponseObject getResponseFromCheckInDataAndVehicleData(CheckInData checkInData, VehicleData vehicleData) {
+    @Override
+    public ResponseObject getInformationCheckInData(CheckInData checkInData,VehicleData vehicleData) {
         if (isValidInformationCheckInData(vehicleData)) {
             pendingTicketRepository.setPendingTicketInformation(checkInData, vehicleData);
             return new ResponseObject(HttpStatus.OK, "Success", vehicleData);
         }
         return new ResponseObject(HttpStatus.FOUND, "Found", "");
     }
-    public VehicleData getInformationCheckInData(CheckInData checkInData) {
+    private VehicleData getInformationCheckInData(CheckInData checkInData) {
         while (pendingTicketRepository.isPendingTicket(checkInData));
         VehicleData result = pendingTicketRepository.getPendingTicketInformation(checkInData);
         pendingTicketRepository.removePendingTicket(checkInData);
