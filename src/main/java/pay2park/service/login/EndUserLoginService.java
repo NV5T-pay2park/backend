@@ -18,13 +18,13 @@ public class EndUserLoginService {
     public ResponseObject login(EndUserLoginData data) {
 
         if (!isValidLoginData(data))
-            return new ResponseObject(HttpStatus.FOUND, "ZaloPayId is invalid", "");
+            return new ResponseObject(HttpStatus.FOUND, "ZaloPayId is invalid", null);
         List<EndUser> userList;
         while (true) {
             userList = endUserRepository.getEndUserBaseOnZalopayID(data.getZalopayID());
             if (userList.size() == 1) break;
             if (userList.size() > 1) {
-                return new ResponseObject(HttpStatus.FOUND, "Can't mapping user", "");
+                return new ResponseObject(HttpStatus.FOUND, "Can't mapping user", null);
             }
             EndUser newEndUser = new EndUser(data.getZalopayID());
             endUserRepository.save(newEndUser);

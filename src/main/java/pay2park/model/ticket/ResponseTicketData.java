@@ -1,13 +1,12 @@
 package pay2park.model.ticket;
 
-import java.time.Instant;
-import java.util.Date;
+import pay2park.extension.Extension;
+import pay2park.model.entityFromDB.Ticket;
 
 public class ResponseTicketData {
     private Long ticketID;
-    private Instant checkInTime;
-    private Instant checkOutTime;
-    Integer total;
+    private String checkInTime;
+    private String checkOutTime;
     private String licensePlate;
     private String vehicleType;
     private int endUserID;
@@ -15,17 +14,17 @@ public class ResponseTicketData {
     private int parkingLotID;
     private String parkingLotName;
     private boolean status;
-
+    private Integer amount;
     public ResponseTicketData() {
 
     }
 
-    public ResponseTicketData(Long ticketID, Instant checkInTime, Instant checkOutTime, Integer total,
-                              String licensePlate, String vehicleType, int endUserID, String endUserName, int parkingLotID, String parkingLotName, boolean status) {
+    public ResponseTicketData(Long ticketID, String checkInTime, String checkOutTime,
+                              String licensePlate, String vehicleType, int endUserID, String endUserName,
+                              int parkingLotID, String parkingLotName, boolean status , Integer amount) {
         this.ticketID = ticketID;
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
-        this.total = total;
         this.licensePlate = licensePlate;
         this.vehicleType = vehicleType;
         this.endUserID = endUserID;
@@ -33,7 +32,22 @@ public class ResponseTicketData {
         this.parkingLotID = parkingLotID;
         this.parkingLotName = parkingLotName;
         this.status = status;
+        this.amount = amount;
     }
+    public ResponseTicketData(Ticket ticket){
+        this.ticketID = ticket.getId();
+        this.checkInTime = Extension.formatTime(ticket.getCheckInTime());
+        this.checkOutTime = Extension.formatTime(ticket.getCheckOutTime());
+        this.licensePlate = ticket.getLicensePlates();
+        this.vehicleType = ticket.getVehicleType().getVehicleTypeName();
+        this.endUserID = ticket.getEndUser().getId();
+        this.endUserName = ticket.getEndUser().getFirstName() + " " + ticket.getEndUser().getLastName();
+        this.parkingLotID = ticket.getParkingLot().getId();
+        this.parkingLotName = ticket.getParkingLot().getParkingLotName();
+        this.status = ticket.getCheckOutTime() != null;
+        this.amount = ticket.getAmount();
+    }
+
 
     public Long getTicketID() {
         return ticketID;
@@ -43,28 +57,20 @@ public class ResponseTicketData {
         this.ticketID = ticketID;
     }
 
-    public Instant getCheckInTime() {
+    public String getCheckInTime() {
         return checkInTime;
     }
 
-    public void setCheckInTime(Instant checkInTime) {
+    public void setCheckInTime(String checkInTime) {
         this.checkInTime = checkInTime;
     }
 
-    public Instant getCheckOutTime() {
+    public String getCheckOutTime() {
         return checkOutTime;
     }
 
-    public void setCheckOutTime(Instant checkOutTime) {
+    public void setCheckOutTime(String checkOutTime) {
         this.checkOutTime = checkOutTime;
-    }
-
-    public Integer getTotal() {
-        return total;
-    }
-
-    public void setTotal(Integer total) {
-        this.total = total;
     }
 
     public String getLicensePlate() {
@@ -121,5 +127,13 @@ public class ResponseTicketData {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 }

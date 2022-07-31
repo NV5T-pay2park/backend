@@ -31,4 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
-.m2
+.m2/copy_reference_file.log
+src/main/resources/application.properties
+src/main/resources/system.properties
+

@@ -3,9 +3,9 @@ package pay2park.service.login;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import pay2park.model.ResponseObject;
-import pay2park.model.entityFromDB.Merchant;
 import pay2park.model.entityFromDB.MerchantEmployee;
 import pay2park.model.entityFromDB.Permission;
 import pay2park.model.login.MerchantEmployeePermissions;
@@ -18,6 +18,7 @@ import pay2park.security.Hash;
 import java.util.List;
 
 @Service
+@Component
 public class MerchantEmployeeLoginService {
     @Autowired
     MerchantEmployeeRepository merchantEmployeeRepository;
@@ -29,13 +30,23 @@ public class MerchantEmployeeLoginService {
         if (!isValidPhoneLoginData(phone)) {
             return new ResponseObject(HttpStatus.FOUND, "invalid phone number", null);
         }
-        String password = requestData.getPassword();
-        if (!isValidPassword(phone, password)) {
-            return new ResponseObject(HttpStatus.FOUND, "invalid username ", null);
+
+        String userName = requestData.getUserName();
+        if (userName != null && !isValidUserName(userName)) {
+            return new ResponseObject(HttpStatus.FOUND, "invalid user name", null);
         }
 
-        MerchantEmployee merchantEmployee = merchantEmployeeRepository
-                .getMerchantEmployeeByPhoneAndPassword(phone, Hash.getHash(password)).get(0);
+        String password = requestData.getPassword();
+        if (!isValidPassword(phone, userName, password)) {
+            return new ResponseObject(HttpStatus.FOUND, "wrong password", null);
+        }
+
+        List<MerchantEmployee> merchantEmployees = merchantEmployeeRepository
+                .getMerchantEmployeeByPhoneAndUserNameAndPassword(phone, userName, Hash.getHash(password));
+        if (merchantEmployees.size() < 1) {
+            return new ResponseObject(HttpStatus.FOUND, "this user is not created before", null);
+        }
+        MerchantEmployee merchantEmployee = merchantEmployees.get(0);
 
         Permission permission = permissionRepository.getPermissionById(
                 merchantEmployee.getPermission().getId()
@@ -48,6 +59,7 @@ public class MerchantEmployeeLoginService {
         responsePermissions.setAllowExport(permission.getAllowExport() == 1);
 
         MerchantEmployeeResponseLoginData responseData = new MerchantEmployeeResponseLoginData();
+        responseData.setUserId(merchantEmployee.getId());
         responseData.setPhone(merchantEmployee.getPhone());
         responseData.setUserName(merchantEmployee.getUserName());
         responseData.setPermissions(responsePermissions);
@@ -60,9 +72,15 @@ public class MerchantEmployeeLoginService {
                 return false;
         return true;
     }
+
+    boolean isValidUserName(String userName) {
+        for (int i = 0; i < userName.length(); ++i)
+            if (userName.charAt(i) == ' ') return false;
+        return true;
+    }
     
-    boolean isValidPassword(String phone, String password) {
-        List<String> passwordList =  merchantEmployeeRepository.password(phone);
+    boolean isValidPassword(String phone, String userName, String password) {
+        List<String> passwordList =  merchantEmployeeRepository.password(phone, userName);
         if (passwordList.size() != 1) return false;
         return passwordList.get(0).equals(Hash.getHash(password));
     }

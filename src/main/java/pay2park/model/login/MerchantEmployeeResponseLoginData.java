@@ -9,11 +9,11 @@ public class MerchantEmployeeResponseLoginData {
         this.userName = userName;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
@@ -34,7 +34,7 @@ public class MerchantEmployeeResponseLoginData {
     }
 
     String userName;
-    String userId;
+    int userId;
     String phone;
     MerchantEmployeePermissions permissions;
 }

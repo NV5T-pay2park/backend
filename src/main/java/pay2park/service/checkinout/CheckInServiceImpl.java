@@ -12,10 +12,7 @@ import pay2park.model.entityFromDB.Ticket;
 import pay2park.model.parking.VehicleData;
 import pay2park.model.ticket.TicketData;
 import pay2park.model.ticket.ResponseTicketData;
-import pay2park.repository.EndUserRepository;
-import pay2park.repository.ParkingLotRepository;
-import pay2park.repository.TicketsRepository;
-import pay2park.repository.VehicleTypeRepository;
+import pay2park.repository.*;
 import pay2park.service.ticket.TicketService;
 import pay2park.service.websocket.Socket;
 
@@ -36,27 +33,37 @@ public class CheckInServiceImpl implements CheckInService {
     @Autowired
     Socket socket;
 
+    @Autowired
+    PendingTicketRepository pendingTicketRepository;
+
     public ResponseObject checkIn(CheckInData checkInData) {
         ResponseTicketData ticket = new ResponseTicketData();
-        socket.RequestToEnterLicensePlate(checkInData.getParkingLotID());
-        VehicleData vehicleData = getInformationCheckInData();
-        if (!checkCheckInData(checkInData)) {
-            return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
-        }
-        if (!isValidInformationCheckIn(vehicleData)) {
-            return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
-        }
         if (!isValidNumberSlotRemaining(checkInData)) {
             return new ResponseObject(HttpStatus.FOUND, "Sold out", ticket);
         }
+        if (!checkCheckInData(checkInData)) {
+            return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
+        }
+
+        if (!pendingTicketRepository.addPendingTicket(checkInData)) {
+            return new ResponseObject(HttpStatus.FOUND, "This user already in queue", ticket);
+        }
+        socket.RequestToEnterLicensePlate(checkInData);
+        VehicleData vehicleData = getInformationCheckInData(checkInData);
+
+        if (!isValidInformationCheckIn(vehicleData)) {
+            return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
+        }
+
         List<Ticket> ticketsIsCreated = getTicketIsCreated(checkInData, vehicleData);
         if (ticketsIsCreated.size() > 0) {
             Ticket ticketIsCreated = ticketsIsCreated.get(0);
-            ticket = new ResponseTicketData(ticketIsCreated.getId(), ticketIsCreated.getCheckInTime(), null, null,
+            ticket = new ResponseTicketData(ticketIsCreated.getId(),
+                    Extension.formatTime(ticketIsCreated.getCheckInTime()), null,
                     ticketIsCreated.getLicensePlates(), ticketIsCreated.getVehicleType().getVehicleTypeName(),
                     ticketIsCreated.getEndUser().getId(),
                     ticketIsCreated.getEndUser().getFirstName() + ' ' + ticketIsCreated.getEndUser().getLastName(),
-                    ticketIsCreated.getParkingLot().getId(), ticketIsCreated.getParkingLot().getParkingLotName(), false);
+                    ticketIsCreated.getParkingLot().getId(), ticketIsCreated.getParkingLot().getParkingLotName(), false, null);
             socket.SendCheckInFail(checkInData.getParkingLotID());
             return new ResponseObject(HttpStatus.BAD_REQUEST, "Ticket is created", ticket);
         } else {
@@ -79,19 +86,16 @@ public class CheckInServiceImpl implements CheckInService {
     }
 
     private boolean isValidInformationCheckIn(VehicleData vehicleData) {
+        if (vehicleData == null) {
+            return false;
+        }
         boolean checkVehicleType = vehicleTypeRepository.
                 existsById(vehicleData.getVehicleTypeID());
         boolean checkLicensePlate = vehicleData.getLicensePlate().length() != 0;
         return checkLicensePlate && checkVehicleType;
     }
 
-    @Override
-    public ResponseObject getInformationCheckInData(VehicleData vehicleData) {
-        if (isValidInformationCheckInData(vehicleData)) {
-            return new ResponseObject(HttpStatus.OK, "Success", vehicleData);
-        }
-        return new ResponseObject(HttpStatus.FOUND, "Found", "");
-    }
+
 
     private boolean isValidInformationCheckInData(VehicleData vehicleData) {
         boolean checkVehicleType = vehicleTypeRepository.existsById(vehicleData.getVehicleTypeID());
@@ -105,8 +109,19 @@ public class CheckInServiceImpl implements CheckInService {
         return ticketsRepository.getTicketByEndUserIDAndParkingLot(endUser.get(), parkingLot.get(), vehicleData.getLicensePlate());
     }
 
-    private VehicleData getInformationCheckInData() {
-        return new VehicleData(1, Extension.getLicensePlate());
+    @Override
+    public ResponseObject getInformationCheckInData(CheckInData checkInData,VehicleData vehicleData) {
+        if (isValidInformationCheckInData(vehicleData)) {
+            pendingTicketRepository.setPendingTicketInformation(checkInData, vehicleData);
+            return new ResponseObject(HttpStatus.OK, "Success", vehicleData);
+        }
+        return new ResponseObject(HttpStatus.FOUND, "Found", "");
+    }
+    private VehicleData getInformationCheckInData(CheckInData checkInData) {
+        while (pendingTicketRepository.isPendingTicket(checkInData));
+        VehicleData result = pendingTicketRepository.getPendingTicketInformation(checkInData);
+        pendingTicketRepository.removePendingTicket(checkInData);
+        return result;
     }
 
     private boolean isValidNumberSlotRemaining(CheckInData checkInData) {

@@ -1,5 +1,6 @@
 package pay2park.service.checkinout;
 
+import net.bytebuddy.utility.dispatcher.JavaDispatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -9,10 +10,7 @@ import pay2park.model.ResponseObject;
 import pay2park.model.checkinout.CheckOutData;
 
 import pay2park.model.checkinout.PreCheckOutData;
-import pay2park.model.entityFromDB.ParkingLot;
-import pay2park.model.entityFromDB.PaymentUrl;
-import pay2park.model.entityFromDB.PriceTicket;
-import pay2park.model.entityFromDB.Ticket;
+import pay2park.model.entityFromDB.*;
 
 import pay2park.model.payment.OrderData;
 import pay2park.model.payment.QueryData;
@@ -46,6 +44,8 @@ public class CheckOutServiceImpl implements CheckOutService {
     QueryOrderService queryOrderService;
     @Autowired
     PriceTicketRepository priceTicketRepository;
+    @Autowired
+    TransactionRepository transactionRepository;
 
     @Override
     public ResponseObject preCheckOut(PreCheckOutData checkOutData) {
@@ -71,14 +71,13 @@ public class CheckOutServiceImpl implements CheckOutService {
         Ticket ticketCheckout = ticketsRepository.findById(checkOutData.getTicketID()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
         Duration duration = Duration.between(ticketCheckout.getCheckInTime(), time);
         double minuteTime = duration.toMinutes();
-        double hourTime = minuteTime/60;
+        double hourTime = minuteTime / 60;
         List<PriceTicket> listPriceTicket = priceTicketRepository.getPriceTicketByParkingLotIdAndVehicleType(ticketCheckout.getParkingLot(), ticketCheckout.getVehicleType());
         int amount = calculateAmountOfTicket(hourTime, listPriceTicket);
 
         if (amount <= 0) {
             return new ResponseObject(HttpStatus.FOUND, "payment failed with amount of ticket", "");
         }
-        System.out.println(amount);
         // Check checkout
         String appTransId = getCurrentTimeString("yyMMdd") + "_" + endUserId + ticketID.toString();
         boolean appTransIdExist = paymentUrlRepository.existsById(appTransId);
@@ -117,11 +116,19 @@ public class CheckOutServiceImpl implements CheckOutService {
             // update ticket checkout time and slot of parking
             Ticket ticketUpdate = ticketsRepository.findById(ticketID).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
             ticketUpdate.setCheckOutTime(time);
+            ticketUpdate.setAmount(amount);
             ticketsRepository.save(ticketUpdate);
             ParkingLot parkingLotUpdate = parkingLotRepository.findById(ticketUpdate.getParkingLot().getId()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
             int newSlotRemaining = parkingLotUpdate.getNumberSlotRemaining() + 1;
             parkingLotUpdate.setNumberSlotRemaining(newSlotRemaining);
             parkingLotRepository.save(parkingLotUpdate);
+
+            // Add transaction
+//            Transaction transaction = new Transaction();
+//            transaction.setTransactionType("38");
+//            transaction.setTransactionDate(Instant.now());
+//            transaction.setTicket(ticketUpdate);
+//            transactionRepository.save(transaction);
 
             return new ResponseObject(HttpStatus.OK, "checkout successfully", "");
         }
@@ -149,9 +156,8 @@ public class CheckOutServiceImpl implements CheckOutService {
         return fmt.format(cal.getTimeInMillis());
     }
 
-
     public int calculateAmountOfTicket(double parkingHour, List<PriceTicket> priceTicketList) {
-        Comparator<PriceTicket> compareById = (PriceTicket o1, PriceTicket o2) -> o1.getPeriodTime().compareTo( o2.getPeriodTime() );
+        Comparator<PriceTicket> compareById = (PriceTicket o1, PriceTicket o2) -> o1.getPeriodTime().compareTo(o2.getPeriodTime());
         priceTicketList.sort(compareById);
         int result = 0;
         for (int i = 0; i < priceTicketList.size(); i++) {
