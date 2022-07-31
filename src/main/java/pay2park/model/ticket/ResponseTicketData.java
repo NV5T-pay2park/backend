@@ -1,5 +1,7 @@
 package pay2park.model.ticket;
 
+import pay2park.model.entityFromDB.Ticket;
+
 import java.time.Instant;
 import java.util.Date;
 
@@ -33,6 +35,20 @@ public class ResponseTicketData {
         this.status = status;
         this.amount = amount;
     }
+    public ResponseTicketData(Ticket ticket){
+        this.ticketID = ticket.getId();
+        this.checkInTime = ticket.getCheckInTime();
+        this.checkOutTime = ticket.getCheckOutTime();
+        this.licensePlate = ticket.getLicensePlates();
+        this.vehicleType = ticket.getVehicleType().getVehicleTypeName();
+        this.endUserID = ticket.getEndUser().getId();
+        this.endUserName = ticket.getEndUser().getFirstName() + " " + ticket.getEndUser().getLastName();
+        this.parkingLotID = ticket.getParkingLot().getId();
+        this.parkingLotName = ticket.getParkingLot().getParkingLotName();
+        this.status = ticket.getCheckOutTime() != null ? true: false;
+        this.amount = ticket.getAmount();
+    }
+
 
     public Long getTicketID() {
         return ticketID;
