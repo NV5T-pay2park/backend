@@ -36,8 +36,5 @@ public class ParkingMerchantListData {
         this.phone = parkingLot.getPhoneNumber();
         this.status = parkingLot.getStatus();
         this.image = null;
-
-        System.out.println(this.id);
-        System.out.println(this.name);
     }
 }
