@@ -1,9 +1,9 @@
-package pay2park.model.parking;
+package pay2park.model.merchant;
 
 import pay2park.model.entityFromDB.ParkingLot;
 import pay2park.model.entityFromDB.ParkingLotImage;
 
-public class ParkingMerchantListData {
+public class ParkingLotListData {
     public Integer id;
     public String name;
     public String timeOpen;
@@ -14,7 +14,7 @@ public class ParkingMerchantListData {
     public Integer status;
     public String image;
 
-    public ParkingMerchantListData(ParkingLot parkingLot, ParkingLotImage parkingLotImage) {
+    public ParkingLotListData(ParkingLot parkingLot, ParkingLotImage parkingLotImage) {
         this.id = parkingLot.getId();
         this.name = parkingLot.getParkingLotName();
         this.timeOpen = parkingLot.getTimeOpen();
@@ -26,7 +26,7 @@ public class ParkingMerchantListData {
         this.image = parkingLotImage.getUrl();
     }
 
-    public ParkingMerchantListData(ParkingLot parkingLot) {
+    public ParkingLotListData(ParkingLot parkingLot) {
         this.id = parkingLot.getId();
         this.name = parkingLot.getParkingLotName();
         this.timeOpen = parkingLot.getTimeOpen();

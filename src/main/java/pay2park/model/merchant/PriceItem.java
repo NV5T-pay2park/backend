@@ -1,4 +1,4 @@
-package pay2park.model.parking;
+package pay2park.model.merchant;
 
 import pay2park.model.entityFromDB.PriceTicket;
 

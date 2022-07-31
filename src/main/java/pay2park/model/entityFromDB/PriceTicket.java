@@ -1,7 +1,5 @@
 package pay2park.model.entityFromDB;
 
-import pay2park.model.parking.PriceItem;
-
 import javax.persistence.*;
 
 @Entity

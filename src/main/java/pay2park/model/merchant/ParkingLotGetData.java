@@ -1,12 +1,12 @@
-package pay2park.model.parking;
+package pay2park.model.merchant;
 
 import pay2park.model.entityFromDB.ParkingLot;
-import pay2park.model.entityFromDB.ParkingLotImage;
 import pay2park.model.entityFromDB.PriceTicket;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ParkingMerchantGetData {
+public class ParkingLotGetData {
 
     public Integer id;
     public String name;
@@ -21,7 +21,7 @@ public class ParkingMerchantGetData {
     public String phone;
     public List<PriceWithVehicle> priceTable;
 
-    public ParkingMerchantGetData(ParkingLot parkingLot, List<PriceTicket> priceTickets) {
+    public ParkingLotGetData(ParkingLot parkingLot, List<PriceTicket> priceTickets) {
         this.id = parkingLot.getId();
         this.name = parkingLot.getParkingLotName();
         this.numberSlot = parkingLot.getNumberSlot();
@@ -34,6 +34,7 @@ public class ParkingMerchantGetData {
         this.timeClose = parkingLot.getTimeClose();
         this.phone = parkingLot.getPhoneNumber();
 
+        this.priceTable = new ArrayList<>();
         for (PriceTicket priceTicket : priceTickets) {
             // add priceWithVehicle
             boolean isCreated = false;
@@ -44,7 +45,7 @@ public class ParkingMerchantGetData {
                 }
             }
             if (!isCreated) {
-                this.priceTable.add(new PriceWithVehicle(priceTicket.getVehicleType().getId()));
+                this.priceTable.add(new PriceWithVehicle(priceTicket.getVehicleType().getId(), new ArrayList<>()));
             }
 
             // add priceItem

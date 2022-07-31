@@ -1,9 +1,9 @@
-package pay2park.service.parking;
+package pay2park.service.merchant;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pay2park.model.entityFromDB.*;
-import pay2park.model.parking.*;
+import pay2park.model.merchant.*;
 import pay2park.repository.*;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ParkingMerchantServiceImpl implements ParkingMerchantService{
+public class ParkingLotServiceImpl implements ParkingLotService {
 
     @Autowired
     ParkingLotRepository parkingLotRepository;
@@ -29,17 +29,17 @@ public class ParkingMerchantServiceImpl implements ParkingMerchantService{
     VehicleTypeRepository vehicleTypeRepository;
 
     @Override
-    public List<ParkingMerchantListData> list(Integer merchantId) {
+    public List<ParkingLotListData> list(Integer merchantId) {
         List<ParkingLot> parkingLots = parkingLotRepository.findByMerchantId(merchantId);
 
-        List<ParkingMerchantListData> parkingMerchantList = new ArrayList<>();
+        List<ParkingLotListData> parkingMerchantList = new ArrayList<>();
 
         for (ParkingLot parkingLot : parkingLots) {
             List<ParkingLotImage> parkingLotImageList = parkingLotImageRepository.getAllImageByParkingLot(parkingLot);
             if (parkingLotImageList.size() > 0) {
-                parkingMerchantList.add(new ParkingMerchantListData(parkingLot, parkingLotImageList.get(0)));
+                parkingMerchantList.add(new ParkingLotListData(parkingLot, parkingLotImageList.get(0)));
             } else {
-                parkingMerchantList.add(new ParkingMerchantListData(parkingLot));
+                parkingMerchantList.add(new ParkingLotListData(parkingLot));
             }
         }
 
@@ -47,34 +47,34 @@ public class ParkingMerchantServiceImpl implements ParkingMerchantService{
     }
 
     @Override
-    public boolean create(ParkingMerchantCreateData parkingMerchantCreateData) {
+    public boolean create(ParkingLotCreateData parkingLotCreateData) {
         try {
             ParkingLot parkingLot = new ParkingLot();
 
-            parkingLot.setParkingLotName(parkingMerchantCreateData.parkingLotName);
-            parkingLot.setNumberSlot(parkingMerchantCreateData.numberSlot);
-            parkingLot.setNumberSlotRemaining(parkingMerchantCreateData.numberSlot);
-            parkingLot.setStreet(parkingMerchantCreateData.street);
-            parkingLot.setWard(parkingMerchantCreateData.ward);
-            parkingLot.setDistrict(parkingMerchantCreateData.district);
-            parkingLot.setCity(parkingMerchantCreateData.city);
+            parkingLot.setParkingLotName(parkingLotCreateData.parkingLotName);
+            parkingLot.setNumberSlot(parkingLotCreateData.numberSlot);
+            parkingLot.setNumberSlotRemaining(parkingLotCreateData.numberSlot);
+            parkingLot.setStreet(parkingLotCreateData.street);
+            parkingLot.setWard(parkingLotCreateData.ward);
+            parkingLot.setDistrict(parkingLotCreateData.district);
+            parkingLot.setCity(parkingLotCreateData.city);
             parkingLot.setStatus(1); // actived
 
-            Optional<Merchant> merchantOptional = merchantRepository.findById(parkingMerchantCreateData.merchantId);
+            Optional<Merchant> merchantOptional = merchantRepository.findById(parkingLotCreateData.merchantId);
             if (merchantOptional.isPresent())
                 return false;
             parkingLot.setMerchant(merchantOptional.get());
 
-            parkingLot.setLat(parkingMerchantCreateData.lat);
-            parkingLot.setLng(parkingMerchantCreateData.lng);
-            parkingLot.setTimeOpen(parkingMerchantCreateData.timeOpen);
-            parkingLot.setTimeClose(parkingMerchantCreateData.timeClose);
-            parkingLot.setPhoneNumber(parkingMerchantCreateData.phoneNumber);
+            parkingLot.setLat(parkingLotCreateData.lat);
+            parkingLot.setLng(parkingLotCreateData.lng);
+            parkingLot.setTimeOpen(parkingLotCreateData.timeOpen);
+            parkingLot.setTimeClose(parkingLotCreateData.timeClose);
+            parkingLot.setPhoneNumber(parkingLotCreateData.phoneNumber);
 
             parkingLotRepository.save(parkingLot);
 
 
-            for (PriceWithVehicle priceWithVehicle : parkingMerchantCreateData.priceTable) {
+            for (PriceWithVehicle priceWithVehicle : parkingLotCreateData.priceTable) {
                 Optional<VehicleType> vehicleTypeOptional = vehicleTypeRepository.findById(priceWithVehicle.vehicleTypeId);
                 if (!vehicleTypeOptional.isPresent()) {
                     return false;
@@ -118,27 +118,27 @@ public class ParkingMerchantServiceImpl implements ParkingMerchantService{
     }
 
     @Override
-    public boolean update(ParkingMerchantUpdateData parkingMerchantUpdateData) {
+    public boolean update(ParkingLotUpdateData parkingLotUpdateData) {
         try {
-            Optional<ParkingLot> parkingLotOptional = parkingLotRepository.findById(parkingMerchantUpdateData.parkingLotId);
+            Optional<ParkingLot> parkingLotOptional = parkingLotRepository.findById(parkingLotUpdateData.parkingLotId);
             if (!parkingLotOptional.isPresent()) {
                 return false;
             }
             ParkingLot parkingLot = parkingLotOptional.get();
 
-            parkingLot.setParkingLotName(parkingMerchantUpdateData.parkingLotName);
-            parkingLot.setNumberSlot(parkingMerchantUpdateData.numberSlot);
-            parkingLot.setNumberSlotRemaining(parkingMerchantUpdateData.numberSlot);
-            parkingLot.setStreet(parkingMerchantUpdateData.street);
-            parkingLot.setWard(parkingMerchantUpdateData.ward);
-            parkingLot.setDistrict(parkingMerchantUpdateData.district);
-            parkingLot.setCity(parkingMerchantUpdateData.city);
-            parkingLot.setStatus(parkingMerchantUpdateData.status);
-            parkingLot.setLat(parkingMerchantUpdateData.lat);
-            parkingLot.setLng(parkingMerchantUpdateData.lng);
-            parkingLot.setTimeOpen(parkingMerchantUpdateData.timeOpen);
-            parkingLot.setTimeClose(parkingMerchantUpdateData.timeClose);
-            parkingLot.setPhoneNumber(parkingMerchantUpdateData.phoneNumber);
+            parkingLot.setParkingLotName(parkingLotUpdateData.parkingLotName);
+            parkingLot.setNumberSlot(parkingLotUpdateData.numberSlot);
+            parkingLot.setNumberSlotRemaining(parkingLotUpdateData.numberSlot);
+            parkingLot.setStreet(parkingLotUpdateData.street);
+            parkingLot.setWard(parkingLotUpdateData.ward);
+            parkingLot.setDistrict(parkingLotUpdateData.district);
+            parkingLot.setCity(parkingLotUpdateData.city);
+            parkingLot.setStatus(parkingLotUpdateData.status);
+            parkingLot.setLat(parkingLotUpdateData.lat);
+            parkingLot.setLng(parkingLotUpdateData.lng);
+            parkingLot.setTimeOpen(parkingLotUpdateData.timeOpen);
+            parkingLot.setTimeClose(parkingLotUpdateData.timeClose);
+            parkingLot.setPhoneNumber(parkingLotUpdateData.phoneNumber);
 
             parkingLotRepository.save(parkingLot);
 
@@ -147,7 +147,7 @@ public class ParkingMerchantServiceImpl implements ParkingMerchantService{
                 priceTicketRepository.delete(priceTicket);
             }
 
-            for (PriceWithVehicle priceWithVehicle : parkingMerchantUpdateData.priceTable) {
+            for (PriceWithVehicle priceWithVehicle : parkingLotUpdateData.priceTable) {
                 Optional<VehicleType> vehicleTypeOptional = vehicleTypeRepository.findById(priceWithVehicle.vehicleTypeId);
                 if (!vehicleTypeOptional.isPresent()) {
                     return false;
@@ -174,7 +174,7 @@ public class ParkingMerchantServiceImpl implements ParkingMerchantService{
     }
 
     @Override
-    public ParkingMerchantGetData getParkingLot(Integer parkingLotId) {
+    public ParkingLotGetData getParkingLot(Integer parkingLotId) {
         Optional<ParkingLot> parkingLotOptional = parkingLotRepository.findById(parkingLotId);
         if (!parkingLotOptional.isPresent()) {
             System.out.println("Not found paking lot!!!");
@@ -185,7 +185,7 @@ public class ParkingMerchantServiceImpl implements ParkingMerchantService{
 
         List<PriceTicket> priceTickets = priceTicketRepository.getPriceTicketByParkingLotId(parkingLot);
 
-        ParkingMerchantGetData data = new ParkingMerchantGetData(parkingLot, priceTickets);
+        ParkingLotGetData data = new ParkingLotGetData(parkingLot, priceTickets);
 
         return data;
     }
