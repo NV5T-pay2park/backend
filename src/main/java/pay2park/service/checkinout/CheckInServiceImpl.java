@@ -45,13 +45,11 @@ public class CheckInServiceImpl implements CheckInService {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
         }
 
-//        if (!pendingTicketRepository.addPendingTicket(checkInData)) {
-//            return new ResponseObject(HttpStatus.FOUND, "This user already in queue", ticket);
-//        }
-//        socket.RequestToEnterLicensePlate(checkInData);
-//        VehicleData vehicleData = getInformationCheckInData(checkInData);
-
-        VehicleData vehicleData = new VehicleData(1, Extension.getLicensePlate());
+        if (!pendingTicketRepository.addPendingTicket(checkInData)) {
+            return new ResponseObject(HttpStatus.FOUND, "This user already in queue", ticket);
+        }
+        socket.RequestToEnterLicensePlate(checkInData);
+        VehicleData vehicleData = getInformationCheckInData(checkInData);
         if (!isValidInformationCheckIn(vehicleData)) {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
         }
@@ -87,13 +85,14 @@ public class CheckInServiceImpl implements CheckInService {
     }
 
     private boolean isValidInformationCheckIn(VehicleData vehicleData) {
+        if (vehicleData == null) {
+            return false;
+        }
         boolean checkVehicleType = vehicleTypeRepository.
                 existsById(vehicleData.getVehicleTypeID());
         boolean checkLicensePlate = vehicleData.getLicensePlate().length() != 0;
         return checkLicensePlate && checkVehicleType;
     }
-
-
 
     private boolean isValidInformationCheckInData(VehicleData vehicleData) {
         boolean checkVehicleType = vehicleTypeRepository.existsById(vehicleData.getVehicleTypeID());
@@ -120,7 +119,6 @@ public class CheckInServiceImpl implements CheckInService {
         pendingTicketRepository.removePendingTicket(checkInData);
         return result;
     }
-
     private boolean isValidNumberSlotRemaining(CheckInData checkInData) {
         Optional<ParkingLot> parkingLot = parkingLotRepository.findById(checkInData.getParkingLotID());
         return parkingLot.get().getNumberSlotRemaining() > 0;
