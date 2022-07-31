@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import pay2park.IntegrationTest;
+import pay2park.controller.ResponseObject2JSON;
 import pay2park.model.ResponseObject;
 import pay2park.model.login.MerchantEmployeeRequestLoginData;
 import pay2park.service.login.MerchantEmployeeLoginService;
@@ -43,13 +44,10 @@ class MerchantEmployeeLoginControllerTest {
         reqJson.put("password", req.getPassword());
 
         ResponseObject expectedRes = loginService.login(req);
-        JSONObject expected = new JSONObject();
-        expected.put("status", expectedRes.getStatus());
-        expected.put("message", expectedRes.getMessage());
-        expected.put("data", expectedRes.getData());
+        JSONObject expected = ResponseObject2JSON.cast(expectedRes);
 
         // WHEN
-        String res = mockMvc.perform( MockMvcRequestBuilders
+        String actual = mockMvc.perform( MockMvcRequestBuilders
                 .post("/api/loginmerchant/")
                 .content(String.valueOf(reqJson))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -57,6 +55,6 @@ class MerchantEmployeeLoginControllerTest {
             .andReturn().getResponse().getContentAsString();
 
         // THEN
-        assertEquals(mapper.readTree(String.valueOf(expected)), mapper.readTree(res));
+        assertEquals(mapper.readTree(String.valueOf(expected)), mapper.readTree(actual));
     }
 }
