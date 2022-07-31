@@ -97,7 +97,7 @@ public class CheckInServiceImpl implements CheckInService {
 
 
 
-    private boolean isValidInformationCheckInData(VehicleData vehicleData) {
+    boolean isValidInformationCheckInData(VehicleData vehicleData) {
         boolean checkVehicleType = vehicleTypeRepository.existsById(vehicleData.getVehicleTypeID());
         boolean checkLicensePlate = vehicleData.getLicensePlate().length() > 0;
         return checkLicensePlate && checkVehicleType;
@@ -124,7 +124,7 @@ public class CheckInServiceImpl implements CheckInService {
         return result;
     }
 
-    private boolean isValidNumberSlotRemaining(CheckInData checkInData) {
+    public boolean isValidNumberSlotRemaining(CheckInData checkInData) {
         Optional<ParkingLot> parkingLot = parkingLotRepository.findById(checkInData.getParkingLotID());
         return parkingLot.get().getNumberSlotRemaining() > 0;
     }
