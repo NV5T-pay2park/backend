@@ -284,7 +284,7 @@ CREATE TABLE `tickets` (
   CONSTRAINT `ticket_end_user_fk` FOREIGN KEY (`end_user_id`) REFERENCES `end_users` (`end_user_id`),
   CONSTRAINT `ticket_parking_lot` FOREIGN KEY (`parking_lot_id`) REFERENCES `parking_lots` (`parking_lot_id`),
   CONSTRAINT `ticket_vehicle_type_fk` FOREIGN KEY (`vehicle_type_id`) REFERENCES `vehicle_types` (`vehicle_type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2207291418121735 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
