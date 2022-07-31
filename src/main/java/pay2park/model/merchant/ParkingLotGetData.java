@@ -12,7 +12,10 @@ public class ParkingLotGetData {
     public String name;
     public Integer numberSlot;
     public Integer numberSlotRemaining;
-    public String address;
+    public String street;
+    public String ward;
+    public String district;
+    public String city;
     public Integer status;
     public Double lat;
     public Double lng;
@@ -26,7 +29,10 @@ public class ParkingLotGetData {
         this.name = parkingLot.getParkingLotName();
         this.numberSlot = parkingLot.getNumberSlot();
         this.numberSlotRemaining = parkingLot.getNumberSlotRemaining();
-        this.address = parkingLot.getStreet() + ", " +  parkingLot.getWard() + ", " + parkingLot.getDistrict() + ", " + parkingLot.getCity();
+        this.street = parkingLot.getStreet();
+        this.ward = parkingLot.getWard();
+        this.district = parkingLot.getDistrict();
+        this.city = parkingLot.getCity();
         this.status = parkingLot.getStatus();
         this.lat = parkingLot.getLat();
         this.lng = parkingLot.getLng();
