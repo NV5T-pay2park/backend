@@ -82,7 +82,6 @@ public class ImageServiceImpl implements ImageService {
         } catch (IOException e) {
             return new ResponseObject(HttpStatus.FOUND, "Found", "");
         }
-
     }
 
     public boolean isExists(String id) {
