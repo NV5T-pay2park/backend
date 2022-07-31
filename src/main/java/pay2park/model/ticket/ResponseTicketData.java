@@ -1,14 +1,12 @@
 package pay2park.model.ticket;
 
+import pay2park.extension.Extension;
 import pay2park.model.entityFromDB.Ticket;
-
-import java.time.Instant;
-import java.util.Date;
 
 public class ResponseTicketData {
     private Long ticketID;
-    private Instant checkInTime;
-    private Instant checkOutTime;
+    private String checkInTime;
+    private String checkOutTime;
     private String licensePlate;
     private String vehicleType;
     private int endUserID;
@@ -21,8 +19,9 @@ public class ResponseTicketData {
 
     }
 
-    public ResponseTicketData(Long ticketID, Instant checkInTime, Instant checkOutTime,
-                              String licensePlate, String vehicleType, int endUserID, String endUserName, int parkingLotID, String parkingLotName, boolean status , Integer amount) {
+    public ResponseTicketData(Long ticketID, String checkInTime, String checkOutTime,
+                              String licensePlate, String vehicleType, int endUserID, String endUserName,
+                              int parkingLotID, String parkingLotName, boolean status , Integer amount) {
         this.ticketID = ticketID;
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
@@ -37,15 +36,15 @@ public class ResponseTicketData {
     }
     public ResponseTicketData(Ticket ticket){
         this.ticketID = ticket.getId();
-        this.checkInTime = ticket.getCheckInTime();
-        this.checkOutTime = ticket.getCheckOutTime();
+        this.checkInTime = Extension.formatTime(ticket.getCheckInTime());
+        this.checkOutTime = Extension.formatTime(ticket.getCheckOutTime());
         this.licensePlate = ticket.getLicensePlates();
         this.vehicleType = ticket.getVehicleType().getVehicleTypeName();
         this.endUserID = ticket.getEndUser().getId();
         this.endUserName = ticket.getEndUser().getFirstName() + " " + ticket.getEndUser().getLastName();
         this.parkingLotID = ticket.getParkingLot().getId();
         this.parkingLotName = ticket.getParkingLot().getParkingLotName();
-        this.status = ticket.getCheckOutTime() != null ? true: false;
+        this.status = ticket.getCheckOutTime() != null;
         this.amount = ticket.getAmount();
     }
 
@@ -58,19 +57,19 @@ public class ResponseTicketData {
         this.ticketID = ticketID;
     }
 
-    public Instant getCheckInTime() {
+    public String getCheckInTime() {
         return checkInTime;
     }
 
-    public void setCheckInTime(Instant checkInTime) {
+    public void setCheckInTime(String checkInTime) {
         this.checkInTime = checkInTime;
     }
 
-    public Instant getCheckOutTime() {
+    public String getCheckOutTime() {
         return checkOutTime;
     }
 
-    public void setCheckOutTime(Instant checkOutTime) {
+    public void setCheckOutTime(String checkOutTime) {
         this.checkOutTime = checkOutTime;
     }
 

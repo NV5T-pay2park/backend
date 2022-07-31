@@ -10,10 +10,7 @@ import java.util.Optional;
 
 public interface ImageService {
     ResponseObject getImageByID(String id);
-
     ResponseObject getAllImageByParkingLot(int id);
-
-    ResponseObject insertImage(MultipartFile multipartFile, int parkingLotID);
-
+    ResponseObject insertImage(List<MultipartFile> multipartFiles, int parkingLotID);
     ResponseObject deleteImage(String id);
 }
