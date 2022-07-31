@@ -32,7 +32,7 @@ class ParkingServiceImplTest {
 //        parkingList.add(new ParkingListData(parkingLot, 0.0, 0));
 //    }
 //        return parkingList;
-    @Autowired
+    @Mock
     ParkingLotRepository parkingLotRepository;
     @InjectMocks
     ParkingServiceImpl parkingServiceImpl = new ParkingServiceImpl();

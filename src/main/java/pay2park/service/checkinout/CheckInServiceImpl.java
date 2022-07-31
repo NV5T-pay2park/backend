@@ -85,7 +85,10 @@ public class CheckInServiceImpl implements CheckInService {
         return checkEndUserID && checkParkingLotID;
     }
 
-    private boolean isValidInformationCheckIn(VehicleData vehicleData) {
+    public boolean isValidInformationCheckIn(VehicleData vehicleData) {
+        if (vehicleData == null) {
+            return false;
+        }
         boolean checkVehicleType = vehicleTypeRepository.
                 existsById(vehicleData.getVehicleTypeID());
         boolean checkLicensePlate = vehicleData.getLicensePlate().length() != 0;
