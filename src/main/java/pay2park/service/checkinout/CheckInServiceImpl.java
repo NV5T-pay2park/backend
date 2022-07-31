@@ -115,11 +115,10 @@ public class CheckInServiceImpl implements CheckInService {
         return new ResponseObject(HttpStatus.FOUND, "Found", "");
     }
     private VehicleData getInformationCheckInData(CheckInData checkInData) {
-        return new VehicleData(1, "77C1-09876");
-//        while (pendingTicketRepository.isPendingTicket(checkInData));
-//        VehicleData result = pendingTicketRepository.getPendingTicketInformation(checkInData);
-//        pendingTicketRepository.removePendingTicket(checkInData);
-//        return result;
+        while (pendingTicketRepository.isPendingTicket(checkInData));
+        VehicleData result = pendingTicketRepository.getPendingTicketInformation(checkInData);
+        pendingTicketRepository.removePendingTicket(checkInData);
+        return result;
     }
 
     private boolean isValidNumberSlotRemaining(CheckInData checkInData) {
