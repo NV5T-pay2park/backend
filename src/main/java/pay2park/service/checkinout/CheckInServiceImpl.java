@@ -45,10 +45,10 @@ public class CheckInServiceImpl implements CheckInService {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
         }
 
-        if (!pendingTicketRepository.addPendingTicket(checkInData)) {
-            return new ResponseObject(HttpStatus.FOUND, "This user already in queue", ticket);
-        }
-        socket.RequestToEnterLicensePlate(checkInData);
+//        if (!pendingTicketRepository.addPendingTicket(checkInData)) {
+//            return new ResponseObject(HttpStatus.FOUND, "This user already in queue", ticket);
+//        }
+//        socket.RequestToEnterLicensePlate(checkInData);
         VehicleData vehicleData = getInformationCheckInData(checkInData);
 
         if (!isValidInformationCheckIn(vehicleData)) {
@@ -115,10 +115,11 @@ public class CheckInServiceImpl implements CheckInService {
         return new ResponseObject(HttpStatus.FOUND, "Found", "");
     }
     private VehicleData getInformationCheckInData(CheckInData checkInData) {
-        while (pendingTicketRepository.isPendingTicket(checkInData));
-        VehicleData result = pendingTicketRepository.getPendingTicketInformation(checkInData);
-        pendingTicketRepository.removePendingTicket(checkInData);
-        return result;
+        return new VehicleData(1, "77C1-09876");
+//        while (pendingTicketRepository.isPendingTicket(checkInData));
+//        VehicleData result = pendingTicketRepository.getPendingTicketInformation(checkInData);
+//        pendingTicketRepository.removePendingTicket(checkInData);
+//        return result;
     }
 
     private boolean isValidNumberSlotRemaining(CheckInData checkInData) {
