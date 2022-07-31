@@ -109,15 +109,19 @@ public class CheckInServiceImpl implements CheckInService {
         return ticketsRepository.getTicketByEndUserIDAndParkingLot(endUser.get(), parkingLot.get(), vehicleData.getLicensePlate());
     }
 
-    @Override
-    public ResponseObject getInformationCheckInData(CheckInData checkInData,VehicleData vehicleData) {
+    public ResponseObject getInformationByCheckInDataAndVehicleData(CheckInData checkInData, VehicleData vehicleData) {
         if (isValidInformationCheckInData(vehicleData)) {
             pendingTicketRepository.setPendingTicketInformation(checkInData, vehicleData);
             return new ResponseObject(HttpStatus.OK, "Success", vehicleData);
         }
         return new ResponseObject(HttpStatus.FOUND, "Found", "");
     }
-    private VehicleData getInformationCheckInData(CheckInData checkInData) {
+
+    public ResponseObject getResponseFromCheckInDataAndVehicleData(CheckInData checkInData, VehicleData informationCheckIn) {
+        return null;
+    }
+
+    public VehicleData getInformationCheckInData(CheckInData checkInData) {
         while (pendingTicketRepository.isPendingTicket(checkInData));
         VehicleData result = pendingTicketRepository.getPendingTicketInformation(checkInData);
         pendingTicketRepository.removePendingTicket(checkInData);

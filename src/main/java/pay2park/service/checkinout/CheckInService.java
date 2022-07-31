@@ -11,5 +11,7 @@ public interface CheckInService {
 
     VehicleData getInformationCheckInData(CheckInData checkInData);
 
+    ResponseObject getInformationByCheckInDataAndVehicleData(CheckInData checkInData, VehicleData vehicleData);
+
     ResponseObject getResponseFromCheckInDataAndVehicleData(CheckInData checkInData, VehicleData informationCheckIn);
 }

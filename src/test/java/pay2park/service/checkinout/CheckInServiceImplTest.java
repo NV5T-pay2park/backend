@@ -5,24 +5,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import pay2park.Pay2parkBackendApplication;
-import pay2park.model.ResponseObject;
 import pay2park.model.checkinout.CheckInData;
-import pay2park.model.checkinout.PreCheckOutData;
-import pay2park.model.entityFromDB.EndUser;
 import pay2park.model.entityFromDB.ParkingLot;
-import pay2park.model.entityFromDB.Ticket;
-import pay2park.model.entityFromDB.VehicleType;
 import pay2park.model.parking.VehicleData;
 import pay2park.repository.*;
 import pay2park.service.websocket.Socket;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -141,7 +132,7 @@ class CheckInServiceImplTest {
         VehicleData vehicleData1 = new VehicleData();
         vehicleData1.setVehicleTypeID(2);
         vehicleData1.setLicensePlate("sb");
-        assertEquals("Success", checkInServiceImpl.getInformationCheckInData(checkInData, vehicleData1).getMessage());
+        assertEquals("Success", checkInServiceImpl.getInformationByCheckInDataAndVehicleData(checkInData, vehicleData1).getMessage());
     }
 
     @DisplayName("information checkin")
