@@ -18,4 +18,9 @@ public class TicketController {
         ResponseObject responseObject = ticketService.getTicketByEndUserId(endUserID);
         return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
     }
+    @GetMapping("/getTicketByParkingLotId")
+    public ResponseEntity<ResponseObject> getTicketByParkingLotId(@RequestParam(value = "parkingLotId") int parkingLotId) {
+        ResponseObject responseObject = ticketService.getTicketByParkingLotId(parkingLotId);
+        return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
+    }
 }

@@ -87,6 +87,26 @@ public class TicketServiceImpl implements TicketService {
         return new ResponseObject(HttpStatus.OK, "Success", dataResponse);
     }
 
+    @Override
+    public ResponseObject getTicketByParkingLotId(int parkingLotId) {
+        if (!parkingLotRepository.existsById(parkingLotId)) {
+            return new ResponseObject(HttpStatus.FOUND, "Parking lot is not valid",
+                    new ArrayList<Ticket>());
+        }
+        Optional<ParkingLot> parkingLot = parkingLotRepository.findById(parkingLotId);
+        List<Ticket> ticketByEndUserID = ticketsRepository.getAllTicketByParkingLotID(parkingLot.get());
+        List<ResponseTicketData> dataResponse = ticketByEndUserID.stream().map(
+                i -> new ResponseTicketData(i.getId(), Extension.formatTime(i.getCheckInTime()),
+                        null,
+                        (i.getCheckOutTime() == null) ? null : calculateAmount(i.getId()), i.getLicensePlates(),
+                        i.getVehicleType().getVehicleTypeName(),
+                        i.getEndUser().getId(),
+                        i.getEndUser().getFirstName() + ' ' + i.getEndUser().getLastName(),
+                        i.getParkingLot().getId(), i.getParkingLot().getParkingLotName(),
+                        !(i.getCheckOutTime() == null))).sorted((t1, t2) -> t2.getCheckInTime().compareTo(t1.getCheckInTime())).collect(Collectors.toList());
+        return new ResponseObject(HttpStatus.OK, "Success", dataResponse);
+    }
+
     private Integer calculateAmount(Long ticketID) {
         return 5000;
     }

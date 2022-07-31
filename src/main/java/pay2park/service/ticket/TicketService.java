@@ -8,4 +8,6 @@ import pay2park.model.ticket.ResponseTicketData;
 public interface TicketService {
     ResponseTicketData createTicket(TicketData ticketData);
     ResponseObject getTicketByEndUserId(int endUserID);
+
+    ResponseObject getTicketByParkingLotId(int parkingLotId);
 }

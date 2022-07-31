@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/merchant/parkingLot")
+@RequestMapping("/api/merchant/parkingLot/")
 @CrossOrigin
 public class ParkingLotController {
 
