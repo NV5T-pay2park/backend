@@ -45,10 +45,10 @@ public class CheckInServiceImpl implements CheckInService {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
         }
 
-//        if (!pendingTicketRepository.addPendingTicket(checkInData)) {
-//            return new ResponseObject(HttpStatus.FOUND, "This user already in queue", ticket);
-//        }
-//        socket.RequestToEnterLicensePlate(checkInData);
+        if (!pendingTicketRepository.addPendingTicket(checkInData)) {
+            return new ResponseObject(HttpStatus.FOUND, "This user already in queue", ticket);
+        }
+        socket.RequestToEnterLicensePlate(checkInData);
         VehicleData vehicleData = getInformationCheckInData(checkInData);
 
         if (!isValidInformationCheckIn(vehicleData)) {
@@ -86,6 +86,9 @@ public class CheckInServiceImpl implements CheckInService {
     }
 
     private boolean isValidInformationCheckIn(VehicleData vehicleData) {
+        if (vehicleData == null) {
+            return false;
+        }
         boolean checkVehicleType = vehicleTypeRepository.
                 existsById(vehicleData.getVehicleTypeID());
         boolean checkLicensePlate = vehicleData.getLicensePlate().length() != 0;
