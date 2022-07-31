@@ -1,8 +1,5 @@
 package pay2park;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.SingletonManager;
-import com.cloudinary.utils.ObjectUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;

@@ -60,7 +60,7 @@ public class TicketServiceImpl implements TicketService {
             int numberSlotRemaining = parkingLotUpdate.getNumberSlotRemaining();
             parkingLotUpdate.setNumberSlotRemaining(numberSlotRemaining - 1);
             parkingLotRepository.save(parkingLotUpdate);
-            return new ResponseTicketData(id, Extension.formatTime(checkInTime), Extension.formatTime(checkInOut),
+            return new ResponseTicketData(id, Extension.formatTime(checkInTime), null,
                     licensePlate, vehicleTypeName, endUserID,
                     endUser.get().getFirstName() + ' ' + endUser.get().getLastName(),
                     parkingLotID, parkingLotName, false, amount);
