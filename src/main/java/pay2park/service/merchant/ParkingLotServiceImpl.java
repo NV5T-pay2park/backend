@@ -50,7 +50,6 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     public boolean create(ParkingLotCreateData parkingLotCreateData) {
         try {
             ParkingLot parkingLot = new ParkingLot();
-
             parkingLot.setParkingLotName(parkingLotCreateData.parkingLotName);
             parkingLot.setNumberSlot(parkingLotCreateData.numberSlot);
             parkingLot.setNumberSlotRemaining(parkingLotCreateData.numberSlot);
@@ -61,7 +60,8 @@ public class ParkingLotServiceImpl implements ParkingLotService {
             parkingLot.setStatus(1); // actived
 
             Optional<Merchant> merchantOptional = merchantRepository.findById(parkingLotCreateData.merchantId);
-            if (merchantOptional.isPresent())
+
+            if (!merchantOptional.isPresent())
                 return false;
             parkingLot.setMerchant(merchantOptional.get());
 
@@ -83,13 +83,9 @@ public class ParkingLotServiceImpl implements ParkingLotService {
 
                 for (PriceItem priceItem : priceWithVehicle.prices) {
 
-                    PriceTicket priceTicket = new PriceTicket();
+                    PriceTicket priceTicket = new PriceTicket(parkingLot, vehicleType, priceItem);
 
-                    priceTicket.setParkingLot(parkingLot);
-                    priceTicket.setVehicleType(vehicleType);
-                    priceTicket.setPeriodTime(priceItem.periodTime);
-                    priceTicket.setPrice(priceItem.price);
-                    priceTicket.setUnit(priceItem.unit);
+                    priceTicket.setId(new PriceTicketId(parkingLot.getId(), vehicleType.getId(), priceItem.periodTime));
 
                     priceTicketRepository.save(priceTicket);
                 }

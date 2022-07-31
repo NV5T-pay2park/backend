@@ -12,4 +12,6 @@ public class PriceItem {
         this.price = priceTicket.getPrice();
         this.unit = priceTicket.getUnit();
     }
+
+    public PriceItem() {}
 }

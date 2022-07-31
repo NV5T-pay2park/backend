@@ -10,4 +10,5 @@ public class PriceWithVehicle {
         this.vehicleTypeId = vehicleTypeId;
         this.prices = prices;
     }
+    public PriceWithVehicle(){}
 }
