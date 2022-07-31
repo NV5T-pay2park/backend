@@ -91,6 +91,27 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    public ResponseObject getTicketByParkingLotId(int parkingLotId) {
+        if (!parkingLotRepository.existsById(parkingLotId)) {
+            return new ResponseObject(HttpStatus.FOUND, "End user is not valid",
+                    new ArrayList<Ticket>());
+        }
+        Optional<ParkingLot> parkingLotOptional = parkingLotRepository.findById(parkingLotId);
+        List<Ticket> ticketList = ticketsRepository.getAllTicketByParkingLotID(parkingLotOptional.get());
+        List<ResponseTicketData> dataResponse = ticketList.stream().map(
+                        ticket -> new ResponseTicketData(ticket.getId(), Extension.formatTime(ticket.getCheckInTime()),
+                                (ticket.getCheckOutTime() == null) ? null : Extension.formatTime(ticket.getCheckOutTime()),
+                                ticket.getLicensePlates(),
+                                ticket.getVehicleType().getVehicleTypeName(),
+                                ticket.getEndUser().getId(),
+                                ticket.getEndUser().getFirstName() + ' ' + ticket.getEndUser().getLastName(),
+                                ticket.getParkingLot().getId(), ticket.getParkingLot().getParkingLotName(),
+                                !(ticket.getCheckOutTime() == null), ticket.getAmount())).
+                sorted((t1, t2) -> t2.getCheckInTime().compareTo(t1.getCheckInTime())).collect(Collectors.toList());
+        return new ResponseObject(HttpStatus.OK, "Success", dataResponse);
+    }
+
+    @Override
     public ResponseTicketData getTicketById(Long id){
         Ticket ticket = ticketsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + id));
         return new ResponseTicketData(ticket);
