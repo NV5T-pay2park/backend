@@ -1,7 +1,12 @@
 package pay2park.extension;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Extension {
@@ -35,9 +40,12 @@ public class Extension {
         return providerCode + "C1-" + licensePlate;
     }
     public static String formatTime(Instant instant) {
-        Date myDate = Date.from(instant);
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        formatter.setCalendar(new GregorianCalendar(TimeZone.getTimeZone("GMT+7")));
-        return formatter.format(myDate);
+        String dateTime = instant.toString();
+        String date = dateTime.substring(0, 10);
+        List<String> d = List.of(date.split("-"));
+        date = d.get(2) + "/" + d.get(1) + "/" + d.get(0);
+        String time = dateTime.substring(11, dateTime.length() - 1);
+        dateTime = date + " " + time;
+        return dateTime;
     }
 }
