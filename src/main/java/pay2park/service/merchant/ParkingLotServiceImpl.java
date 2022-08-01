@@ -28,6 +28,9 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     @Autowired
     VehicleTypeRepository vehicleTypeRepository;
 
+    @Autowired
+    MerchantEmployeeRepository merchantEmployeeRepository;
+
     @Override
     public List<ParkingLotListData> list(Integer merchantId) {
         List<ParkingLot> parkingLots = parkingLotRepository.findByMerchantId(merchantId);
@@ -47,7 +50,7 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
-    public boolean create(ParkingLotCreateData parkingLotCreateData) {
+    public ParkingLotCreateResponseData create(ParkingLotCreateData parkingLotCreateData) {
         try {
             ParkingLot parkingLot = new ParkingLot();
             parkingLot.setParkingLotName(parkingLotCreateData.parkingLotName);
@@ -62,7 +65,7 @@ public class ParkingLotServiceImpl implements ParkingLotService {
             Optional<Merchant> merchantOptional = merchantRepository.findById(parkingLotCreateData.merchantId);
 
             if (!merchantOptional.isPresent())
-                return false;
+                return new ParkingLotCreateResponseData(false, "Invalid merchantId");
             parkingLot.setMerchant(merchantOptional.get());
 
             parkingLot.setLat(parkingLotCreateData.lat);
@@ -77,7 +80,7 @@ public class ParkingLotServiceImpl implements ParkingLotService {
             for (PriceWithVehicle priceWithVehicle : parkingLotCreateData.priceTable) {
                 Optional<VehicleType> vehicleTypeOptional = vehicleTypeRepository.findById(priceWithVehicle.vehicleTypeId);
                 if (!vehicleTypeOptional.isPresent()) {
-                    return false;
+                    return new ParkingLotCreateResponseData(false, "Invalid vehicleTypeId");
                 }
                 VehicleType vehicleType = vehicleTypeOptional.get();
 
@@ -86,9 +89,9 @@ public class ParkingLotServiceImpl implements ParkingLotService {
                 }
             }
 
-            return true;
+            return new ParkingLotCreateResponseData(true, "Success", parkingLot.getId());
         } catch (Exception e) {
-            return false;
+            return new ParkingLotCreateResponseData(false, "Exception");
         }
     }
 
@@ -96,11 +99,14 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     public boolean delete(Integer parkingLotId) {
         try {
             Optional<ParkingLot> parkingLotOptional = parkingLotRepository.findById(parkingLotId);
-
-            if (!parkingLotOptional.isPresent())
+            if (!parkingLotOptional.isPresent()) {
                 return false;
+            }
+            ParkingLot parkingLot = parkingLotOptional.get();
 
-            parkingLotRepository.delete(parkingLotOptional.get());
+            parkingLot.setStatus(0);
+
+            parkingLotRepository.save(parkingLot);
 
             return true;
         } catch (Exception e) {
@@ -171,6 +177,19 @@ public class ParkingLotServiceImpl implements ParkingLotService {
         ParkingLotGetData data = new ParkingLotGetData(parkingLot, priceTickets);
 
         return data;
+    }
+
+    @Override
+    public Integer getByEmployeeId(Integer employeeId) {
+        Optional<MerchantEmployee> merchantEmployeeOptional = merchantEmployeeRepository.findById(employeeId);
+        if (!merchantEmployeeOptional.isPresent()) {
+            System.out.println("Not found paking lot!!!");
+            return null;
+        }
+
+        MerchantEmployee merchantEmployee = merchantEmployeeOptional.get();
+
+        return merchantEmployee.getParkingLot().getId();
     }
 
 }
