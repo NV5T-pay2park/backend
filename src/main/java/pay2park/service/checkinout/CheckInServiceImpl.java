@@ -50,7 +50,6 @@ public class CheckInServiceImpl implements CheckInService {
         }
         socket.RequestToEnterLicensePlate(checkInData);
         VehicleData vehicleData = getInformationCheckInData(checkInData);
-
         if (!isValidInformationCheckIn(vehicleData)) {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
         }
@@ -86,13 +85,14 @@ public class CheckInServiceImpl implements CheckInService {
     }
 
     private boolean isValidInformationCheckIn(VehicleData vehicleData) {
+        if (vehicleData == null) {
+            return false;
+        }
         boolean checkVehicleType = vehicleTypeRepository.
                 existsById(vehicleData.getVehicleTypeID());
         boolean checkLicensePlate = vehicleData.getLicensePlate().length() != 0;
         return checkLicensePlate && checkVehicleType;
     }
-
-
 
     private boolean isValidInformationCheckInData(VehicleData vehicleData) {
         boolean checkVehicleType = vehicleTypeRepository.existsById(vehicleData.getVehicleTypeID());
@@ -106,21 +106,19 @@ public class CheckInServiceImpl implements CheckInService {
         return ticketsRepository.getTicketByEndUserIDAndParkingLot(endUser.get(), parkingLot.get(), vehicleData.getLicensePlate());
     }
 
-    @Override
-    public ResponseObject getInformationCheckInData(CheckInData checkInData,VehicleData vehicleData) {
+    public ResponseObject getResponseFromCheckInDataAndVehicleData(CheckInData checkInData, VehicleData vehicleData) {
         if (isValidInformationCheckInData(vehicleData)) {
             pendingTicketRepository.setPendingTicketInformation(checkInData, vehicleData);
             return new ResponseObject(HttpStatus.OK, "Success", vehicleData);
         }
         return new ResponseObject(HttpStatus.FOUND, "Found", "");
     }
-    private VehicleData getInformationCheckInData(CheckInData checkInData) {
+    public VehicleData getInformationCheckInData(CheckInData checkInData) {
         while (pendingTicketRepository.isPendingTicket(checkInData));
         VehicleData result = pendingTicketRepository.getPendingTicketInformation(checkInData);
         pendingTicketRepository.removePendingTicket(checkInData);
         return result;
     }
-
     private boolean isValidNumberSlotRemaining(CheckInData checkInData) {
         Optional<ParkingLot> parkingLot = parkingLotRepository.findById(checkInData.getParkingLotID());
         return parkingLot.get().getNumberSlotRemaining() > 0;
