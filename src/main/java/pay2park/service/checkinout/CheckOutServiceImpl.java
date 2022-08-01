@@ -19,6 +19,7 @@ import pay2park.model.payment.ResponseQueryData;
 import pay2park.repository.*;
 import pay2park.service.payment.CreateOrderService;
 import pay2park.service.payment.QueryOrderService;
+import pay2park.service.websocket.Socket;
 
 
 import java.io.IOException;
@@ -47,6 +48,8 @@ public class CheckOutServiceImpl implements CheckOutService {
     @Autowired
     TransactionRepository transactionRepository;
 
+    @Autowired
+    Socket socket;
     @Override
     public ResponseObject preCheckOut(PreCheckOutData checkOutData) {
         if (!checkDataIsValid(checkOutData)) {
@@ -57,6 +60,7 @@ public class CheckOutServiceImpl implements CheckOutService {
         if (ticket.getCheckOutTime() != null) {
             return new ResponseObject(HttpStatus.FOUND, "Ticket was checked out before", "");
         }
+        socket.SendLicensePlate(checkOutData.getParkingLotID(), checkOutData, ticket.getLicensePlates());
         return new ResponseObject(HttpStatus.OK, "Pre checkout successfully", ticket.getLicensePlates());
     }
 

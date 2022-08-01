@@ -1,6 +1,7 @@
 package pay2park.service.websocket;
 
 import pay2park.model.checkinout.CheckInData;
+import pay2park.model.checkinout.PreCheckOutData;
 import pay2park.model.websocket.SocketMessageData;
 
 public interface Socket {
@@ -8,4 +9,6 @@ public interface Socket {
     boolean RequestToEnterLicensePlate(CheckInData checkInData);
     boolean SendCheckInSuccessful(int parkingLotID);
     boolean SendCheckInFail(int parkingLotID);
+
+    boolean SendLicensePlate(int parkingLotID, PreCheckOutData checkOutData, String licensePlate);
 }

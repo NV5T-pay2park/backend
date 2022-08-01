@@ -124,8 +124,8 @@ public class ParkingLotServiceImpl implements ParkingLotService {
             ParkingLot parkingLot = parkingLotOptional.get();
 
             parkingLot.setParkingLotName(parkingLotUpdateData.parkingLotName);
-            parkingLot.setNumberSlot(parkingLotUpdateData.numberSlot);
-            parkingLot.setNumberSlotRemaining(parkingLotUpdateData.numberSlot);
+            Integer numberSlot = parkingLotUpdateData.numberSlot - parkingLot.getNumberSlot();
+            parkingLot.change(numberSlot);
             parkingLot.setStreet(parkingLotUpdateData.street);
             parkingLot.setWard(parkingLotUpdateData.ward);
             parkingLot.setDistrict(parkingLotUpdateData.district);
