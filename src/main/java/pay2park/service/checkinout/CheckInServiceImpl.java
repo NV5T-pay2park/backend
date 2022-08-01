@@ -16,6 +16,8 @@ import pay2park.repository.*;
 import pay2park.service.ticket.TicketService;
 import pay2park.service.websocket.Socket;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -50,7 +52,6 @@ public class CheckInServiceImpl implements CheckInService {
         }
         socket.RequestToEnterLicensePlate(checkInData);
         VehicleData vehicleData = getInformationCheckInData(checkInData);
-
         if (!isValidInformationCheckIn(vehicleData)) {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
         }
@@ -107,16 +108,22 @@ public class CheckInServiceImpl implements CheckInService {
         return ticketsRepository.getTicketByEndUserIDAndParkingLot(endUser.get(), parkingLot.get(), vehicleData.getLicensePlate());
     }
 
-    @Override
-    public ResponseObject getInformationCheckInData(CheckInData checkInData,VehicleData vehicleData) {
+    public ResponseObject getResponseFromCheckInDataAndVehicleData(CheckInData checkInData, VehicleData vehicleData) {
         if (isValidInformationCheckInData(vehicleData)) {
             pendingTicketRepository.setPendingTicketInformation(checkInData, vehicleData);
             return new ResponseObject(HttpStatus.OK, "Success", vehicleData);
         }
         return new ResponseObject(HttpStatus.FOUND, "Found", "");
     }
-    private VehicleData getInformationCheckInData(CheckInData checkInData) {
-        while (pendingTicketRepository.isPendingTicket(checkInData));
+    public VehicleData getInformationCheckInData(CheckInData checkInData) {
+        Instant startTime = Instant.now();
+        while (pendingTicketRepository.isPendingTicket(checkInData)){
+            Instant now = Instant.now();
+            if(Duration.between(startTime, now).toSeconds() > 60) {
+                pendingTicketRepository.removePendingTicket(checkInData);
+                return null;
+            }
+        };
         VehicleData result = pendingTicketRepository.getPendingTicketInformation(checkInData);
         pendingTicketRepository.removePendingTicket(checkInData);
         return result;

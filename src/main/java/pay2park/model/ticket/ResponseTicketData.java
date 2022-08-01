@@ -37,7 +37,7 @@ public class ResponseTicketData {
     public ResponseTicketData(Ticket ticket){
         this.ticketID = ticket.getId();
         this.checkInTime = Extension.formatTime(ticket.getCheckInTime());
-        this.checkOutTime = Extension.formatTime(ticket.getCheckOutTime());
+        this.checkOutTime = ticket.getCheckOutTime() != null ? Extension.formatTime(ticket.getCheckOutTime()) : null;
         this.licensePlate = ticket.getLicensePlates();
         this.vehicleType = ticket.getVehicleType().getVehicleTypeName();
         this.endUserID = ticket.getEndUser().getId();

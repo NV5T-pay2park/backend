@@ -12,6 +12,7 @@
 //import org.springframework.test.web.servlet.MockMvc;
 //import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 //import pay2park.IntegrationTest;
+//import pay2park.controller.ResponseObject2JSON;
 //import pay2park.model.ResponseObject;
 //import pay2park.model.login.EndUserLoginData;
 //import pay2park.service.login.EndUserLoginService;
@@ -39,11 +40,7 @@
 //        String zalopayID = "93jfkd092f2fs4";
 //        EndUserLoginData req = new EndUserLoginData(zalopayID);
 //        ResponseObject expectedRes = loginService.login(req);
-//
-//        JSONObject expected = new JSONObject();
-//        expected.put("status", expectedRes.getStatus());
-//        expected.put("message", expectedRes.getMessage());
-//        expected.put("data", expectedRes.getData());
+//        JSONObject expected = ResponseObject2JSON.cast(expectedRes);
 //
 //        // WHEN
 //        String actual;
