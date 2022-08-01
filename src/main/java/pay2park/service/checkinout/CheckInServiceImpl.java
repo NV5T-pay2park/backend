@@ -16,6 +16,8 @@ import pay2park.repository.*;
 import pay2park.service.ticket.TicketService;
 import pay2park.service.websocket.Socket;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -114,7 +116,14 @@ public class CheckInServiceImpl implements CheckInService {
         return new ResponseObject(HttpStatus.FOUND, "Found", "");
     }
     public VehicleData getInformationCheckInData(CheckInData checkInData) {
-        while (pendingTicketRepository.isPendingTicket(checkInData));
+        Instant startTime = Instant.now();
+        while (pendingTicketRepository.isPendingTicket(checkInData)){
+            Instant now = Instant.now();
+            if(Duration.between(startTime, now).toSeconds() > 60) {
+                pendingTicketRepository.removePendingTicket(checkInData);
+                return null;
+            }
+        };
         VehicleData result = pendingTicketRepository.getPendingTicketInformation(checkInData);
         pendingTicketRepository.removePendingTicket(checkInData);
         return result;

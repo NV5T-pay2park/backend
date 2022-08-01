@@ -16,6 +16,9 @@ public interface PriceTicketRepository extends JpaRepository<PriceTicket, PriceT
     @Query(value = "SELECT price_ticket FROM PriceTicket price_ticket WHERE price_ticket.parkingLot = ?1")
     List<PriceTicket> findByParkingLotId(ParkingLot parkingLotId);
 
+    @Query(value = "SELECT price_ticket FROM PriceTicket price_ticket WHERE price_ticket.parkingLot = ?1")
+    List<PriceTicket> getPriceTicketByParkingLotId(ParkingLot parkingLot);
+
     @Query(value = "SELECT price_ticket FROM PriceTicket price_ticket WHERE price_ticket.parkingLot = ?1 AND price_ticket.vehicleType = ?2")
     List<PriceTicket> getPriceTicketByParkingLotIdAndVehicleType(ParkingLot parkingLot, VehicleType vehicleType);
 

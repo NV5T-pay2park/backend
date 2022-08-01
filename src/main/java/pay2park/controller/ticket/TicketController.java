@@ -26,4 +26,9 @@ public class TicketController {
         return
                 new ResponseObject(HttpStatus.OK, "get ticket by id successfully ", data);
     }
+    @GetMapping("/getTicketByParkingLotId")
+    public ResponseEntity<ResponseObject> getTicketByParkingLotId(@RequestParam(value = "parkingLotId") int parkingLotId) {
+        ResponseObject responseObject = ticketService.getTicketByParkingLotId(parkingLotId);
+        return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
+    }
 }
