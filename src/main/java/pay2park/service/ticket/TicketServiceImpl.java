@@ -21,8 +21,6 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
-import static pay2park.extension.Extension.formatTime;
 import static pay2park.extension.Extension.getCheckInTime;
 
 @Service
