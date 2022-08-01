@@ -19,7 +19,7 @@ public class ParkingLotListData {
         this.name = parkingLot.getParkingLotName();
         this.timeOpen = parkingLot.getTimeOpen();
         this.timeClose = parkingLot.getTimeClose();
-        this.currentServing = parkingLot.getNumberSlot() - parkingLot.getNumberSlotRemaining();
+        this.currentServing = Math.max(parkingLot.getNumberSlot() - parkingLot.getNumberSlotRemaining(), 0);
         this.address = parkingLot.getStreet() + ", " +  parkingLot.getWard() + ", " + parkingLot.getDistrict() + ", " + parkingLot.getCity();
         this.phoneNumber = parkingLot.getPhoneNumber();
         this.status = parkingLot.getStatus();
@@ -31,7 +31,7 @@ public class ParkingLotListData {
         this.name = parkingLot.getParkingLotName();
         this.timeOpen = parkingLot.getTimeOpen();
         this.timeClose = parkingLot.getTimeClose();
-        this.currentServing = parkingLot.getNumberSlot() - parkingLot.getNumberSlotRemaining();
+        this.currentServing = Math.max(parkingLot.getNumberSlot() - parkingLot.getNumberSlotRemaining(), 0);
         this.address = parkingLot.getStreet() + ", " +  parkingLot.getWard() + ", " + parkingLot.getDistrict() + ", " + parkingLot.getCity();
         this.phoneNumber = parkingLot.getPhoneNumber();
         this.status = parkingLot.getStatus();
