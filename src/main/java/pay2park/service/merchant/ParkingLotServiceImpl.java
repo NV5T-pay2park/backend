@@ -28,6 +28,9 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     @Autowired
     VehicleTypeRepository vehicleTypeRepository;
 
+    @Autowired
+    MerchantEmployeeRepository merchantEmployeeRepository;
+
     @Override
     public List<ParkingLotListData> list(Integer merchantId) {
         List<ParkingLot> parkingLots = parkingLotRepository.findByMerchantId(merchantId);
@@ -174,6 +177,19 @@ public class ParkingLotServiceImpl implements ParkingLotService {
         ParkingLotGetData data = new ParkingLotGetData(parkingLot, priceTickets);
 
         return data;
+    }
+
+    @Override
+    public Integer getByEmployeeId(Integer employeeId) {
+        Optional<MerchantEmployee> merchantEmployeeOptional = merchantEmployeeRepository.findById(employeeId);
+        if (!merchantEmployeeOptional.isPresent()) {
+            System.out.println("Not found paking lot!!!");
+            return null;
+        }
+
+        MerchantEmployee merchantEmployee = merchantEmployeeOptional.get();
+
+        return merchantEmployee.getParkingLot().getId();
     }
 
 }

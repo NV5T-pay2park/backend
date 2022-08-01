@@ -55,4 +55,11 @@ public class ParkingLotController {
         ParkingLotGetData data = parkingLotService.getParkingLot(parkingLotId);
         return new ResponseObject(HttpStatus.OK, "successfully", data);
     }
+
+    @GetMapping("/getByEmployeeId/{employeeId}")
+    @ResponseBody
+    public ResponseObject getByEmployeeId(@PathVariable Integer employeeId) throws IOException {
+        Integer data = parkingLotService.getByEmployeeId(employeeId);
+        return new ResponseObject(HttpStatus.OK, "successfully", data);
+    }
 }

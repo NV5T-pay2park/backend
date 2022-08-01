@@ -13,4 +13,6 @@ public interface ParkingLotService {
     boolean update(ParkingLotUpdateData parkingLotUpdateData);
 
     ParkingLotGetData getParkingLot(Integer parkingLotId);
+
+    Integer getByEmployeeId(Integer employeeId);
 }
