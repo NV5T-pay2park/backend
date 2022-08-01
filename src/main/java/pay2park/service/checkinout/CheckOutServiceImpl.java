@@ -70,8 +70,8 @@ public class CheckOutServiceImpl implements CheckOutService {
         // Calculate amount of ticket
         Ticket ticketCheckout = ticketsRepository.findById(checkOutData.getTicketID()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
         Duration duration = Duration.between(ticketCheckout.getCheckInTime(), time);
-        double minuteTime = duration.toMinutes();
-        double hourTime = minuteTime / 60;
+        double minuteTime = duration.toSeconds();
+        double hourTime = minuteTime / 60 / 60;
         List<PriceTicket> listPriceTicket = priceTicketRepository.getPriceTicketByParkingLotIdAndVehicleType(ticketCheckout.getParkingLot(), ticketCheckout.getVehicleType());
         int amount = calculateAmountOfTicket(hourTime, listPriceTicket);
 
@@ -170,6 +170,6 @@ public class CheckOutServiceImpl implements CheckOutService {
             int units = (int) Math.ceil(time / priceTicketList.get(i).getUnit());
             result += units * priceTicketList.get(i).getPrice();
         }
-        return result;
+        return result ;
     }
 }
