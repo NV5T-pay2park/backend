@@ -194,4 +194,9 @@ public class ParkingLot {
                 ", ward='" + ward + '\'' +
                 '}';
     }
+
+    public void change(Integer numberSlot) {
+        this.numberSlot += numberSlot;
+        this.numberSlotRemaining += numberSlot;
+    }
 }
