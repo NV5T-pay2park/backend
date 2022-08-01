@@ -3,16 +3,14 @@ package pay2park.controller.websocket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import pay2park.model.websocket.SocketConnectData;
 import pay2park.model.websocket.SocketMessageData;
 import pay2park.service.websocket.Socket;
 
 @RestController
+@CrossOrigin
 public class SocketController {
 
 //    @Autowired
