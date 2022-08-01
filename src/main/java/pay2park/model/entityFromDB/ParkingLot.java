@@ -173,4 +173,25 @@ public class ParkingLot {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "ParkingLot{" +
+                "id=" + id +
+                ", parkingLotName='" + parkingLotName + '\'' +
+                ", numberSlot=" + numberSlot +
+                ", numberSlotRemaining=" + numberSlotRemaining +
+                ", status=" + status +
+                ", merchant=" + merchant +
+                ", lat=" + lat +
+                ", lng=" + lng +
+                ", timeOpen='" + timeOpen + '\'' +
+                ", timeClose='" + timeClose + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", city='" + city + '\'' +
+                ", district='" + district + '\'' +
+                ", street='" + street + '\'' +
+                ", ward='" + ward + '\'' +
+                '}';
+    }
 }
