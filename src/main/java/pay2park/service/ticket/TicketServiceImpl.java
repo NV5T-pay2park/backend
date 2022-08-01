@@ -21,8 +21,6 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
-import static pay2park.extension.Extension.formatTime;
 import static pay2park.extension.Extension.getCheckInTime;
 
 @Service
@@ -86,7 +84,7 @@ public class TicketServiceImpl implements TicketService {
                         i.getEndUser().getFirstName() + ' ' + i.getEndUser().getLastName(),
                         i.getParkingLot().getId(), i.getParkingLot().getParkingLotName(),
                         !(i.getCheckOutTime() == null), i.getAmount())).
-                sorted((t1, t2) -> t2.getCheckInTime().compareTo(t1.getCheckInTime())).collect(Collectors.toList());
+                sorted((t1, t2) -> t2.getTicketID().compareTo(t1.getTicketID())).collect(Collectors.toList());
         return new ResponseObject(HttpStatus.OK, "Success", dataResponse);
     }
 

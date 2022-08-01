@@ -60,6 +60,7 @@ public class MerchantEmployeeLoginService {
 
         MerchantEmployeeResponseLoginData responseData = new MerchantEmployeeResponseLoginData();
         responseData.setUserId(merchantEmployee.getId());
+        responseData.setMerchantId(merchantEmployee.getParkingLot().getMerchant().getId());
         responseData.setPhone(merchantEmployee.getPhone());
         responseData.setUserName(merchantEmployee.getUserName());
         responseData.setPermissions(responsePermissions);
