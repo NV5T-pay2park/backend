@@ -41,8 +41,7 @@ public class ParkingServiceImpl implements ParkingService {
         List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
 
         for (ParkingLot parkingLot : rawData) {
-            parkingList.add(new ParkingListData(parkingLot, 0.0, 0,
-                    getImageList(parkingLotImageRepository.getAllImageByParkingLot(parkingLot))));
+            parkingList.add(new ParkingListData(parkingLot, 0.0, 0, getImageList(parkingLotImageRepository.getAllImageByParkingLot(parkingLot))));
         }
         return parkingList;
     }
@@ -60,8 +59,7 @@ public class ParkingServiceImpl implements ParkingService {
         }
 
         if (coordinates.equals("")) {
-            return new ParkingDetailData(parking, 0.0, 0, priceTicketDataList,
-                    getImageList(parkingLotImageRepository.getAllImageByParkingLot(parking)));
+            return new ParkingDetailData(parking, 0.0, 0, priceTicketDataList, getImageList(parkingLotImageRepository.getAllImageByParkingLot(parking)));
         } else {
             String[] parts1 = coordinates.split(",");
             double userLong = Double.parseDouble(parts1[0]);
@@ -71,8 +69,7 @@ public class ParkingServiceImpl implements ParkingService {
 
             String returnDistance = Distance.getDistanceAndTimeGgApi(userLong, userLat, parking.getLat(), parking.getLng());
             String[] parts2 = returnDistance.split(",");
-            return new ParkingDetailData(parking, Double.parseDouble(parts2[0]), Integer.parseInt(parts2[1]),
-                    priceTicketDataList, getImageList(parkingLotImageRepository.getAllImageByParkingLot(parking)));
+            return new ParkingDetailData(parking, Double.parseDouble(parts2[0]), Integer.parseInt(parts2[1]), priceTicketDataList, getImageList(parkingLotImageRepository.getAllImageByParkingLot(parking)));
         }
     }
 
@@ -136,8 +133,7 @@ public class ParkingServiceImpl implements ParkingService {
             for (ParkingLot parkingLot : rawData) {
                 double dt = Distance.getDistance(userLong, userLat, parkingLot.getLat(), parkingLot.getLng());
                 int time = (int) (dt * 3.5);
-                parkingList.add(new ParkingListData(parkingLot, dt, time,
-                        getImageList(parkingLotImageRepository.getAllImageByParkingLot(parkingLot))));
+                parkingList.add(new ParkingListData(parkingLot, dt, time, getImageList(parkingLotImageRepository.getAllImageByParkingLot(parkingLot))));
 
             }
             parkingList.sort(new Comparator<ParkingListData>() {
@@ -147,8 +143,7 @@ public class ParkingServiceImpl implements ParkingService {
             });
         } else {
             for (ParkingLot parkingLot : rawData) {
-                parkingList.add(new ParkingListData(parkingLot, 0.0, 0,
-                        getImageList(parkingLotImageRepository.getAllImageByParkingLot(parkingLot))));
+                parkingList.add(new ParkingListData(parkingLot, 0.0, 0, getImageList(parkingLotImageRepository.getAllImageByParkingLot(parkingLot))));
             }
         }
 
@@ -160,7 +155,6 @@ public class ParkingServiceImpl implements ParkingService {
     }
 
     private List<ImageResponse> getImageList(List<ParkingLotImage> parkingLotImages) {
-        return parkingLotImages.stream().map(i ->
-                new ImageResponse(i.getId(), i.getUrl())).collect(Collectors.toList());
+        return parkingLotImages.stream().map(i -> new ImageResponse(i.getId(), i.getUrl())).collect(Collectors.toList());
     }
 }
