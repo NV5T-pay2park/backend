@@ -41,6 +41,8 @@ public class ParkingServiceImpl implements ParkingService {
         List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
 
         for (ParkingLot parkingLot : rawData) {
+            if (parkingLot.getStatus() == 0)
+                continue;
             parkingList.add(new ParkingListData(parkingLot, 0.0, 0,
                     getImageList(parkingLotImageRepository.getAllImageByParkingLot(parkingLot))));
         }
