@@ -18,6 +18,7 @@ import pay2park.model.payment.ResponseQueryData;
 import pay2park.repository.*;
 import pay2park.service.payment.CreateOrderService;
 import pay2park.service.payment.QueryOrderService;
+import pay2park.service.websocket.Socket;
 
 
 import java.io.IOException;
@@ -46,6 +47,8 @@ public class CheckOutServiceImpl implements CheckOutService {
     @Autowired
     TransactionRepository transactionRepository;
 
+    @Autowired
+    Socket socket;
     @Override
     public ResponseObject preCheckOut(PreCheckOutData checkOutData) {
         if (!checkDataIsValid(checkOutData)) {
@@ -56,6 +59,7 @@ public class CheckOutServiceImpl implements CheckOutService {
         if (ticket.getCheckOutTime() != null) {
             return new ResponseObject(HttpStatus.FOUND, "Ticket was checked out before", "");
         }
+        socket.SendLicensePlate(checkOutData.getParkingLotID(), checkOutData, ticket.getLicensePlates());
         return new ResponseObject(HttpStatus.OK, "Pre checkout successfully", ticket.getLicensePlates());
     }
 
@@ -69,8 +73,8 @@ public class CheckOutServiceImpl implements CheckOutService {
         // Calculate amount of ticket
         Ticket ticketCheckout = ticketsRepository.findById(checkOutData.getTicketID()).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + ticketID));
         Duration duration = Duration.between(ticketCheckout.getCheckInTime(), time);
-        double minuteTime = duration.toMinutes();
-        double hourTime = minuteTime / 60;
+        double minuteTime = duration.toSeconds();
+        double hourTime = minuteTime / 60 / 60;
         List<PriceTicket> listPriceTicket = priceTicketRepository.getPriceTicketByParkingLotIdAndVehicleType(ticketCheckout.getParkingLot(), ticketCheckout.getVehicleType());
         int amount = calculateAmountOfTicket(hourTime, listPriceTicket);
 
@@ -169,6 +173,6 @@ public class CheckOutServiceImpl implements CheckOutService {
             int units = (int) Math.ceil(time / priceTicketList.get(i).getUnit());
             result += units * priceTicketList.get(i).getPrice();
         }
-        return result;
+        return result ;
     }
 }

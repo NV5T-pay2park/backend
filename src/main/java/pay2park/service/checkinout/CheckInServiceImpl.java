@@ -16,6 +16,8 @@ import pay2park.repository.*;
 import pay2park.service.ticket.TicketService;
 import pay2park.service.websocket.Socket;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -50,7 +52,6 @@ public class CheckInServiceImpl implements CheckInService {
         }
         socket.RequestToEnterLicensePlate(checkInData);
         VehicleData vehicleData = getInformationCheckInData(checkInData);
-
         if (!isValidInformationCheckIn(vehicleData)) {
             return new ResponseObject(HttpStatus.FOUND, "Data is not valid", ticket);
         }
@@ -95,9 +96,7 @@ public class CheckInServiceImpl implements CheckInService {
         return checkLicensePlate && checkVehicleType;
     }
 
-
-
-    boolean isValidInformationCheckInData(VehicleData vehicleData) {
+    private boolean isValidInformationCheckInData(VehicleData vehicleData) {
         boolean checkVehicleType = vehicleTypeRepository.existsById(vehicleData.getVehicleTypeID());
         boolean checkLicensePlate = vehicleData.getLicensePlate().length() > 0;
         return checkLicensePlate && checkVehicleType;
@@ -122,13 +121,19 @@ public class CheckInServiceImpl implements CheckInService {
     }
 
     public VehicleData getInformationCheckInData(CheckInData checkInData) {
-        while (pendingTicketRepository.isPendingTicket(checkInData));
+        Instant startTime = Instant.now();
+        while (pendingTicketRepository.isPendingTicket(checkInData)){
+            Instant now = Instant.now();
+            if(Duration.between(startTime, now).toSeconds() > 60) {
+                pendingTicketRepository.removePendingTicket(checkInData);
+                return null;
+            }
+        };
         VehicleData result = pendingTicketRepository.getPendingTicketInformation(checkInData);
         pendingTicketRepository.removePendingTicket(checkInData);
         return result;
     }
-
-    public boolean isValidNumberSlotRemaining(CheckInData checkInData) {
+    private boolean isValidNumberSlotRemaining(CheckInData checkInData) {
         Optional<ParkingLot> parkingLot = parkingLotRepository.findById(checkInData.getParkingLotID());
         return parkingLot.get().getNumberSlotRemaining() > 0;
     }

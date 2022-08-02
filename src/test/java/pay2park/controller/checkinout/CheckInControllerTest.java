@@ -35,6 +35,10 @@ import pay2park.model.parking.VehicleData;
 import pay2park.repository.EndUserRepository;
 import pay2park.repository.ParkingLotRepository;
 import pay2park.service.checkinout.CheckInService;
+
+import java.sql.Array;
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -52,6 +56,13 @@ class CheckInControllerTest {
     private ParkingLotRepository parkingLotRepository;
     @Autowired
     private MockMvc mockMvc;
+
+    private ObjectMapper mapper;
+
+    @BeforeEach
+    void setUp() {
+        mapper = new ObjectMapper();
+    }
 
     @Test
     void checkIn()  {
@@ -76,26 +87,31 @@ class CheckInControllerTest {
         Mockito.when(checkInService.checkIn(req))
                 .thenReturn();
 
-        String actualString;
+        String actual;
         try {
-            actualString = mockMvc.perform( MockMvcRequestBuilders
+            byte[] actualBytes = mockMvc.perform( MockMvcRequestBuilders
                             .post("/api/checkIn/")
                             .content(String.valueOf(reqJson))
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
-                    .andReturn().getResponse().getContentAsBytes();
+                    .andReturn().getResponse().getContentAsByteArray();
+            actual = Arrays.toString(actualBytes);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
         // THEN
+        try {
+            assertEquals(mapper.readTree(String.valueOf(expected)), mapper.readTree(actual));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     void getInformationCheckInData() {
         // GIVEN
-        ObjectMapper mapper = new ObjectMapper();
         CheckInData checkInData = new CheckInData(4, 15);
         VehicleData vehicleData = new VehicleData(1, "54C1-19832");
         CheckInInformation reqObj = new CheckInInformation(checkInData, vehicleData);

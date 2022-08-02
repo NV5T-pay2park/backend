@@ -1,6 +1,13 @@
 package pay2park.model.login;
 
 public class MerchantEmployeeResponseLoginData {
+    public int getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(int merchantId) {
+        this.merchantId = merchantId;
+    }
     public String getUserName() {
         return userName;
     }
@@ -35,6 +42,9 @@ public class MerchantEmployeeResponseLoginData {
 
     String userName;
     int userId;
+
+
+    int merchantId;
     String phone;
     MerchantEmployeePermissions permissions;
 }

@@ -21,8 +21,6 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
-import static pay2park.extension.Extension.formatTime;
 import static pay2park.extension.Extension.getCheckInTime;
 
 @Service
@@ -86,6 +84,27 @@ public class TicketServiceImpl implements TicketService {
                         i.getEndUser().getFirstName() + ' ' + i.getEndUser().getLastName(),
                         i.getParkingLot().getId(), i.getParkingLot().getParkingLotName(),
                         !(i.getCheckOutTime() == null), i.getAmount())).
+                sorted((t1, t2) -> t2.getTicketID().compareTo(t1.getTicketID())).collect(Collectors.toList());
+        return new ResponseObject(HttpStatus.OK, "Success", dataResponse);
+    }
+
+    @Override
+    public ResponseObject getTicketByParkingLotId(int parkingLotId) {
+        if (!parkingLotRepository.existsById(parkingLotId)) {
+            return new ResponseObject(HttpStatus.FOUND, "End user is not valid",
+                    new ArrayList<Ticket>());
+        }
+        Optional<ParkingLot> parkingLotOptional = parkingLotRepository.findById(parkingLotId);
+        List<Ticket> ticketList = ticketsRepository.getAllTicketByParkingLotID(parkingLotOptional.get());
+        List<ResponseTicketData> dataResponse = ticketList.stream().map(
+                        ticket -> new ResponseTicketData(ticket.getId(), Extension.formatTime(ticket.getCheckInTime()),
+                                (ticket.getCheckOutTime() == null) ? null : Extension.formatTime(ticket.getCheckOutTime()),
+                                ticket.getLicensePlates(),
+                                ticket.getVehicleType().getVehicleTypeName(),
+                                ticket.getEndUser().getId(),
+                                ticket.getEndUser().getFirstName() + ' ' + ticket.getEndUser().getLastName(),
+                                ticket.getParkingLot().getId(), ticket.getParkingLot().getParkingLotName(),
+                                !(ticket.getCheckOutTime() == null), ticket.getAmount())).
                 sorted((t1, t2) -> t2.getCheckInTime().compareTo(t1.getCheckInTime())).collect(Collectors.toList());
         return new ResponseObject(HttpStatus.OK, "Success", dataResponse);
     }
@@ -95,8 +114,6 @@ public class TicketServiceImpl implements TicketService {
         Ticket ticket = ticketsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Ticket not exist with id: " + id));
         return new ResponseTicketData(ticket);
     }
-
-
 
     private Long createTicketID(TicketData ticketData) {
         String createTicketTime = Extension.getCurrentTimeString("yyMMddHHmmss");

@@ -1,5 +1,7 @@
 package pay2park.model.entityFromDB;
 
+import pay2park.model.merchant.PriceItem;
+
 import javax.persistence.*;
 
 @Entity
@@ -38,6 +40,15 @@ public class PriceTicket {
         this.periodTime = periodTime;
         this.price = price;
         this.unit = unit;
+    }
+
+    public PriceTicket(ParkingLot parkingLot, VehicleType vehicleType, PriceItem priceItem) {
+        this.id = new PriceTicketId(parkingLot.getId(), vehicleType.getId(), priceItem.periodTime);
+        this.parkingLot = parkingLot;
+        this.vehicleType = vehicleType;
+        this.periodTime = priceItem.periodTime;
+        this.price = priceItem.price;
+        this.unit = priceItem.unit;
     }
 
     public Integer getPeriodTime() {
@@ -86,5 +97,17 @@ public class PriceTicket {
 
     public void setId(PriceTicketId id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "PriceTicket{" +
+                "id=" + id +
+                ", parkingLot=" + parkingLot +
+                ", vehicleType=" + vehicleType +
+                ", periodTime=" + periodTime +
+                ", price=" + price +
+                ", unit=" + unit +
+                '}';
     }
 }

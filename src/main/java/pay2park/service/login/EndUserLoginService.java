@@ -17,8 +17,15 @@ public class EndUserLoginService {
 
     public ResponseObject login(EndUserLoginData data) {
 
-        if (!isValidLoginData(data))
+        if (!isValidZalopayID(data.getZalopayID()))
             return new ResponseObject(HttpStatus.FOUND, "ZaloPayId is invalid", null);
+
+        if (!isValidEndUserName(data.getFirstName()))
+            return new ResponseObject(HttpStatus.FOUND, "first name is in wrong format", null);
+
+        if (!isValidEndUserName(data.getLastName()))
+            return new ResponseObject(HttpStatus.FOUND, "last name is in wrong format", null);
+
         List<EndUser> userList;
         while (true) {
             userList = endUserRepository.getEndUserBaseOnZalopayID(data.getZalopayID());
@@ -26,7 +33,7 @@ public class EndUserLoginService {
             if (userList.size() > 1) {
                 return new ResponseObject(HttpStatus.FOUND, "Can't mapping user", null);
             }
-            EndUser newEndUser = new EndUser(data.getZalopayID());
+            EndUser newEndUser = new EndUser(data.getZalopayID(), data.getFirstName(), data.getLastName());
             endUserRepository.save(newEndUser);
         }
         int endUserID = userList.get(0).getId();
@@ -34,11 +41,22 @@ public class EndUserLoginService {
         return new ResponseObject(HttpStatus.OK, "Success", data);
     }
 
-    boolean isValidLoginData(EndUserLoginData loginData) {
-        String zalopayID = loginData.getZalopayID();
+    boolean isValidZalopayID(String zalopayID) {
         if (zalopayID.equals("")) return false;
         for (int i = 0; i < zalopayID.length(); ++i) {
             if (zalopayID.charAt(i) == ' ') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    boolean isValidEndUserName(String name) {
+        if (name.equals("")) return false;
+        for (int i = 0; i < name.length(); ++i) {
+            char ch = name.charAt(i);
+            boolean isValidChar = ('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || ch == ' ';
+            if (!isValidChar) {
                 return false;
             }
         }
