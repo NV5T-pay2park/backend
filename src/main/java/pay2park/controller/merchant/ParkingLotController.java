@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pay2park.model.ResponseObject;
-import pay2park.model.merchant.ParkingLotCreateData;
-import pay2park.model.merchant.ParkingLotGetData;
-import pay2park.model.merchant.ParkingLotListData;
-import pay2park.model.merchant.ParkingLotUpdateData;
+import pay2park.model.merchant.*;
 import pay2park.service.merchant.ParkingLotService;
 
 import java.io.IOException;
@@ -32,8 +29,8 @@ public class ParkingLotController {
     @PostMapping("/create")
     @ResponseBody
     public ResponseObject create(@RequestBody ParkingLotCreateData parkingLotCreateData) throws IOException {
-        boolean data = parkingLotService.create(parkingLotCreateData);
-        return new ResponseObject(HttpStatus.OK, "successfully", data);
+        ParkingLotCreateResponseData data = parkingLotService.create(parkingLotCreateData);
+        return new ResponseObject(HttpStatus.OK, data.mess(), data);
     }
 
     @GetMapping("/delete/{parkingLotId}")
@@ -56,6 +53,13 @@ public class ParkingLotController {
     @ResponseBody
     public ResponseObject getParkingLot(@PathVariable Integer parkingLotId) throws IOException {
         ParkingLotGetData data = parkingLotService.getParkingLot(parkingLotId);
+        return new ResponseObject(HttpStatus.OK, "successfully", data);
+    }
+
+    @GetMapping("/getByEmployeeId/{employeeId}")
+    @ResponseBody
+    public ResponseObject getByEmployeeId(@PathVariable Integer employeeId) throws IOException {
+        Integer data = parkingLotService.getByEmployeeId(employeeId);
         return new ResponseObject(HttpStatus.OK, "successfully", data);
     }
 }

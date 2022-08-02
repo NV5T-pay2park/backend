@@ -41,7 +41,7 @@ public class ParkingServiceImpl implements ParkingService {
         List<ParkingListData> parkingList = new ArrayList<ParkingListData>();
 
         for (ParkingLot parkingLot : rawData) {
-            parkingList.add(new ParkingListData(parkingLot, 3.4, 4,
+            parkingList.add(new ParkingListData(parkingLot, 0.0, 0,
                     getImageList(parkingLotImageRepository.getAllImageByParkingLot(parkingLot))));
         }
         return parkingList;
@@ -135,7 +135,7 @@ public class ParkingServiceImpl implements ParkingService {
 //            Distance distance = new Distance();
             for (ParkingLot parkingLot : rawData) {
                 double dt = Distance.getDistance(userLong, userLat, parkingLot.getLat(), parkingLot.getLng());
-                int time = (int) (dt * 4);
+                int time = (int) (dt * 3.5);
                 parkingList.add(new ParkingListData(parkingLot, dt, time,
                         getImageList(parkingLotImageRepository.getAllImageByParkingLot(parkingLot))));
 
