@@ -35,18 +35,20 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     public List<ParkingLotListData> list(Integer merchantId) {
         List<ParkingLot> parkingLots = parkingLotRepository.findByMerchantId(merchantId);
 
-        List<ParkingLotListData> parkingMerchantList = new ArrayList<>();
+        List<ParkingLotListData> parkingLotList = new ArrayList<>();
 
         for (ParkingLot parkingLot : parkingLots) {
+            if (parkingLot.getStatus() == 0)
+                continue;
             List<ParkingLotImage> parkingLotImageList = parkingLotImageRepository.getAllImageByParkingLot(parkingLot);
             if (parkingLotImageList.size() > 0) {
-                parkingMerchantList.add(new ParkingLotListData(parkingLot, parkingLotImageList.get(0)));
+                parkingLotList.add(new ParkingLotListData(parkingLot, parkingLotImageList.get(0)));
             } else {
-                parkingMerchantList.add(new ParkingLotListData(parkingLot));
+                parkingLotList.add(new ParkingLotListData(parkingLot));
             }
         }
 
-        return parkingMerchantList;
+        return parkingLotList;
     }
 
     @Override
