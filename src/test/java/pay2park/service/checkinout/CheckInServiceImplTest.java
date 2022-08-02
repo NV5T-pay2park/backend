@@ -19,80 +19,80 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = Pay2parkBackendApplication.class)
-class CheckInServiceImplTest {
-    @Mock
-    TicketsRepository ticketsRepository;
-    @Mock
-    VehicleTypeRepository vehicleTypeRepository;
-    @Mock
-    ParkingLotRepository parkingLotRepository;
-    @Mock
-    EndUserRepository endUserRepository;
-    @Mock
-    PendingTicketRepository pendingTicketRepository;
-    @Mock
-    Socket socket;
-    @BeforeEach
-    void setMockOutput() throws IOException {
-        when(vehicleTypeRepository.existsById(1)).thenReturn(true);
-        when(vehicleTypeRepository.existsById(2)).thenReturn(true);
-
-    }
-
-    @InjectMocks
-    CheckInServiceImpl checkInServiceImpl = new CheckInServiceImpl();
-    @DisplayName("Test number slot remaining")
-    @Test
-    void testCheckInNumberSlot() {
-        ParkingLot parkingLot = new ParkingLot();
-        parkingLot.setId(1);
-        parkingLot.setNumberSlotRemaining(0);
-        when(parkingLotRepository.findById(1)).thenReturn(Optional.of(parkingLot));
-        VehicleData vehicleData = new VehicleData();
-        vehicleData.setVehicleTypeID(1);
-        vehicleData.setLicensePlate("");
-        CheckInData checkInData = new CheckInData();
-        checkInData.setEndUserID(1);
-        checkInData.setParkingLotID(1);
-        assertEquals("Sold out", checkInServiceImpl.checkIn(checkInData).getMessage());
-    }
-
-    @DisplayName("Data is not valid")
-    @Test
-    void testCheckDataIsNotValid() {
-        ParkingLot parkingLot = new ParkingLot();
-        parkingLot.setId(1);
-        parkingLot.setNumberSlotRemaining(10);
-        when(parkingLotRepository.findById(1)).thenReturn(Optional.of(parkingLot));
-        VehicleData vehicleData = new VehicleData();
-        vehicleData.setVehicleTypeID(1);
-        vehicleData.setLicensePlate("AB");
-        CheckInData checkInData = new CheckInData();
-        checkInData.setEndUserID(1);
-        checkInData.setParkingLotID(1);
-        when(endUserRepository.existsById(1)).thenReturn(true);
-        assertEquals("Data is not valid", checkInServiceImpl.checkIn(checkInData).getMessage());
-    }
-
-    @DisplayName("ticket was created before")
-    @Test
-    void testCheckInTicketCreatedBefore() {
-        ParkingLot parkingLot = new ParkingLot();
-        parkingLot.setId(1);
-        parkingLot.setNumberSlotRemaining(10);
-        when(parkingLotRepository.findById(1)).thenReturn(Optional.of(parkingLot));
-        VehicleData vehicleData = new VehicleData();
-        vehicleData.setVehicleTypeID(1);
-        vehicleData.setLicensePlate("AB");
-        CheckInData checkInData = new CheckInData();
-        checkInData.setEndUserID(1);
-        checkInData.setParkingLotID(1);
-        when(endUserRepository.existsById(1)).thenReturn(true);
-        when(parkingLotRepository.existsById(1)).thenReturn(true);
-        when(pendingTicketRepository.addPendingTicket(checkInData)).thenReturn(false);
-        assertEquals("This user already in queue", checkInServiceImpl.checkIn(checkInData).getMessage());
-    }
+//@SpringBootTest(classes = Pay2parkBackendApplication.class)
+//class CheckInServiceImplTest {
+//    @Mock
+//    TicketsRepository ticketsRepository;
+//    @Mock
+//    VehicleTypeRepository vehicleTypeRepository;
+//    @Mock
+//    ParkingLotRepository parkingLotRepository;
+//    @Mock
+//    EndUserRepository endUserRepository;
+//    @Mock
+//    PendingTicketRepository pendingTicketRepository;
+//    @Mock
+//    Socket socket;
+//    @BeforeEach
+//    void setMockOutput() throws IOException {
+//        when(vehicleTypeRepository.existsById(1)).thenReturn(true);
+//        when(vehicleTypeRepository.existsById(2)).thenReturn(true);
+//
+//    }
+//
+//    @InjectMocks
+//    CheckInServiceImpl checkInServiceImpl = new CheckInServiceImpl();
+//    @DisplayName("Test number slot remaining")
+//    @Test
+//    void testCheckInNumberSlot() {
+//        ParkingLot parkingLot = new ParkingLot();
+//        parkingLot.setId(1);
+//        parkingLot.setNumberSlotRemaining(0);
+//        when(parkingLotRepository.findById(1)).thenReturn(Optional.of(parkingLot));
+//        VehicleData vehicleData = new VehicleData();
+//        vehicleData.setVehicleTypeID(1);
+//        vehicleData.setLicensePlate("");
+//        CheckInData checkInData = new CheckInData();
+//        checkInData.setEndUserID(1);
+//        checkInData.setParkingLotID(1);
+//        assertEquals("Sold out", checkInServiceImpl.checkIn(checkInData).getMessage());
+//    }
+//
+//    @DisplayName("Data is not valid")
+//    @Test
+//    void testCheckDataIsNotValid() {
+//        ParkingLot parkingLot = new ParkingLot();
+//        parkingLot.setId(1);
+//        parkingLot.setNumberSlotRemaining(10);
+//        when(parkingLotRepository.findById(1)).thenReturn(Optional.of(parkingLot));
+//        VehicleData vehicleData = new VehicleData();
+//        vehicleData.setVehicleTypeID(1);
+//        vehicleData.setLicensePlate("AB");
+//        CheckInData checkInData = new CheckInData();
+//        checkInData.setEndUserID(1);
+//        checkInData.setParkingLotID(1);
+//        when(endUserRepository.existsById(1)).thenReturn(true);
+//        assertEquals("Data is not valid", checkInServiceImpl.checkIn(checkInData).getMessage());
+//    }
+//
+//    @DisplayName("ticket was created before")
+//    @Test
+//    void testCheckInTicketCreatedBefore() {
+//        ParkingLot parkingLot = new ParkingLot();
+//        parkingLot.setId(1);
+//        parkingLot.setNumberSlotRemaining(10);
+//        when(parkingLotRepository.findById(1)).thenReturn(Optional.of(parkingLot));
+//        VehicleData vehicleData = new VehicleData();
+//        vehicleData.setVehicleTypeID(1);
+//        vehicleData.setLicensePlate("AB");
+//        CheckInData checkInData = new CheckInData();
+//        checkInData.setEndUserID(1);
+//        checkInData.setParkingLotID(1);
+//        when(endUserRepository.existsById(1)).thenReturn(true);
+//        when(parkingLotRepository.existsById(1)).thenReturn(true);
+//        when(pendingTicketRepository.addPendingTicket(checkInData)).thenReturn(false);
+//        assertEquals("This user already in queue", checkInServiceImpl.checkIn(checkInData).getMessage());
+//    }
 
 //    @DisplayName("valid data")
 //    @Test
@@ -123,7 +123,7 @@ class CheckInServiceImplTest {
 //        assertEquals("Data is not valid", checkInServiceImpl.checkIn(checkInData).getMessage());
 //    }
 
-    @DisplayName("get information data")
+ /*   @DisplayName("get information data")
     @Test
     void getInformationData(){
         CheckInData checkInData = new CheckInData();
@@ -148,4 +148,4 @@ class CheckInServiceImplTest {
 
 
 
-}
+}*/

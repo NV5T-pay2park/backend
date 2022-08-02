@@ -24,7 +24,10 @@ public class CheckInController {
     @PostMapping("/sendInformationCheckIn")
     public ResponseEntity<ResponseObject> getInformationCheckInData(
             @RequestBody CheckInInformation informationCheckIn) {
-        ResponseObject responseObject = checkInService.getResponseFromCheckInDataAndVehicleData(informationCheckIn.getCheckInData(), informationCheckIn.getVehicleData());
+        ResponseObject responseObject = checkInService.getResponseFromCheckInDataAndVehicleData(
+                informationCheckIn.getCheckInData(),
+                informationCheckIn.getVehicleData()
+        );
         return ResponseEntity.status(responseObject.getStatus()).body(responseObject);
     }
 }
