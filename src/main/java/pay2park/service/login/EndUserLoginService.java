@@ -20,10 +20,10 @@ public class EndUserLoginService {
         if (!isValidZalopayID(data.getZalopayID()))
             return new ResponseObject(HttpStatus.FOUND, "ZaloPayId is invalid", null);
 
-        if (!isValidName(data.getFirstName()))
+        if (isValidEndUserName(data.getFirstName()))
             return new ResponseObject(HttpStatus.FOUND, "first name is in wrong format", null);
 
-        if (!isValidName(data.getLastName()))
+        if (isValidEndUserName(data.getLastName()))
             return new ResponseObject(HttpStatus.FOUND, "last name is in wrong format", null);
 
         List<EndUser> userList;
@@ -51,14 +51,14 @@ public class EndUserLoginService {
         return true;
     }
 
-    boolean isValidName(String name) {
-        if (name.equals("")) return false;
+    boolean isValidEndUserName(String name) {
+        if (name.equals("")) return true;
         for (int i = 0; i < name.length(); ++i) {
             char ch = name.charAt(i);
-            if (!(('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z'))) {
-                return false;
+            if (!(('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z') || ch == ' ')) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 }
