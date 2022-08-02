@@ -110,10 +110,12 @@ public class CheckInServiceImpl implements CheckInService {
 
     public ResponseObject getResponseFromCheckInDataAndVehicleData(CheckInData checkInData, VehicleData vehicleData) {
         if (isValidInformationCheckInData(vehicleData)) {
+            if (!pendingTicketRepository.containsKey(checkInData))
+                return new ResponseObject(HttpStatus.FOUND, "checkInData doesn't exist", null);
             pendingTicketRepository.setPendingTicketInformation(checkInData, vehicleData);
             return new ResponseObject(HttpStatus.OK, "Success", vehicleData);
         }
-        return new ResponseObject(HttpStatus.FOUND, "Found", "");
+        return new ResponseObject(HttpStatus.FOUND, "Found", null);
     }
     public VehicleData getInformationCheckInData(CheckInData checkInData) {
         Instant startTime = Instant.now();

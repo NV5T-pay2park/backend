@@ -12,6 +12,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PendingTicketRepository {
     private static final ConcurrentHashMap<CheckInData, VehicleData> pendingTicket = new ConcurrentHashMap<>();
 
+    public boolean containsKey(CheckInData checkInData) {
+        return pendingTicket.containsKey(checkInData);
+    }
+
     public boolean addPendingTicket(CheckInData checkInData) {
         // already have this pending ticket
         if (pendingTicket.containsKey(checkInData)) {
