@@ -26,7 +26,7 @@ public class EndUserLoginService {
             if (userList.size() > 1) {
                 return new ResponseObject(HttpStatus.FOUND, "Can't mapping user", null);
             }
-            EndUser newEndUser = new EndUser(data.getZalopayID());
+            EndUser newEndUser = new EndUser(data.getZalopayID(), data.getFirstName(), data.getLastName());
             endUserRepository.save(newEndUser);
         }
         int endUserID = userList.get(0).getId();

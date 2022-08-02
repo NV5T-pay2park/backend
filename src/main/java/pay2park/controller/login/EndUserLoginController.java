@@ -19,8 +19,11 @@ public class EndUserLoginController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(HttpStatus.OK, "cc", "ok"));
     }
     @GetMapping("/api/loginenduser")
-    public ResponseEntity<ResponseObject> catchNewLoginEndUser(@RequestParam(value = "zlpId", defaultValue = "") String zlpID) {
-        ResponseObject res = loginService.login(new EndUserLoginData(zlpID));
+    public ResponseEntity<ResponseObject> catchNewLoginEndUser(
+            @RequestParam(value = "zlpId", defaultValue = "") String zlpID,
+            @RequestParam(value = "firstName", defaultValue = "Anonymous") String firstName,
+            @RequestParam(value = "lastName", defaultValue = "") String lastName) {
+        ResponseObject res = loginService.login(new EndUserLoginData(zlpID, firstName, lastName));
         return ResponseEntity.status(res.getStatus()).body(res);
     }
 }
