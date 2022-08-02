@@ -86,11 +86,11 @@ public class EndUser {
 
     public EndUser() {}
 
-    public EndUser(String zalopayID) {
+    public EndUser(String zalopayID, String firstName, String lastName) {
         this.zalopayId = zalopayID;
         this.email = "NaN";
-        this.firstName = "NaN";
-        this.lastName = "NaN";
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.phone = "NaN";
         this.gender = 1;
     }
