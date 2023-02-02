@@ -86,7 +86,7 @@ public class CheckInServiceImpl implements CheckInService {
         return checkEndUserID && checkParkingLotID;
     }
 
-    private boolean isValidInformationCheckIn(VehicleData vehicleData) {
+    public boolean isValidInformationCheckIn(VehicleData vehicleData) {
         if (vehicleData == null) {
             return false;
         }
@@ -108,7 +108,7 @@ public class CheckInServiceImpl implements CheckInService {
         return ticketsRepository.getTicketByEndUserIDAndParkingLot(endUser.get(), parkingLot.get(), vehicleData.getLicensePlate());
     }
 
-    public ResponseObject getResponseFromCheckInDataAndVehicleData(CheckInData checkInData, VehicleData vehicleData) {
+    public ResponseObject getInformationByCheckInDataAndVehicleData(CheckInData checkInData, VehicleData vehicleData) {
         if (isValidInformationCheckInData(vehicleData)) {
             if (!pendingTicketRepository.containsKey(checkInData))
                 return new ResponseObject(HttpStatus.FOUND, "checkInData doesn't exist", null);
@@ -117,6 +117,11 @@ public class CheckInServiceImpl implements CheckInService {
         }
         return new ResponseObject(HttpStatus.FOUND, "Found", null);
     }
+
+    public ResponseObject getResponseFromCheckInDataAndVehicleData(CheckInData checkInData, VehicleData informationCheckIn) {
+        return null;
+    }
+
     public VehicleData getInformationCheckInData(CheckInData checkInData) {
         Instant startTime = Instant.now();
         while (pendingTicketRepository.isPendingTicket(checkInData)){

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import pay2park.service.checkinout.CheckInService;
 
-@Profile("test")
+@Profile("testMockCheckInService")
 @Configuration
 public class CheckInServiceTestConfig {
     @Bean
